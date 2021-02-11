@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using tk3full.Data;
 
 namespace tk3full.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20210211211458_addingmenuitems")]
+    partial class addingmenuitems
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -100,17 +102,8 @@ namespace tk3full.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<DateTime>("created")
+                    b.Property<DateTime>("Created")
                         .HasColumnType("TEXT");
-
-                    b.Property<int>("departmentId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("firstName")
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("forignId")
-                        .HasColumnType("INTEGER");
 
                     b.Property<Guid>("guId")
                         .HasColumnType("TEXT");
@@ -118,38 +111,11 @@ namespace tk3full.Data.Migrations
                     b.Property<byte[]>("hashKey")
                         .HasColumnType("BLOB");
 
-                    b.Property<string>("lastName")
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("locationId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("middleName")
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTime>("modified")
-                        .HasColumnType("TEXT");
-
                     b.Property<byte[]>("passwordHash")
                         .HasColumnType("BLOB");
 
-                    b.Property<int>("status")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("title")
-                        .HasColumnType("TEXT");
-
                     b.Property<string>("userName")
                         .HasColumnType("TEXT");
-
-                    b.Property<string>("userParams")
-                        .HasColumnType("TEXT");
-
-                    b.Property<decimal>("workHoursPerWeek")
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("workScheduleId")
-                        .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 

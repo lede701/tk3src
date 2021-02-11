@@ -7,6 +7,7 @@ import { SheetviewComponent } from './timesheets/sheetview/sheetview.component';
 import { DayviewComponent } from './timesheets/dayview/dayview.component';
 import { WeekviewComponent } from './timesheets/weekview/weekview.component';
 import { TimesheetsComponent } from './timesheets/timesheets.component';
+import { MenuComponent } from './menu/menu.component';
 
 @NgModule({
   declarations: [
@@ -14,7 +15,8 @@ import { TimesheetsComponent } from './timesheets/timesheets.component';
     SheetviewComponent,
     DayviewComponent,
     WeekviewComponent,
-    TimesheetsComponent
+    TimesheetsComponent,
+    MenuComponent
   ],
   imports: [
     BrowserModule,
