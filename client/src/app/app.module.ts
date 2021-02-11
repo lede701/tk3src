@@ -3,18 +3,18 @@ import { NgModule } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { TimehseetsComponent } from './timehseets/timehseets.component';
 import { SheetviewComponent } from './timesheets/sheetview/sheetview.component';
 import { DayviewComponent } from './timesheets/dayview/dayview.component';
 import { WeekviewComponent } from './timesheets/weekview/weekview.component';
+import { TimesheetsComponent } from './timesheets/timesheets.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    TimehseetsComponent,
     SheetviewComponent,
     DayviewComponent,
-    WeekviewComponent
+    WeekviewComponent,
+    TimesheetsComponent
   ],
   imports: [
     BrowserModule,
