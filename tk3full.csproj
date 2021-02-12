@@ -5,6 +5,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="client\src\app\entities\menuItemEntity.ts" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="5.0.3" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.3" />
@@ -18,8 +22,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="client\" />
     <Folder Include="Models\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <TypeScriptCompile Include="client\src\app\entities\menuItemEntity.ts" />
   </ItemGroup>
 
 </Project>
