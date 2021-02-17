@@ -2,102 +2,21 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using tk3full.Data;
 
 namespace tk3full.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20210217214343_FixedCommentsRelationship")]
+    partial class FixedCommentsRelationship
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "5.0.3");
-
-            modelBuilder.Entity("tk3full.Entities.LeaveBank", b =>
-                {
-                    b.Property<int>("id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("bankDescription")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("displayCode")
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("expiresInDays")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("status")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("id");
-
-                    b.ToTable("LeaveBank");
-                });
-
-            modelBuilder.Entity("tk3full.Entities.LeaveTransactions", b =>
-                {
-                    b.Property<int>("id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<bool>("approved")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("bankId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<DateTime>("created")
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTime>("displayDate")
-                        .HasColumnType("TEXT");
-
-                    b.Property<bool>("employeeSigned")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<bool>("isAccrual")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<bool>("isParent")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("locationId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<DateTime>("modified")
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("parentId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("status")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<DateTime>("tranDate")
-                        .HasColumnType("TEXT");
-
-                    b.Property<decimal>("tranTime")
-                        .HasColumnType("TEXT");
-
-                    b.Property<char>("tranType")
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("userId")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("id");
-
-                    b.HasIndex("bankId");
-
-                    b.HasIndex("userId");
-
-                    b.ToTable("LeaveTansactions");
-                });
 
             modelBuilder.Entity("tk3full.Entities.MenuItem", b =>
                 {
@@ -168,6 +87,9 @@ namespace tk3full.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
+                    b.Property<int?>("CratedUserId")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("ProjectDescription")
                         .HasColumnType("TEXT");
 
@@ -194,7 +116,7 @@ namespace tk3full.Data.Migrations
 
                     b.HasKey("id");
 
-                    b.HasIndex("createdBy");
+                    b.HasIndex("CratedUserId");
 
                     b.HasIndex("modifiedBy");
 
@@ -262,28 +184,6 @@ namespace tk3full.Data.Migrations
                     b.HasIndex("timesheetId");
 
                     b.ToTable("TimeDetailsComments");
-                });
-
-            modelBuilder.Entity("tk3full.Entities.TimeLunch", b =>
-                {
-                    b.Property<int>("id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<DateTime>("lunchDate")
-                        .HasColumnType("TEXT");
-
-                    b.Property<decimal>("lunchTime")
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("timesheetId")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("id");
-
-                    b.HasIndex("timesheetId");
-
-                    b.ToTable("TimeLunch");
                 });
 
             modelBuilder.Entity("tk3full.Entities.Timesheet", b =>
@@ -409,25 +309,6 @@ namespace tk3full.Data.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("tk3full.Entities.LeaveTransactions", b =>
-                {
-                    b.HasOne("tk3full.Entities.LeaveBank", "Bank")
-                        .WithMany()
-                        .HasForeignKey("bankId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("tk3full.Entities.Tk3User", "User")
-                        .WithMany()
-                        .HasForeignKey("userId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Bank");
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("tk3full.Entities.MenuItem", b =>
                 {
                     b.HasOne("tk3full.Entities.Tk3User", "CreatedUser")
@@ -449,11 +330,9 @@ namespace tk3full.Data.Migrations
 
             modelBuilder.Entity("tk3full.Entities.ProjectCode", b =>
                 {
-                    b.HasOne("tk3full.Entities.Tk3User", "CreatedUser")
+                    b.HasOne("tk3full.Entities.Tk3User", "CratedUser")
                         .WithMany()
-                        .HasForeignKey("createdBy")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("CratedUserId");
 
                     b.HasOne("tk3full.Entities.Tk3User", "ModifiedUser")
                         .WithMany()
@@ -461,7 +340,7 @@ namespace tk3full.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("CreatedUser");
+                    b.Navigation("CratedUser");
 
                     b.Navigation("ModifiedUser");
                 });
@@ -502,17 +381,6 @@ namespace tk3full.Data.Migrations
                     b.Navigation("Timesheet");
                 });
 
-            modelBuilder.Entity("tk3full.Entities.TimeLunch", b =>
-                {
-                    b.HasOne("tk3full.Entities.Timesheet", "Timesheet")
-                        .WithMany("TimeLunch")
-                        .HasForeignKey("timesheetId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Timesheet");
-                });
-
             modelBuilder.Entity("tk3full.Entities.Timesheet", b =>
                 {
                     b.HasOne("tk3full.Entities.Tk3User", "User")
@@ -532,8 +400,6 @@ namespace tk3full.Data.Migrations
             modelBuilder.Entity("tk3full.Entities.Timesheet", b =>
                 {
                     b.Navigation("TimeDetails");
-
-                    b.Navigation("TimeLunch");
                 });
 #pragma warning restore 612, 618
         }

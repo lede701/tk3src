@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
   <div class="container-fluid">
-    <a class="navbar-brand" href="#">{{title}}</a>
+    <a class="navbar-brand" href="#"><img src="./assets/tk3Logo.png" width="30" height="30" class="mr-2" alt="{{title}}" />{{title}}</a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -27,10 +27,14 @@
           <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
         </li>
       </ul>
-      <form class="d-flex">
-        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-        <button class="btn btn-outline-success" type="submit">Search</button>
+      <form class="d-flex" *ngIf="!authService.getIsAuthenticated()">
+        <input class="form-control me-1" type="text" placeholder="Username" aria-label="Search">
+        <input class="form-control me-1" type="password" placeholder="Password" aria-label="Search">
+        <button class="btn btn-outline-success" type="submit">Login</button>
       </form>
+      <div *ngIf="authService.getIsAuthenticated()">
+        {{authService.getName()}}
+      </div>
     </div>
   </div>
 </nav>

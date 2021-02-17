@@ -31,6 +31,7 @@ namespace tk3full
         {
             services.AddApplicationServices(_config);
             services.AddControllers();
+            services.AddCors();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "tk3full", Version = "v1" });
@@ -51,6 +52,8 @@ namespace tk3full
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseCors(x => x.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
 
             app.UseAuthorization();
 

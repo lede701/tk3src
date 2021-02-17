@@ -4,6 +4,7 @@ import { take } from 'rxjs/operators';
 
 import { MenuItemEntity } from '../entities/menuItemEntity';
 import { environment } from '../../environments/environment';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-menu',
@@ -15,7 +16,7 @@ export class MenuComponent implements OnInit {
   public menuItems: MenuItemEntity[] = [];
   private _menuSub: any;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, public authService: AuthService) { }
 
   ngOnInit(): void {
 

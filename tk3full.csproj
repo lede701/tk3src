@@ -2,10 +2,13 @@
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
+    <TypeScriptToolsVersion>Latest</TypeScriptToolsVersion>
   </PropertyGroup>
 
   <ItemGroup>
     <None Remove="client\src\app\entities\menuItemEntity.ts" />
+    <None Remove="client\src\app\entities\userEntity.ts" />
+    <None Remove="client\src\app\services\auth.service.ts" />
   </ItemGroup>
 
   <ItemGroup>
@@ -18,7 +21,7 @@
     </PackageReference>
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="5.0.3" />
     <PackageReference Include="MySql.Data.EntityFrameworkCore" Version="8.0.22" />
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.0.4" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.0.7" />
   </ItemGroup>
 
   <ItemGroup>
@@ -27,6 +30,8 @@
 
   <ItemGroup>
     <TypeScriptCompile Include="client\src\app\entities\menuItemEntity.ts" />
+    <TypeScriptCompile Include="client\src\app\entities\userEntity.ts" />
+    <TypeScriptCompile Include="client\src\app\services\auth.service.ts" />
   </ItemGroup>
 
 </Project>
