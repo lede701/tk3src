@@ -6,5 +6,8 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.less']
 })
 export class AppComponent {
-  title = 'client';
+  title = 'TimeKeeper 3';
+
+  constructor() { }
+
 }
