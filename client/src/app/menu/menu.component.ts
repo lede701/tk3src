@@ -1,5 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { take } from 'rxjs/operators';
+
 import { MenuItemEntity } from '../entities/menuItemEntity';
 import { environment } from '../../environments/environment';
 
@@ -19,7 +21,7 @@ export class MenuComponent implements OnInit {
 
     let url = environment.apiUrl + '/Menu';
     // Creating a memory leak that needs to be fixed!
-    this._menuSub = this.http.get<MenuItemEntity[]>(url).pipe(take(1)).subscribe(menu => {
+    this.http.get<MenuItemEntity[]>(url).pipe(take(1)).subscribe(menu => {
       this.menuItems = menu;
     });
   }
