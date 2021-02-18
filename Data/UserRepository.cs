@@ -25,12 +25,16 @@ namespace tk3full.Data
 
 		public async Task<Tk3User> GetUserByIdAsync(int id)
 		{
-			return await _context.Users.FindAsync(id);
+			return await _context
+				.Users
+				.FindAsync(id);
 		}
 
 		public async Task<Tk3User> GetUserByUsernameAsync(string username)
 		{
-			return await _context.Users.SingleOrDefaultAsync(u => u.userName == username.ToLower());
+			return await _context
+				.Users
+				.SingleOrDefaultAsync(u => u.userName == username.ToLower());
 		}
 
 		public async Task<UserDto> GetUserDtoByUserNameAsync(string username)
@@ -43,7 +47,9 @@ namespace tk3full.Data
 
 		public async Task<IEnumerable<Tk3User>> GetUsersAsync()
 		{
-			return await _context.Users.ToListAsync();
+			return await _context
+				.Users
+				.ToListAsync();
 		}
 
 		public async Task<bool> SaveAllAsync()
