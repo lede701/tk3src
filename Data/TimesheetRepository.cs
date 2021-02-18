@@ -22,7 +22,38 @@ namespace tk3full.Data
             _mapper = mapper;
         }
 
-        public async Task<TimesheetDto> GetTimesheet(Guid guid)
+        public async Task<bool> AddCommentAsync(TimeDetails td, String commentIn)
+		{
+            TimeDetailsComments tdc = new TimeDetailsComments()
+            {
+                guid = Guid.NewGuid(),
+                timesheetId = td.timesheetId,
+                timeDetailsId = td.id,
+                comment = commentIn,
+                created = DateTime.Now,
+                modified = DateTime.Now,
+                status = RecordStatus.ACTIVE
+            };
+            _context.TimeDetailsComments.Add(tdc);
+            return await _context.SaveChangesAsync() > 0;
+		}
+
+        public async Task<bool> AddTimeAsync(TimeDetails td, Timesheet ts)
+        {
+            td.timesheetId = ts.id;
+            _context.TimeDetails.Add(td);
+            return await _context.SaveChangesAsync() > 0;
+        }
+
+
+        public async Task<Timesheet> FindAsync(Guid guid)
+        {
+            return await _context.Timesheet
+                .Where(ts => ts.guid == guid)
+                .SingleOrDefaultAsync();
+        }
+
+        public async Task<TimesheetDto> GetTimesheetDtoAsync(Guid guid)
         {
             return await _context.Timesheet
                 .Where(ts => ts.guid == guid)
@@ -30,7 +61,7 @@ namespace tk3full.Data
                 .SingleOrDefaultAsync();
         }
 
-        public async Task<TimesheetDto> CreateTimesheet(Tk3User user)
+        public async Task<TimesheetDto> CreateTimesheetAsync(Tk3User user, DateTime start, DateTime end)
         {
             // Create new timesheet
             Timesheet ts = new Timesheet()
@@ -41,7 +72,9 @@ namespace tk3full.Data
                 middleName = user.middleName,
                 lastname = user.lastName,
                 positionDescription = user.title,
-                hoursPerWeekWorked = user.workHoursPerWeek
+                hoursPerWeek = user.workHoursPerWeek,
+                startDate = start,
+                endDate = end
             };
             // Add new timesheet to the contrxt
             _context.Timesheet.Add(ts);
@@ -50,5 +83,24 @@ namespace tk3full.Data
             // Returned mapped DTO obecjt
             return _mapper.Map<TimesheetDto>(ts);
         }
-    }
+
+		public async Task<TimesheetDto> GetTimesheetWithIdAsync(int id)
+		{
+            var ts = await _context.Timesheet.FindAsync(id);
+            if(ts.guid == new Guid("00000000-0000-0000-0000-000000000000"))
+			{
+                ts.guid = Guid.NewGuid();
+                _context.Timesheet.Update(ts);
+                await _context.SaveChangesAsync();
+			}
+
+            return _mapper.Map<TimesheetDto>(ts);
+		}
+
+		public async Task<TimeDetails> GetDetails(Guid guid)
+		{
+            return await _context.TimeDetails.Where(td => td.guid == guid)
+                .SingleOrDefaultAsync();
+		}
+	}
 }

@@ -16,6 +16,10 @@ namespace tk3full.Helpers
 			CreateMap<Tk3User, UserDto>();
 			CreateMap<MenuItem, MenuItemDto>();
 			CreateMap<Timesheet, TimesheetDto>();
+			CreateMap<TimeDetails, TimeDetailsDto>();
+			CreateMap<TimeDetailsComments, TimeDetailsCommentsDto>();
+			CreateMap<TimeLunch, TimeLunchDto>();
+			CreateMap<ProjectCode, ProjectCodeDto>();
 		}
 	}
 }

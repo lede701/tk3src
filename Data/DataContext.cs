@@ -15,6 +15,9 @@ namespace tk3full.Data
 
 		public DbSet<Tk3User> Users { get; set; }
 		public DbSet<Timesheet> Timesheet { get; set; }
+		public DbSet<TimeDetails> TimeDetails { get; set; }
+		public DbSet<TimeDetailsComments> TimeDetailsComments { get; set; }
 		public DbSet<MenuItem> Menu { get; set; }
 		public DbSet<LeaveTransactions> LeaveTansactions { get; set; }
+		public DbSet<ProjectCode> ProjectCode { get; set; }
 	}}

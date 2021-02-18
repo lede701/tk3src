@@ -17,8 +17,8 @@ namespace tk3full.Entities
 		public String firstName { get; set; }
 		public String middleName { get; set; }
 		public String lastname { get; set; }
-		public decimal workHours { get; set; }
-		public decimal hoursPerWeekWorked { get; set; }
+		public decimal hoursPerDay { get; set; }
+		public decimal hoursPerWeek { get; set; }
 		public int employeeStatus { get; set; }
 		public DateTime startDate { get; set; }
 		public DateTime endDate { get; set; }

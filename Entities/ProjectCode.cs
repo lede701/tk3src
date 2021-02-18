@@ -11,6 +11,7 @@ namespace tk3full.Entities
 		#region Table Parameters
 
 		public int id { get; set; }
+		public Guid guid { get; set; }
 		public String ProjectTitle { get; set; }
 		public String ProjectDescription { get; set; }
 		public int commentType { get; set; }

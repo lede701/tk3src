@@ -8,6 +8,7 @@ namespace tk3full.Entities
 	public class LeaveBank
 	{
 		public int id { get; set; }
+		public Guid guid { get; set; }
 		public String displayCode { get; set; }
 		public String bankDescription { get; set; }
 		public int expiresInDays { get; set; }

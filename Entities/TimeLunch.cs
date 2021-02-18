@@ -11,6 +11,7 @@ namespace tk3full.Entities
 		#region Table Properties
 
 		public int id { get; set; }
+		public Guid guid { get; set; }
 		[ForeignKey("Timesheet")]
 		public int timesheetId { get; set; }
 		public decimal lunchTime { get; set; }

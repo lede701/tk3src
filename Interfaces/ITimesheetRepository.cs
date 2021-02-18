@@ -9,7 +9,13 @@ namespace tk3full.Interfaces
 {
     public interface ITimesheetRepository
     {
-        Task<TimesheetDto> GetTimesheet(Guid guid);
-        Task<TimesheetDto> CreateTimesheet(Tk3User user);
+        Task<Timesheet> FindAsync(Guid guid);
+        Task<TimesheetDto> CreateTimesheetAsync(Tk3User user, DateTime start, DateTime end);
+        Task<bool> AddTimeAsync(TimeDetails td, Timesheet ts);
+        Task<bool> AddCommentAsync(TimeDetails tdo, String comment);
+
+        Task<TimeDetails> GetDetails(Guid guid);
+        Task<TimesheetDto> GetTimesheetDtoAsync(Guid guid);
+        Task<TimesheetDto> GetTimesheetWithIdAsync(int id);
     }
 }

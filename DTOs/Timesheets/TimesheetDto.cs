@@ -13,8 +13,8 @@ namespace tk3full.DTOs.Timesheets
 		public String firstName { get; set; }
 		public String middleName { get; set; }
 		public String lastname { get; set; }
-		public decimal workHours { get; set; }
-		public decimal hoursPerWeekWorked { get; set; }
+		public decimal hoursPerDay { get; set; }
+		public decimal hoursPerWeek { get; set; }
 		public int employeeStatus { get; set; }
 		public DateTime startDate { get; set; }
 		public DateTime endDate { get; set; }
@@ -22,6 +22,7 @@ namespace tk3full.DTOs.Timesheets
 		public DateTime supervisorSignDate { get; set; }
 
 		public ICollection<TimeDetailsDto> TimeDetails { get; set; }
+		public ICollection<TimeLunchDto> TimeLunch { get; set; }
 
 	}
 }

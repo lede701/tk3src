@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -13,32 +14,77 @@ using tk3full.Interfaces;
 
 namespace tk3full.Controllers
 {
-    [Authorize]
+    //[Authorize]
     public class TimesheetController : Tk3BaseController
     {
         private readonly ITimesheetRepository _tsRepo;
+		private readonly IProjectRepository _projectRepo;
+		private readonly IMapper _mapper;
+		private readonly IUserRepository _userRepo;
 
-        public TimesheetController(ITimesheetRepository tsRepo)
+		public TimesheetController(ITimesheetRepository tsRepo, IProjectRepository projectRepo,
+            IMapper mapper, IUserRepository userRepo)
         {
             _tsRepo = tsRepo;
-        }
+			_projectRepo = projectRepo;
+			_mapper = mapper;
+			_userRepo = userRepo;
+		}
 
-        [HttpGet("get/{timesheetId}")]
+        [HttpGet("get/{guid}")]
         public async Task<ActionResult<TimesheetDto>> GetTimesheet(string guid)
         {
-            var tso = await _tsRepo.GetTimesheet(new Guid(guid));
+            // Pull object out of database
+            TimesheetDto tso = await _tsRepo.GetTimesheetDtoAsync(new Guid(guid));
+            // Check if a valid object was found
             if(tso != null) return Ok(tso);
 
-            return BadRequest("Invalid timsheet code");
+            // No valid object so send an error
+            return BadRequest("ERROR: Invalid timsheet code");
         }
 
-        [HttpGet("new")]
-        public async Task<ActionResult<TimesheetDto>> Create()
+        [HttpGet("new/{start}/{end}")]
+        public async Task<ActionResult<TimesheetDto>> Create(DateTime start, DateTime end)
         {
-            var user = new Tk3User();
-            var tso = await _tsRepo.CreateTimesheet(user);
-            return Ok(tso);
+            var user = await _userRepo.FindAsync(1);
+            var tso = await _tsRepo.CreateTimesheetAsync(user, start, end);
+            if (tso != null) return Ok(tso);
+
+            return BadRequest("ERROR: Could not create timesheet");
         }
+
+        [HttpPost("time/add/{tsGuid}/{projectGuid}")]
+        public async Task<ActionResult<TimeDetailsDto>> AddTime(Guid tsGuid, Guid projectGuid, decimal time, DateTime day, string? comment)
+		{
+            var project = await _projectRepo.FindAsync(projectGuid);
+            var ts = await _tsRepo.FindAsync(tsGuid);
+
+            if (project == null) return BadRequest("ERROR: Invalid project code");
+            if (ts == null) return BadRequest("ERROR: Invalid timesheet code");
+
+            var td = new TimeDetails()
+            {
+                guid = Guid.NewGuid(),
+                projectId = project.id,
+                timeDate = day,
+                hrWorked = time,
+                status = RecordStatus.ACTIVE
+            };
+
+            if(await _tsRepo.AddTimeAsync(td, ts))
+			{
+                if(comment?.Length > 0)
+				{
+                    await _tsRepo.AddCommentAsync(td, comment);
+				}
+
+                td = await _tsRepo.GetDetails(td.guid);
+
+                return Ok(_mapper.Map<TimeDetailsDto>(td));
+			}
+
+            return BadRequest("ERROR: Could not add time to timesheet");
+		}
         
     }
 }

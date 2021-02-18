@@ -9,6 +9,7 @@ namespace tk3full.Entities
 	public class MenuItem
 	{
 		public int id { get; set; }
+		public Guid guid { get; set; }
 		public int parentId { get; set; }
 		public String name { get; set; }
 		public String link { get; set; }

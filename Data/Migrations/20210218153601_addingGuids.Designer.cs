@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using tk3full.Data;
 
 namespace tk3full.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20210218153601_addingGuids")]
+    partial class addingGuids
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -337,10 +339,7 @@ namespace tk3full.Data.Migrations
                     b.Property<Guid>("guid")
                         .HasColumnType("TEXT");
 
-                    b.Property<decimal>("hoursPerDay")
-                        .HasColumnType("TEXT");
-
-                    b.Property<decimal>("hoursPerWeek")
+                    b.Property<decimal>("hoursPerWeekWorked")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("lastname")
@@ -363,6 +362,9 @@ namespace tk3full.Data.Migrations
 
                     b.Property<int>("userId")
                         .HasColumnType("INTEGER");
+
+                    b.Property<decimal>("workHours")
+                        .HasColumnType("TEXT");
 
                     b.HasKey("id");
 

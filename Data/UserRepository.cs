@@ -23,7 +23,7 @@ namespace tk3full.Data
 			_mapper = mapper;
 		}
 
-		public async Task<Tk3User> GetUserByIdAsync(int id)
+		public async Task<Tk3User> FindAsync(int id)
 		{
 			return await _context
 				.Users

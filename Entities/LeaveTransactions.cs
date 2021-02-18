@@ -11,6 +11,7 @@ namespace tk3full.Entities
 		#region Table Properties
 
 		public int id { get; set; }
+		public Guid guid { get; set; }
 		[ForeignKey("User")]
 		public int userId { get; set; }
 		public int parentId { get; set; }
