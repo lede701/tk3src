@@ -53,7 +53,7 @@ namespace tk3full.Controllers
             return BadRequest("ERROR: Could not create timesheet");
         }
 
-        [HttpPost("time/add/{tsGuid}/{projectGuid}")]
+        [HttpPost("project/add/{tsGuid}/{projectGuid}")]
         public async Task<ActionResult<TimeDetailsDto>> AddTime(Guid tsGuid, Guid projectGuid, decimal time, DateTime day, string? comment)
 		{
             var project = await _projectRepo.FindAsync(projectGuid);
@@ -85,6 +85,13 @@ namespace tk3full.Controllers
 
             return BadRequest("ERROR: Could not add time to timesheet");
 		}
-        
+        [HttpPost("lunch/add/{tsGuid}")]
+        public async Task<ActionResult<TimeLunchDto>> AddLunch(Guid tsGuid, decimal time, DateTime day)
+        {
+            Timesheet ts = await _tsRepo.FindAsync(tsGuid);
+            return await _tsRepo.AddLunchAsync(ts, time, day);
+            
+        }
+
     }
 }

@@ -14,7 +14,7 @@ import { AuthService } from '../services/auth.service';
 export class MenuComponent implements OnInit {
   @Input() title: string = "Site Title";
   public menuItems: MenuItemEntity[] = [];
-  private _menuSub: any;
+  model: any = {};
 
   constructor(private http: HttpClient, public authService: AuthService) { }
 
@@ -27,5 +27,14 @@ export class MenuComponent implements OnInit {
     });
   }
 
+  login() {
+    this.authService.login(this.model.userName, this.model.password).pipe(take(1)).subscribe(results => {
+      console.log(results);
+    })
+  }
+
+  logout() {
+    this.authService.logout();
+  }
 
 }

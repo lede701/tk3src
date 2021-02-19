@@ -11,8 +11,9 @@ namespace tk3full.Interfaces
     {
         Task<Timesheet> FindAsync(Guid guid);
         Task<TimesheetDto> CreateTimesheetAsync(Tk3User user, DateTime start, DateTime end);
-        Task<bool> AddTimeAsync(TimeDetails td, Timesheet ts);
+        Task<TimeLunchDto> AddLunchAsync(Timesheet ts, decimal time, DateTime day);
         Task<bool> AddCommentAsync(TimeDetails tdo, String comment);
+        Task<bool> AddTimeAsync(TimeDetails td, Timesheet ts);
 
         Task<TimeDetails> GetDetails(Guid guid);
         Task<TimesheetDto> GetTimesheetDtoAsync(Guid guid);

@@ -1,7 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { NgbDropdownModule, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
@@ -31,6 +31,10 @@ import { HomeComponent } from './home/home.component';
     HttpClientModule,
     NgbModule,
     NgbDropdownModule,
+    FormsModule,
+  ],
+  exports: [
+    FormsModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

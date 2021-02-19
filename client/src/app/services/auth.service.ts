@@ -43,7 +43,19 @@ export class AuthService {
         this.updateToken(this);
       }
     }
+  }
 
+  login(userName: string, password: string) {
+    let login: any = {
+      userName: userName,
+      password: password
+    };
+    return this.http.post('https://localhost:5001/api/Auth/login', login);
+  }
+
+  logout() {
+    this._user = new UserEntity('0', '', '');
+    localStorage.setItem('tk3user', JSON.stringify(this._user));
   }
 
   updateToken(src: AuthService) {

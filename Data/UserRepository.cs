@@ -9,6 +9,9 @@ using AutoMapper.QueryableExtensions;
 using tk3full.DTOs;
 using tk3full.Entities;
 using tk3full.Interfaces;
+using System.Security.Cryptography;
+using System.Text;
+using tk3full.Results;
 
 namespace tk3full.Data
 {
@@ -52,7 +55,54 @@ namespace tk3full.Data
 				.ToListAsync();
 		}
 
-		public async Task<bool> SaveAllAsync()
+        public async Task<LoginResults> LoginAsync(string username, string password)
+        {
+			// Create initial login results and try and get user from database
+			LoginResults results = new LoginResults()
+			{
+				ErrorCode = -1,
+				ErrorMessage = "",
+				IsValid = false,
+				User = await _context.Users.SingleOrDefaultAsync(u => u.userName == username.ToLower())
+			};
+
+			// Valid if user was found in database
+			if (results.User == null)
+            {
+				results.ErrorCode = 1001;
+				results.ErrorMessage = "Invalid username";
+				return results;
+            }
+
+			// Create encryption object
+			using (var hmac = new HMACSHA512(results.User.hashKey))
+			{
+				// Calulate password hash
+				var computHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(password));
+				// Check if arrays are the same size
+				if(computHash.Length != results.User.passwordHash.Length)
+                {
+					results.ErrorCode = 1002;
+					results.ErrorMessage = "Invalid password";
+					return results;
+				}
+				for (int i = 0; i < computHash.Length; ++i)
+				{
+					if (computHash[i] != results.User.passwordHash[i])
+					{
+						results.ErrorCode = 1002;
+						results.ErrorMessage = "Invalid password";
+						return results;
+					}
+				}
+			}
+
+			results.IsValid = true;
+			results.userDto = _mapper.Map<UserDto>(results.User);
+			return results;
+		}
+
+        public async Task<bool> SaveAllAsync()
 		{
 			return await _context.SaveChangesAsync() > 0;
 		}

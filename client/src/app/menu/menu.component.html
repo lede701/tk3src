@@ -27,9 +27,25 @@
           <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
         </li>
       </ul>
-      <form class="d-flex" *ngIf="!authService.getIsAuthenticated()">
-        <input class="form-control me-1" type="text" placeholder="Username" aria-label="Search">
-        <input class="form-control me-1" type="password" placeholder="Password" aria-label="Search">
+      <form class="form-inline mt-2 mt-md-0"
+            *ngIf="!authService.getIsAuthenticated()"
+            #loginForm="ngForm"
+            (ngSubmit)="login()"
+            autocomplete="off">
+        <input
+               [(ngModel)]="model.userName"
+               class="form-control me-1"
+               type="text"
+               name="userNAme"
+               placeholder="Username"
+               aria-label="Username">
+        <input
+               [(ngModel)]="model.password"
+               class="form-control me-1"
+               type="password"
+               name="password"
+               placeholder="Password"
+               aria-label="Password">
         <button class="btn btn-outline-success" type="submit">Login</button>
       </form>
       <div *ngIf="authService.getIsAuthenticated()">

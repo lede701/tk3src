@@ -38,6 +38,21 @@ namespace tk3full.Data
             return await _context.SaveChangesAsync() > 0;
 		}
 
+        public async Task<TimeLunchDto> AddLunchAsync(Timesheet ts, decimal time, DateTime day)
+        {
+            TimeLunch tl = new TimeLunch
+            {
+                guid = Guid.NewGuid(),
+                timesheetId = ts.id,
+                lunchTime = time,
+                lunchDate = day
+            };
+            _context.TimeLunch.Add(tl);
+            await _context.SaveChangesAsync();
+            return _mapper.Map<TimeLunchDto>(tl);
+        }
+
+
         public async Task<bool> AddTimeAsync(TimeDetails td, Timesheet ts)
         {
             td.timesheetId = ts.id;
