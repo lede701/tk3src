@@ -2,7 +2,9 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
 import { UserEntity } from '../entities/userEntity';
-import { Subject } from 'rxjs';
+import { ReplaySubject, Subject } from 'rxjs';
+import { environment } from 'src/environments/environment';
+import { map, take } from 'rxjs/operators';
 
 export interface AuthResponseData {
   idToken: string,
@@ -26,11 +28,14 @@ export interface AuthRefreshData {
 export class AuthService {
   private _user: UserEntity;
   private _keepAliveTimer: number = -1;
+  private _baseUri: string = environment.apiUrl;
 
   public AuthChanged: Subject<UserEntity> = new Subject<UserEntity>();
+  private _currentUserSource = new ReplaySubject<UserEntity>(1);
+  currentUser$ = this._currentUserSource.asObservable();
 
   constructor(private http: HttpClient) {
-    this._user = new UserEntity('0', '', '');
+    this._user = new UserEntity();
     let sess = localStorage.getItem('tk3user');
     if (sess) {
       let oSess = JSON.parse(sess);
@@ -50,12 +55,20 @@ export class AuthService {
       userName: userName,
       password: password
     };
-    return this.http.post('https://localhost:5001/api/Auth/login', login);
+
+    //return this.http.post(this._baseUri + '/Auth/login', login).pipe(map((response: UserEntity) => {    })
+    return this.http.post<UserEntity>(this._baseUri + '/Auth/login', login).pipe(map((response: UserEntity) => {
+      this._user = response;
+      this._currentUserSource.next(this._user);
+    }))
   }
 
   logout() {
-    this._user = new UserEntity('0', '', '');
-    localStorage.setItem('tk3user', JSON.stringify(this._user));
+    this.http.post(this._baseUri + '/Auth/login', { username: this._user.username }).pipe(take(1)).subscribe(() => {
+      this._user = new UserEntity();
+      localStorage.removeItem('tk3user');
+      this._currentUserSource.next(this._user);
+    });
   }
 
   updateToken(src: AuthService) {
