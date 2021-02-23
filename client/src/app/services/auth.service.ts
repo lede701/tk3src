@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 
 import { UserEntity } from '../entities/userEntity';
 import { Subject } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 export interface AuthResponseData {
   idToken: string,
@@ -22,6 +23,11 @@ export interface AuthRefreshData {
   project_id: string;
 }
 
+export interface Tk3AuthResponse {
+  userName: string,
+  token: string
+}
+
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   private _user: UserEntity;
@@ -36,6 +42,7 @@ export class AuthService {
       let oSess = JSON.parse(sess);
       if (oSess) {
         this._user.id = oSess.id;
+        this._user.username = oSess.username;
         this._user.isAuthenticated = oSess.isAuthenticated;
         this._user.tokenExpires = new Date(oSess.tokenExpires);
         this._user.refreshToken = oSess.refreshToken;
@@ -50,7 +57,14 @@ export class AuthService {
       userName: userName,
       password: password
     };
-    return this.http.post('https://localhost:5001/api/Auth/login', login);
+
+    return this.http.post<Tk3AuthResponse>('https://localhost:5001/api/Auth/login', login).pipe(map(response => {
+      let user = new UserEntity('0', response.userName, response.token);
+      this._user = user;
+      this._user.isAuthenticated = true;
+      this.AuthChanged.next(this._user);
+      localStorage.setItem('tk3user', JSON.stringify(this._user));
+    }));
   }
 
   logout() {
@@ -60,10 +74,10 @@ export class AuthService {
 
   updateToken(src: AuthService) {
     let now = new Date();
-    console.log("Update token");
     if (now > src._user.tokenExpires) {
+      console.log("Update token");
     }
-    let time = 15 * 1000;
+    let time = 15 * 60 * 1000;
     src._keepAliveTimer = setTimeout(src.updateToken, time, src);
   }
 
@@ -72,6 +86,6 @@ export class AuthService {
   }
 
   getName(): string {
-    return "Username";
+    return this.getIsAuthenticated() ? this._user.username : '';
   }
 }

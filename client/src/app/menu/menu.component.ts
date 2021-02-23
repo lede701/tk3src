@@ -29,7 +29,8 @@ export class MenuComponent implements OnInit {
 
   login() {
     this.authService.login(this.model.userName, this.model.password).pipe(take(1)).subscribe(results => {
-      console.log(results);
+
+      //console.log(results);
     })
   }
 

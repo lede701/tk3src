@@ -23,8 +23,8 @@
             <li><a class="dropdown-item" href="#">Something else here</a></li>
           </ul>
         </li>
-        <li class="nav-item">
-          <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+        <li class="nav-item" *ngIf="authService.getIsAuthenticated()">
+          <a [routerLink]="/logout">Logout</a>
         </li>
       </ul>
       <form class="form-inline mt-2 mt-md-0"
