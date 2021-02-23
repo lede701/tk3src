@@ -16,26 +16,29 @@ export class MenuComponent implements OnInit {
   public menuItems: MenuItemEntity[] = [];
   model: any = {};
 
-  constructor(private http: HttpClient, public authService: AuthService) { }
+  public tempItems: MenuItemEntity[] = [];
+
+  constructor(private http: HttpClient, public auth: AuthService) { }
 
   ngOnInit(): void {
-
     let url = environment.apiUrl + '/Menu';
     // Creating a memory leak that needs to be fixed!
     this.http.get<MenuItemEntity[]>(url).pipe(take(1)).subscribe(menu => {
       this.menuItems = menu;
+      if (this.auth.getIsAuthenticated()) {
+        this.menuItems.push(new MenuItemEntity('Logout', 'auth/logout', ''));
+      }
     });
   }
 
   login() {
-    this.authService.login(this.model.userName, this.model.password).pipe(take(1)).subscribe(results => {
+    this.auth.login(this.model.userName, this.model.password).pipe(take(1)).subscribe(results => {
 
-      //console.log(results);
+      console.log(results);
     })
   }
 
   logout() {
-    this.authService.logout();
+    this.auth.logout();
   }
-
 }

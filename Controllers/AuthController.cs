@@ -59,5 +59,12 @@ namespace tk3full.Controllers
 
             return BadRequest(String.Format("{0}: {1}", results.ErrorCode, results.ErrorMessage));
         }
+
+        [HttpPost("logout")]
+        public async Task<ActionResult> Logout()
+		{
+
+            return BadRequest("ERROR: Could not log user out of system");
+		}
     }
 }

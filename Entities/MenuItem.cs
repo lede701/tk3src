@@ -12,7 +12,7 @@ namespace tk3full.Entities
 		public Guid guid { get; set; }
 		public int parentId { get; set; }
 		public String name { get; set; }
-		public String link { get; set; }
+		public String route { get; set; }
 		public String alias { get; set; }
 		public String type { get; set; }
 		public DateTime published { get; set; }

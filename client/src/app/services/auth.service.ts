@@ -2,7 +2,9 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
 import { UserEntity } from '../entities/userEntity';
-import { Subject } from 'rxjs';
+import { ReplaySubject, Subject } from 'rxjs';
+import { environment } from '../../environments/environment';
+import { map, take } from 'rxjs/operators';
 
 export interface AuthResponseData {
   idToken: string,
@@ -29,6 +31,7 @@ export interface Tk3AuthResponse {
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
+  private storeKey: string = 'tk3user';
   private _user: UserEntity;
   private _keepAliveTimer: number = -1;
   private _baseUri: string = environment.apiUrl;
@@ -39,7 +42,7 @@ export class AuthService {
 
   constructor(private http: HttpClient) {
     this._user = new UserEntity();
-    let sess = localStorage.getItem('tk3user');
+    let sess = localStorage.getItem(this.storeKey);
     if (sess) {
       let oSess = JSON.parse(sess);
       if (oSess) {
@@ -59,14 +62,23 @@ export class AuthService {
       userName: userName,
       password: password
     };
-    return this.http.post('https://localhost:5001/api/Auth/login', login);
+    return this.http.post<Tk3AuthResponse>('https://localhost:5001/api/Auth/login', login).pipe(map(results => {
+      let user: UserEntity = new UserEntity();
+      user.isAuthenticated = true;
+      user.username = results.userName;
+      user.token = results.token;
+      user.id = "0";
+      this._user = user;
+      this.AuthChanged.next(this._user);
+      localStorage.setItem(this.storeKey, JSON.stringify(this._user));
+    }));
   }
 
   logout() {
     this.http.post(this._baseUri + '/Auth/login', { username: this._user.username }).pipe(take(1)).subscribe(() => {
       this._user = new UserEntity();
-      localStorage.removeItem('tk3user');
-      this._currentUserSource.next(this._user);
+      localStorage.removeItem(this.storeKey);
+      this.AuthChanged.next(this._user);
     });
   }
 

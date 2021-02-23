@@ -41,11 +41,11 @@ namespace tk3full.Data
 		{
 			if (await ctx.Menu.AnyAsync()) return;
 
-			var menu = new MenuItem()
+			ctx.Menu.Add(new MenuItem()
 			{
 				parentId = 0,
 				name = "Home",
-				link = "/",
+				route = "/",
 				type = "mainmenu",
 				published = DateTime.Now,
 				ordering = 1,
@@ -55,8 +55,22 @@ namespace tk3full.Data
 				modified = DateTime.Now,
 				modifiedBy = 1,
 				status = 1
-			};
-			ctx.Menu.Add(menu);
+			});
+			ctx.Menu.Add(new MenuItem()
+			{
+				parentId = 0,
+				name = "Timesheet",
+				route = "timesheet/",
+				type = "mainmenu",
+				published = DateTime.Now,
+				ordering = 1,
+				isHome = true,
+				created = DateTime.Now,
+				createdBy = 1,
+				modified = DateTime.Now,
+				modifiedBy = 1,
+				status = 1
+			});
 			await ctx.SaveChangesAsync();
 		}
 	}

@@ -14,6 +14,7 @@ import { TimesheetsComponent } from './timesheets/timesheets.component';
 import { MenuComponent } from './menu/menu.component';
 import { HomeComponent } from './home/home.component';
 import { JwtInterceptor } from './interceptors/jwt.interceptor';
+import { AuthComponent } from './auth/auth.component';
 
 @NgModule({
   declarations: [
@@ -23,7 +24,8 @@ import { JwtInterceptor } from './interceptors/jwt.interceptor';
     WeekviewComponent,
     TimesheetsComponent,
     MenuComponent,
-    HomeComponent
+    HomeComponent,
+    AuthComponent
   ],
   imports: [
     BrowserModule,
