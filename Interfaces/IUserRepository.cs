@@ -17,5 +17,6 @@ namespace tk3full.Interfaces
 		Task<Tk3User> GetUserByUsernameAsync(String username);
 		Task<UserDto> GetUserDtoByUserNameAsync(String username);
 		Task<LoginResults> LoginAsync(String username, String password);
+		Task<bool> LogoutAsync();
 	}
 }

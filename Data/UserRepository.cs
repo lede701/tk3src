@@ -102,6 +102,11 @@ namespace tk3full.Data
 			return results;
 		}
 
+		public async Task<bool> LogoutAsync()
+		{
+			return false;
+		}
+
         public async Task<bool> SaveAllAsync()
 		{
 			return await _context.SaveChangesAsync() > 0;
