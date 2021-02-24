@@ -19,12 +19,14 @@ namespace tk3full.Data
 	{
 		private readonly DataContext _context;
 		private readonly IMapper _mapper;
+        private readonly ITokenService _tokenService;
 
-		public UserRepository(DataContext context, IMapper mapper)
+        public UserRepository(DataContext context, IMapper mapper, ITokenService tokenService)
 		{
 			_context = context;
 			_mapper = mapper;
-		}
+            _tokenService = tokenService;
+        }
 
 		public async Task<Tk3User> FindAsync(int id)
 		{
@@ -104,6 +106,7 @@ namespace tk3full.Data
 
 		public async Task<bool> LogoutAsync()
 		{
+			await _tokenService.RevokeToken();
 			return false;
 		}
 

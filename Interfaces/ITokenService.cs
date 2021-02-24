@@ -9,5 +9,6 @@ namespace tk3full.Interfaces
     public interface ITokenService
     {
         String CreateToken(Tk3User user);
+        Task<bool> RevokeToken(Tk3User user);
     }
 }

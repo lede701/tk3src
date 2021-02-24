@@ -40,5 +40,10 @@ namespace tk3full.Services
 
 			return tokenHandler.WriteToken(token);
 		}
+
+		public async Task<bool> RevokeToken(Tk3User user)
+        {
+			return true;
+        }
 	}
 }

@@ -20,13 +20,15 @@ namespace tk3full.Controllers
         private readonly DataContext _context;
 		private readonly IUserRepository _userRepo;
 		private readonly ITokenService _tokenService;
+        private readonly ITokenService _tokenServices;
 
-		public AuthController(DataContext context, IUserRepository userRepo, ITokenService tokenService)
+        public AuthController(DataContext context, IUserRepository userRepo, ITokenService tokenService, ITokenService tokenServices)
         {
             _context = context;
 			_userRepo = userRepo;
 			_tokenService = tokenService;
-		}
+            _tokenServices = tokenServices;
+        }
 
         [HttpGet]
         public async Task<ActionResult<UserDto>> Index()
@@ -63,7 +65,7 @@ namespace tk3full.Controllers
         [HttpPost("logout")]
         public async Task<ActionResult> Logout()
 		{
-
+            await _userRepo.LogoutAsync();
             return BadRequest("ERROR: Could not log user out of system");
 		}
     }
