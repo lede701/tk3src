@@ -29,6 +29,10 @@ export interface Tk3AuthResponse {
   token: string
 }
 
+export interface WhoAmIResponse {
+  username: String
+}
+
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   private storeKey: string = 'tk3user';
@@ -36,7 +40,6 @@ export class AuthService {
   private _keepAliveTimer: number = -1;
   private _baseUri: string = environment.apiUrl;
 
-  public AuthChanged: Subject<UserEntity> = new Subject<UserEntity>();
   private _currentUserSource = new ReplaySubject<UserEntity>(1);
   currentUser$ = this._currentUserSource.asObservable();
 
@@ -47,10 +50,12 @@ export class AuthService {
       let oSess = JSON.parse(sess);
       if (oSess) {
         this._user.id = oSess.id;
+        this._user.token = oSess.token;
         this._user.username = oSess.username;
         this._user.isAuthenticated = oSess.isAuthenticated;
         this._user.tokenExpires = new Date(oSess.tokenExpires);
         this._user.refreshToken = oSess.refreshToken;
+        this._currentUserSource.next(this._user);
         // Check if token need to be updated and also start the tracking prodcess
         this.updateToken(this);
       }
@@ -62,24 +67,25 @@ export class AuthService {
       userName: userName,
       password: password
     };
-    return this.http.post<Tk3AuthResponse>('https://localhost:5001/api/Auth/login', login).pipe(map(results => {
+    return this.http.post<Tk3AuthResponse>(this._baseUri + '/Auth/login', login).pipe(map(results => {
       let user: UserEntity = new UserEntity();
       user.isAuthenticated = true;
       user.username = results.userName;
       user.token = results.token;
       user.id = "0";
       this._user = user;
-      this.AuthChanged.next(this._user);
+      this._currentUserSource.next(this._user);
       localStorage.setItem(this.storeKey, JSON.stringify(this._user));
+      console.log(results);
     }));
   }
 
   logout() {
-    this.http.post(this._baseUri + '/Auth/login', { username: this._user.username }).pipe(take(1)).subscribe(() => {
-      this._user = new UserEntity();
-      localStorage.removeItem(this.storeKey);
-      this.AuthChanged.next(this._user);
+    this.http.post(this._baseUri + '/Auth/logout', { username: this._user.username }).pipe(take(1)).subscribe(() => {
     });
+    this._user = new UserEntity();
+    localStorage.removeItem(this.storeKey);
+    this._currentUserSource.next(this._user);
   }
 
   updateToken(src: AuthService) {
@@ -97,5 +103,9 @@ export class AuthService {
 
   getName(): string {
     return this.getIsAuthenticated() ? this._user.username : '';
+  }
+
+  WhoAmI() {
+    return this.http.get<WhoAmIResponse>(this._baseUri + '/Auth/whoami');
   }
 }

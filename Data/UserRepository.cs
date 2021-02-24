@@ -65,8 +65,17 @@ namespace tk3full.Data
 				ErrorCode = -1,
 				ErrorMessage = "",
 				IsValid = false,
-				User = await _context.Users.SingleOrDefaultAsync(u => u.userName == username.ToLower())
 			};
+
+			// Validate credentails
+			if (password == null || username == null)
+			{
+				results.ErrorCode = 1002;
+				results.ErrorMessage = "Invalid credentials";
+				return results;
+			}
+
+			results.User = await _context.Users.SingleOrDefaultAsync(u => u.userName == username.ToLower());
 
 			// Valid if user was found in database
 			if (results.User == null)
@@ -84,7 +93,7 @@ namespace tk3full.Data
 				// Check if arrays are the same size
 				if(computHash.Length != results.User.passwordHash.Length)
                 {
-					results.ErrorCode = 1002;
+					results.ErrorCode = 1003;
 					results.ErrorMessage = "Invalid password";
 					return results;
 				}
@@ -92,7 +101,7 @@ namespace tk3full.Data
 				{
 					if (computHash[i] != results.User.passwordHash[i])
 					{
-						results.ErrorCode = 1002;
+						results.ErrorCode = 1004;
 						results.ErrorMessage = "Invalid password";
 						return results;
 					}
@@ -104,15 +113,9 @@ namespace tk3full.Data
 			return results;
 		}
 
-		public async Task<bool> LogoutAsync()
+		public async Task<bool> LogoutAsync(Tk3User user)
 		{
-			await _tokenService.RevokeToken();
-			return false;
-		}
-
-        public async Task<bool> SaveAllAsync()
-		{
-			return await _context.SaveChangesAsync() > 0;
+			return await _tokenService.RevokeTokenAsync(user);
 		}
 
 		public void Update(Tk3User user)

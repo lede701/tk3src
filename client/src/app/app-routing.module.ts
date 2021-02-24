@@ -3,6 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { AuthComponent } from './auth/auth.component';
 import { HomeComponent } from './home/home.component';
+import { MenuComponent } from './menu/menu.component';
 import { TimesheetsComponent } from './timesheets/timesheets.component';
 
 const routes: Routes = [
@@ -11,7 +12,7 @@ const routes: Routes = [
 
     ]
   },
-  { path: 'auth/:task', component: AuthComponent},
+  { path: 'auth/:task', component: AuthComponent },
   { path: '', component: HomeComponent }
 ];
 

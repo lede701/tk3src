@@ -12,19 +12,17 @@ namespace tk3full.Controllers
 {
 	public class ProejctController : Tk3BaseController
 	{
-		private readonly IProjectRepository _projectRepo;
-		private readonly IMapper _mapper;
+		private readonly IUnitOfWork _uow;
 
-		public ProejctController(IProjectRepository projectRepo, IMapper mapper)
+		public ProejctController(IUnitOfWork uow)
 		{
-			_projectRepo = projectRepo;
-			_mapper = mapper;
+			_uow = uow;
 		}
 
 		[HttpPost("add")]
 		public async Task<ActionResult<ProjectCodeDto>> AddProject(String projectTitle, String projectDesc, int commentType)
 		{
-			ProjectCodeDto project = await _projectRepo.AddProjectAsync(projectTitle, projectDesc, commentType, RecordStatus.ACTIVE);
+			ProjectCodeDto project = await _uow.ProjectRepositoy.AddProjectAsync(projectTitle, projectDesc, commentType, RecordStatus.ACTIVE);
 			if (project != null) return Ok(project);
 
 			return BadRequest("ERROR: Project was not added!");

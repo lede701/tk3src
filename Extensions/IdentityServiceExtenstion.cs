@@ -24,6 +24,20 @@ namespace tk3full.Extensions
 						ValidateIssuer = false,
 						ValidateAudience = false
 					};
+					options.Events = new JwtBearerEvents
+					{
+						OnMessageReceived = context =>
+						{
+							var accessToken = context.Request.Query["access_token"];
+							var path = context.HttpContext.Request.Path;
+							if (!String.IsNullOrEmpty(accessToken))
+							{
+								context.Token = accessToken;
+							}
+
+							return Task.CompletedTask;
+						}
+					};
 				});
 
 			return services;

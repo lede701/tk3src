@@ -18,12 +18,14 @@ export class JwtInterceptor implements HttpInterceptor {
 
     this.authService.currentUser$.pipe(take(1)).subscribe(user => currentUser = user);
 
-    if (currentUser.id != '0') {
+    if (currentUser.username != '') {
+      console.log('Adding JWT');
       req = req.clone({
         setHeaders: {
           Autherization: `Bearer ${currentUser.token}`
         }
       });
+      console.log(currentUser);
     }
 
     return next.handle(req);

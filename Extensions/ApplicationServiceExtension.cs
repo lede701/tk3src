@@ -18,11 +18,7 @@ namespace tk3full.Extensions
 		public static IServiceCollection AddApplicationServices(this IServiceCollection services, IConfiguration config)
 		{
 			services.AddScoped<ITokenService, TokenService>();
-			services.AddScoped<IUserRepository, UserRepository>();
-			services.AddScoped<IMenuRepository, MenuRepository>();
-			services.AddScoped<IProjectRepository, ProjectRepository>();
-			services.AddScoped<ITimesheetRepository, TimesheetRepository>();
-
+			services.AddScoped<IUnitOfWork, UnitOfWork>();
 			services.AddAutoMapper(typeof(AutoMapperProfiles).Assembly);
 			services.AddDbContext<DataContext>(options =>
 			{

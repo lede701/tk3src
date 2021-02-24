@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using tk3full.Data;
 using tk3full.DTOs;
 using tk3full.Entities;
+using tk3full.Extensions;
 using tk3full.Interfaces;
 using tk3full.Results;
 
@@ -17,30 +18,26 @@ namespace tk3full.Controllers
 {
     public class AuthController : Tk3BaseController
     {
-        private readonly DataContext _context;
-		private readonly IUserRepository _userRepo;
+		private readonly IUnitOfWork _uow;
 		private readonly ITokenService _tokenService;
-        private readonly ITokenService _tokenServices;
 
-        public AuthController(DataContext context, IUserRepository userRepo, ITokenService tokenService, ITokenService tokenServices)
+        public AuthController(IUnitOfWork uow, ITokenService tokenService)
         {
-            _context = context;
-			_userRepo = userRepo;
+			_uow = uow;
 			_tokenService = tokenService;
-            _tokenServices = tokenServices;
         }
 
         [HttpGet]
         public async Task<ActionResult<UserDto>> Index()
         {
-            var user = await _context.Users.FindAsync(1);
+            var user = await _uow.UserRepository.FindAsync(1);
 
             using var hmac = new HMACSHA512();
             user.passwordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes("test1234"));
             user.hashKey = hmac.Key;
 
-            _context.Users.Update(user);
-            await _context.SaveChangesAsync();
+            _uow.UserRepository.Update(user);
+            await _uow.Complete();
 
             return new UserDto
             {
@@ -49,13 +46,19 @@ namespace tk3full.Controllers
             };
         }
 
+        [HttpGet("whoami")]
+        public ActionResult<WhoAmIDto> WhoAmI()
+		{
+            return Ok(new WhoAmIDto { Username = User.GetUsername() });
+		}
+
         [HttpPost("login")]
         public async Task<ActionResult<UserDto>> Login(LoginDto login)
 		{
-            LoginResults results = await _userRepo.LoginAsync(login.UserName, login.Password);
+            LoginResults results = await _uow.UserRepository.LoginAsync(login.UserName, login.Password);
             if (results.IsValid)
             {
-                results.userDto.Token = _tokenService.CreateToken(results.User);
+                results.userDto.Token = await _tokenService.CreateTokenAsync(results.User);
                 return Ok(results.userDto);
             }
 
@@ -65,7 +68,10 @@ namespace tk3full.Controllers
         [HttpPost("logout")]
         public async Task<ActionResult> Logout()
 		{
-            await _userRepo.LogoutAsync();
+            String username = User.GetUsername();
+            if (username == null) return Ok("User token not passed");
+            var user = await _uow.UserRepository.GetUserByUsernameAsync(username);
+            if (await _uow.UserRepository.LogoutAsync(user)) return Ok();
             return BadRequest("ERROR: Could not log user out of system");
 		}
     }

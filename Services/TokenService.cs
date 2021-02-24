@@ -15,13 +15,14 @@ namespace tk3full.Services
     public class TokenService : ITokenService
     {
 		private readonly SymmetricSecurityKey _key;
+		private Dictionary<String, TokenEntity> _validations = new Dictionary<String, TokenEntity>();
 
 		public TokenService(IConfiguration config)
 		{
 			_key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["TokenKey"]));
 		}
 
-		public string CreateToken(Tk3User user)
+		public async Task<string> CreateTokenAsync(Tk3User user)
 		{
 			var claims = new List<Claim>
 			{
@@ -38,12 +39,41 @@ namespace tk3full.Services
 			var tokenHandler = new JwtSecurityTokenHandler();
 			var token = tokenHandler.CreateToken(tokenDescriptor);
 
-			return tokenHandler.WriteToken(token);
+			// Add token to validations
+			TokenEntity te = new TokenEntity
+			{
+				Token = tokenHandler.WriteToken(token),
+				UserName = user.userName
+			};
+
+			await Task.Run(() =>
+			{
+				lock (_validations)
+				{
+					_validations[te.UserName] = te;
+				}
+			});
+
+
+			return te.Token;
 		}
 
-		public async Task<bool> RevokeToken(Tk3User user)
+		public async Task<bool> RevokeTokenAsync(Tk3User user)
         {
-			return true;
+			bool bRetVal = false;
+			await Task.Run(() =>
+			{
+			   if (_validations.ContainsKey(user.userName))
+			   {
+				   lock (_validations)
+				   {
+					   _validations.Remove(user.userName);
+				   }
+					bRetVal = true;
+			   }
+			});
+
+			return bRetVal;
         }
 	}
 }

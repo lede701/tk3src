@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { take } from 'rxjs/operators';
 
 import { AuthService } from '../services/auth.service';
 
@@ -20,6 +21,14 @@ export class AuthComponent implements OnInit {
       this.auth.logout();
       this.router.navigate(['/']);
     }
+    if (this.task == 'whoami') {
+      this.WhoAmI();
+    }
   }
 
+  WhoAmI() {
+    this.auth.WhoAmI().pipe(take(1)).subscribe(results => {
+      console.log(results);
+    });
+  }
 }
