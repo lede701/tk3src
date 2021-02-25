@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 
 using tk3full.DTOs.Timesheets;
-using tk3full.Entities;
+using tk3full.Entities.TimeSheets;
 
 namespace tk3full.Interfaces
 {

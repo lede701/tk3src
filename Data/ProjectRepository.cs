@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using tk3full.DTOs.Timesheets;
-using tk3full.Entities;
+using tk3full.Entities.TimeSheets;
 using tk3full.Interfaces;
 
 namespace tk3full.Data

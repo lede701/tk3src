@@ -1,1 +1,10 @@
-<p>timesheets works!</p>
+<div class="container" *ngIf="timesheetList.length > 0" #timesheetDrawList>
+  <div class="row">
+    <div class="col-md-10 col-md-offset-1">
+      <select #tsSelect (change)="onChangeTimesheet(tsSelect)">
+        <option value="">Select timesheet</option>
+        <option *ngFor="let ts of timesheetList" [value]="ts.guid">{{ts.startDate | date}} - {{ts.endDate | date}}</option>
+      </select>
+    </div>
+  </div>
+</div>

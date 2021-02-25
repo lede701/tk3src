@@ -10,6 +10,8 @@ using System.Threading.Tasks;
 using tk3full.Data;
 using tk3full.DTOs.Timesheets;
 using tk3full.Entities;
+using tk3full.Entities.TimeSheets;
+using tk3full.Extensions;
 using tk3full.Interfaces;
 
 namespace tk3full.Controllers
@@ -40,6 +42,19 @@ namespace tk3full.Controllers
             return BadRequest("ERROR: Invalid timsheet code");
         }
 
+        [HttpGet("list")]
+        public async Task<ActionResult<ICollection<TimesheetListDto>>> GetTimesheetList()
+		{
+            Tk3User user = await _uow.UserRepository.GetUserByGuidAsync(Guid.Parse(User.GetUserId()));
+            var data = await _uow.TimesheetRepositoy.GetTimesheetListAsync(user);
+            if(data != null)
+			{
+                return Ok(data);
+			}
+            return BadRequest("ERROR: No timesheets available to send back for current user");
+
+		}
+
         [HttpGet("new/{start}/{end}")]
         public async Task<ActionResult<TimesheetDto>> Create(DateTime start, DateTime end)
         {
@@ -68,19 +83,20 @@ namespace tk3full.Controllers
                 status = RecordStatus.ACTIVE
             };
 
-            // TODO: Refactor so we reduce database connection
-            if(await _uow.TimesheetRepositoy.AddTimeAsync(td, ts))
+            // Create time detail record and add it to the repository
+            await _uow.TimesheetRepositoy.AddTimeAsync(td, ts);
+            // Check if there is a comment that needs to be added
+            if (comment?.Length > 0)
+            {
+                await _uow.TimesheetRepositoy.AddCommentAsync(td, comment);
+            }
+            // Check if complete is successful
+            if(await _uow.Complete())
 			{
-                if(comment?.Length > 0)
-				{
-                    await _uow.TimesheetRepositoy.AddCommentAsync(td, comment);
-				}
-
-                td = await _uow.TimesheetRepositoy.GetDetails(td.guid);
-
+                // Return DTO object!
                 return Ok(_uow.Mapper.Map<TimeDetailsDto>(td));
-			}
-
+            }
+            // Something really went wrong so let app know
             return BadRequest("ERROR: Could not add time to timesheet");
 		}
         [HttpPost("lunch/create/{tsGuid}")]

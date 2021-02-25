@@ -7,6 +7,7 @@ namespace tk3full.DTOs
 {
 	public class WhoAmIDto
 	{
+		public String Name { get; set; }
 		public String Username { get; set; }
 	}
 }

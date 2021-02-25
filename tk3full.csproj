@@ -7,6 +7,9 @@
 
   <ItemGroup>
     <None Remove="client\src\app\entities\menuItemEntity.ts" />
+    <None Remove="client\src\app\entities\timesheets\timeDetailsEntity.ts" />
+    <None Remove="client\src\app\entities\timesheets\timesheetEntity.ts" />
+    <None Remove="client\src\app\entities\timesheets\timesheetListEntity.ts" />
     <None Remove="client\src\app\entities\userEntity.ts" />
     <None Remove="client\src\app\interceptors\jwt.interceptor.ts" />
     <None Remove="client\src\app\services\auth.service.ts" />
@@ -32,6 +35,9 @@
 
   <ItemGroup>
     <TypeScriptCompile Include="client\src\app\entities\menuItemEntity.ts" />
+    <TypeScriptCompile Include="client\src\app\entities\timesheets\timeDetailsEntity.ts" />
+    <TypeScriptCompile Include="client\src\app\entities\timesheets\timesheetEntity.ts" />
+    <TypeScriptCompile Include="client\src\app\entities\timesheets\timesheetListEntity.ts" />
     <TypeScriptCompile Include="client\src\app\entities\userEntity.ts" />
     <TypeScriptCompile Include="client\src\app\interceptors\jwt.interceptor.ts" />
     <TypeScriptCompile Include="client\src\app\services\auth.service.ts" />

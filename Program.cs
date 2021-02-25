@@ -25,6 +25,7 @@ namespace tk3full
                 await context.Database.MigrateAsync();
                 await Seed.SeedUsers(context);
                 await Seed.SeedMenu(context);
+                await Seed.SeedTimesheets(context);
 			}catch(Exception ex)
 			{
                 var logger = service.GetRequiredService<ILogger<Program>>();

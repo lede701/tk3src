@@ -50,8 +50,13 @@ namespace tk3full.Controllers
         [HttpGet("whoami")]
         public async Task<ActionResult<WhoAmIDto>> WhoAmI()
 		{
+            // Load user infromation
             Tk3User user = await _uow.UserRepository.GetUserByGuidAsync(Guid.Parse(User.GetUserId()));
-            return Ok(new WhoAmIDto { Username = String.Format("{0} {1}", user.firstName, user.lastName) });
+            // Return user name
+            return Ok(new WhoAmIDto { 
+                Name = String.Format("{0} {1}", user.firstName, user.lastName),
+                Username = user.userName
+            });
 		}
 
         [HttpPost("login")]
@@ -76,6 +81,24 @@ namespace tk3full.Controllers
             var user = await _uow.UserRepository.GetUserByUsernameAsync(username);
             if (await _uow.UserRepository.LogoutAsync(user)) return Ok();
             return BadRequest("ERROR: Could not log user out of system");
+		}
+
+        [HttpPost("tokenupdate")]
+        public async Task<ActionResult<UserDto>> TokenUpdate(string guid)
+		{
+            // Load user recrod
+            Tk3User user = await _uow.UserRepository.GetUserByGuidAsync(Guid.Parse(guid));
+            // Validate we have a valid user
+            if(user != null)
+			{
+                // Create user dto
+                UserDto userDto = _uow.Mapper.Map<UserDto>(user);
+                // Create new token
+                userDto.Token = await _tokenService.CreateTokenAsync(user);
+                userDto.tokenExpires = DateTime.UtcNow.AddMinutes(120);
+                return Ok(userDto);
+            }
+            return BadRequest("User can not update token at this time");
 		}
     }
 }

@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace tk3full.Entities
+namespace tk3full.Entities.TimeSheets
 {
 	public class ProjectCode
 	{

@@ -6,6 +6,7 @@ import { MenuItemEntity } from '../entities/menuItemEntity';
 import { environment } from '../../environments/environment';
 import { AuthService } from '../services/auth.service';
 import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-menu',
@@ -17,19 +18,19 @@ export class MenuComponent implements OnInit, OnDestroy {
   public menuItems: MenuItemEntity[] = [];
   model: any = {};
 
-  private authSubscribe: any;
+  private authSubscribe: Subscription;
 
-  constructor(private http: HttpClient, public auth: AuthService, private route: Router) { }
-
-  ngOnInit(): void {
-    this.setupMenu();
+  constructor(private http: HttpClient, public auth: AuthService, private route: Router) {
     this.authSubscribe = this.auth.currentUser$.subscribe(user => {
       this.setupMenu();
     });
   }
 
-  ngOnDestroy(): void {
+  ngOnInit(): void {
+  }
 
+  ngOnDestroy(): void {
+    this.authSubscribe.unsubscribe();
   }
 
   setupMenu() {
@@ -39,7 +40,6 @@ export class MenuComponent implements OnInit, OnDestroy {
       this.menuItems = menu;
       if (this.auth.getIsAuthenticated()) {
         this.menuItems.push(new MenuItemEntity('Logout', 'auth/logout', ''));
-        this.menuItems.push(new MenuItemEntity('Who Am I', 'auth/whoami', ''));
       }
     });
   }
@@ -52,5 +52,11 @@ export class MenuComponent implements OnInit, OnDestroy {
 
   logout() {
     this.auth.logout();
+    this.setupMenu();
+    this.route.navigate(['/']);
+  }
+
+  getName(): string {
+    return this.auth.getName();
   }
 }

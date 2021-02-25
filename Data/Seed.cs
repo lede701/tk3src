@@ -6,6 +6,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using tk3full.Entities;
+using tk3full.Entities.TimeSheets;
 
 namespace tk3full.Data
 {
@@ -72,6 +73,34 @@ namespace tk3full.Data
 				status = 1
 			});
 			await ctx.SaveChangesAsync();
+		}
+
+		public static async Task SeedTimesheets(DataContext ctx)
+		{
+			ctx.Timesheet.Add(new Timesheet()
+			{
+				userId = 1,
+				startDate = DateTime.Parse("2021-02-16"),
+				endDate = DateTime.Parse("2021-02-28"),
+				firstName = "Leland",
+				middleName = "",
+				lastname = "Ede",
+				employeeStatus = 1,
+				guid = Guid.NewGuid(),
+				positionDescription = "Full stack developer"
+			});
+			ctx.Timesheet.Add(new Timesheet()
+			{
+				userId = 1,
+				startDate = DateTime.Parse("2021-03-01"),
+				endDate = DateTime.Parse("2021-03-15"),
+				firstName = "Leland",
+				middleName = "",
+				lastname = "Ede",
+				employeeStatus = 1,
+				guid = Guid.NewGuid(),
+				positionDescription = "Full stack developer"
+			});
 		}
 	}
 }

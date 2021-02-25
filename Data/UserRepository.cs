@@ -49,6 +49,14 @@ namespace tk3full.Data
 				.SingleOrDefaultAsync(u => u.userName == username.ToLower());
 		}
 
+		public async Task<UserDto> GetUserDtoByGuidAsync(Guid guid)
+		{
+			return await _context.Users
+				.Where(u => u.guId == guid)
+				.ProjectTo<UserDto>(_mapper.ConfigurationProvider)
+				.SingleOrDefaultAsync();
+		}
+
 		public async Task<UserDto> GetUserDtoByUserNameAsync(string username)
 		{
 			return await _context.Users

@@ -38,7 +38,8 @@ export interface ITokenParts {
 }
 
 export interface WhoAmIResponse {
-  username: string
+  username: string;
+  name: string;
 }
 
 @Injectable({ providedIn: 'root' })
@@ -61,24 +62,26 @@ export class AuthService {
         // Create the session experation date
         let expDate = new Date(oSess.tokenExpires);
         let now = new Date();
+        // Check if token is still valid
         if (expDate > now) {
+          // Decompress data into user object
           this._user.id = oSess.id;
           this._user.token = oSess.token;
           this._user.username = oSess.username;
           this._user.isAuthenticated = oSess.isAuthenticated;
           this._user.tokenExpires = new Date(oSess.tokenExpires);
           this._user.refreshToken = oSess.refreshToken;
+          // Send notification of current user to app listeners
           this._currentUserSource.next(this._user);
           // Check if token need to be updated and also start the tracking prodcess
           this.updateToken(this);
-        } else {
-          console.log("Session expired");
         }
       }
     }
   }
 
   login(userName: string, password: string) {
+    // Create login DTO object
     let login: any = {
       userName: userName,
       password: password
@@ -103,9 +106,12 @@ export class AuthService {
   }
 
   logout() {
+    // Tell server to dirty the token
     this.http.post(this._baseUri + '/Auth/logout', { username: this._user.username }).pipe(take(1)).subscribe(() => {
     });
+    // Set user to blank record
     this._user = new UserEntity();
+    // Clear the local storage of user record
     localStorage.removeItem(this.storeKey);
     this._currentUserSource.next(this._user);
   }
@@ -113,7 +119,10 @@ export class AuthService {
   updateToken(src: AuthService) {
     let now = new Date();
     if (now > src._user.tokenExpires) {
-      console.log("Update token");
+      this.http.post<Tk3AuthResponse>(this._baseUri + '/Auth/tokenupdate', {}).pipe(take(1)).subscribe(response => {
+        this._user.token = response.token;
+        this._user.tokenExpires = response.tokenExpires;
+      });
     }
     let time = 15 * 60 * 1000;
     src._keepAliveTimer = setTimeout(src.updateToken, time, src);
@@ -127,8 +136,12 @@ export class AuthService {
     return JSON.parse(atob(token.split('.')[1]));
   }
 
-  getName(): string {
+  getUsername(): string {
     return this.getIsAuthenticated() ? this._user.username : '';
+  }
+
+  getName(): string {
+    return this.getUsername();
   }
 
   WhoAmI() {

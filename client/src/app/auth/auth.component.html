@@ -1,5 +1,13 @@
 <div class="container">
-  <div class="row">
+  <div class="row" *ngIf="task == 'whoami' && isReady">
+    <div class="col-sm-12">
+      {{data.username}}
+    </div>
+    <div class="col-sm-12">
+      {{data.name}}
+    </div>
+  </div>
+  <div class="row" *ngIf="showTask">
     <div class="md-col">You would like to perform the following task: {{task}}</div>
   </div>
 </div>

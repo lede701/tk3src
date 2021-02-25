@@ -12,6 +12,9 @@ import { AuthService } from '../services/auth.service';
 export class AuthComponent implements OnInit {
 
   public task: string = '';
+  public data: any;
+  public showTask: boolean = true;
+  public isReady: boolean = false;
 
   constructor(private activeRoute: ActivatedRoute, private router: Router, private auth: AuthService) { }
 
@@ -23,11 +26,14 @@ export class AuthComponent implements OnInit {
     }
     if (this.task == 'whoami') {
       this.WhoAmI();
+      this.showTask = false;
     }
   }
 
   WhoAmI() {
     this.auth.WhoAmI().pipe(take(1)).subscribe(results => {
+      this.data = results;
+      this.isReady = true;
       console.log(results);
     });
   }

@@ -4,31 +4,25 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace tk3full.Entities
+namespace tk3full.Entities.TimeSheets
 {
-	public class TimeDetailsComments
+	public class TimeLunch
 	{
 		#region Table Properties
 
 		public int id { get; set; }
 		public Guid guid { get; set; }
-		[ForeignKey("TimeDetails")]
-		public int timeDetailsId { get; set; }
 		[ForeignKey("Timesheet")]
 		public int timesheetId { get; set; }
-		public int status { get; set; }
-		public String comment { get; set; }
-		public DateTime created { get; set; }
-		public DateTime modified { get; set; }
+		public decimal lunchTime { get; set; }
+		public DateTime lunchDate { get; set; }
 
 		#endregion
 
-		#region Linked Data
+		#region Linked data
 
-		public TimeDetails TimeDetails { get; set; }
 		public Timesheet Timesheet { get; set; }
 
 		#endregion
-
 	}
 }

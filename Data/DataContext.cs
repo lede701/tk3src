@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using tk3full.Entities;
+using tk3full.Entities.TimeSheets;
 
 namespace tk3full.Data
 {

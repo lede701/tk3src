@@ -7,6 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using tk3full.DTOs.Timesheets;
 using tk3full.Entities;
+using tk3full.Entities.TimeSheets;
 using tk3full.Interfaces;
 
 namespace tk3full.Data
@@ -22,20 +23,19 @@ namespace tk3full.Data
             _mapper = mapper;
         }
 
-        public async Task<bool> AddCommentAsync(TimeDetails td, String commentIn)
+        public async Task AddCommentAsync(TimeDetails td, String commentIn)
 		{
             TimeDetailsComments tdc = new TimeDetailsComments()
             {
                 guid = Guid.NewGuid(),
                 timesheetId = td.timesheetId,
-                timeDetailsId = td.id,
                 comment = commentIn,
                 created = DateTime.Now,
                 modified = DateTime.Now,
                 status = RecordStatus.ACTIVE
             };
-            _context.TimeDetailsComments.Add(tdc);
-            return await _context.SaveChangesAsync() > 0;
+            td.Comments.Add(tdc);
+            await _context.TimeDetailsComments.AddAsync(tdc);
 		}
 
         public async Task<TimeLunchDto> AddLunchAsync(Timesheet ts, decimal time, DateTime day)
@@ -47,17 +47,15 @@ namespace tk3full.Data
                 lunchTime = time,
                 lunchDate = day
             };
-            _context.TimeLunch.Add(tl);
-            await _context.SaveChangesAsync();
+            await _context.TimeLunch.AddAsync(tl);
             return _mapper.Map<TimeLunchDto>(tl);
         }
 
 
-        public async Task<bool> AddTimeAsync(TimeDetails td, Timesheet ts)
+        public async Task AddTimeAsync(TimeDetails td, Timesheet ts)
         {
             td.timesheetId = ts.id;
-            _context.TimeDetails.Add(td);
-            return await _context.SaveChangesAsync() > 0;
+            await _context.TimeDetails.AddAsync(td);
         }
 
 
@@ -101,21 +99,25 @@ namespace tk3full.Data
 
 		public async Task<TimesheetDto> GetTimesheetWithIdAsync(int id)
 		{
-            var ts = await _context.Timesheet.FindAsync(id);
-            if(ts.guid == new Guid("00000000-0000-0000-0000-000000000000"))
-			{
-                ts.guid = Guid.NewGuid();
-                _context.Timesheet.Update(ts);
-                await _context.SaveChangesAsync();
-			}
-
-            return _mapper.Map<TimesheetDto>(ts);
+            return await _context
+                .Timesheet
+                .Where(ts => ts.id == id)
+                .ProjectTo<TimesheetDto>(_mapper.ConfigurationProvider)
+                .FirstOrDefaultAsync();
 		}
 
 		public async Task<TimeDetails> GetDetails(Guid guid)
 		{
             return await _context.TimeDetails.Where(td => td.guid == guid)
                 .SingleOrDefaultAsync();
+		}
+
+		public async Task<ICollection<TimesheetListDto>> GetTimesheetListAsync(Tk3User user)
+		{
+            return await _context.Timesheet
+                .Where(ts => ts.userId == user.Id)
+                .ProjectTo<TimesheetListDto>(_mapper.ConfigurationProvider)
+                .ToArrayAsync();
 		}
 	}
 }
