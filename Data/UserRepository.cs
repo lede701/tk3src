@@ -35,6 +35,13 @@ namespace tk3full.Data
 				.FindAsync(id);
 		}
 
+		public async Task<Tk3User> GetUserByGuidAsync(Guid guid)
+		{
+			return await _context
+				.Users
+				.SingleOrDefaultAsync(u => u.guId == guid);
+		}
+
 		public async Task<Tk3User> GetUserByUsernameAsync(string username)
 		{
 			return await _context

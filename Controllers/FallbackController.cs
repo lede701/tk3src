@@ -31,7 +31,13 @@ namespace tk3full.Controllers
 
 		public ActionResult Index()
 		{
-			return PhysicalFile(Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "index.html"), "text/HTML");
+			String indexFile = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "index.html");
+			if(System.IO.File.Exists(indexFile))
+			{
+				return PhysicalFile(indexFile, "text/HTML");
+			}
+
+			return BadRequest("No index file was located");
 		}
 	}
 }

@@ -9,5 +9,6 @@ namespace tk3full.DTOs
     {
         public String UserName { get; set; }
         public String Token { get; set; }
+		public DateTime tokenExpires { get; set; }
 	}
 }

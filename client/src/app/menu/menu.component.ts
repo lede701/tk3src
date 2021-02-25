@@ -5,6 +5,7 @@ import { take } from 'rxjs/operators';
 import { MenuItemEntity } from '../entities/menuItemEntity';
 import { environment } from '../../environments/environment';
 import { AuthService } from '../services/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-menu',
@@ -18,7 +19,7 @@ export class MenuComponent implements OnInit, OnDestroy {
 
   private authSubscribe: any;
 
-  constructor(private http: HttpClient, public auth: AuthService) { }
+  constructor(private http: HttpClient, public auth: AuthService, private route: Router) { }
 
   ngOnInit(): void {
     this.setupMenu();
@@ -45,9 +46,8 @@ export class MenuComponent implements OnInit, OnDestroy {
 
   login() {
     this.auth.login(this.model.userName, this.model.password).pipe(take(1)).subscribe(results => {
-
-      console.log(results);
-    })
+      this.route.navigate(['/']);
+    });
   }
 
   logout() {

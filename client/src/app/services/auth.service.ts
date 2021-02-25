@@ -26,11 +26,19 @@ export interface AuthRefreshData {
 
 export interface Tk3AuthResponse {
   userName: string,
-  token: string
+  token: string,
+  tokenExpires: Date
+}
+
+export interface ITokenParts {
+  exp: Date;
+  nameid: string;
+  iat: Date;
+  nbf: Date;
 }
 
 export interface WhoAmIResponse {
-  username: String
+  username: string
 }
 
 @Injectable({ providedIn: 'root' })
@@ -48,16 +56,24 @@ export class AuthService {
     let sess = localStorage.getItem(this.storeKey);
     if (sess) {
       let oSess = JSON.parse(sess);
+      // Check if there is a valid user object
       if (oSess) {
-        this._user.id = oSess.id;
-        this._user.token = oSess.token;
-        this._user.username = oSess.username;
-        this._user.isAuthenticated = oSess.isAuthenticated;
-        this._user.tokenExpires = new Date(oSess.tokenExpires);
-        this._user.refreshToken = oSess.refreshToken;
-        this._currentUserSource.next(this._user);
-        // Check if token need to be updated and also start the tracking prodcess
-        this.updateToken(this);
+        // Create the session experation date
+        let expDate = new Date(oSess.tokenExpires);
+        let now = new Date();
+        if (expDate > now) {
+          this._user.id = oSess.id;
+          this._user.token = oSess.token;
+          this._user.username = oSess.username;
+          this._user.isAuthenticated = oSess.isAuthenticated;
+          this._user.tokenExpires = new Date(oSess.tokenExpires);
+          this._user.refreshToken = oSess.refreshToken;
+          this._currentUserSource.next(this._user);
+          // Check if token need to be updated and also start the tracking prodcess
+          this.updateToken(this);
+        } else {
+          console.log("Session expired");
+        }
       }
     }
   }
@@ -67,16 +83,22 @@ export class AuthService {
       userName: userName,
       password: password
     };
+    // Call auth service on server
     return this.http.post<Tk3AuthResponse>(this._baseUri + '/Auth/login', login).pipe(map(results => {
+      // Create a new User Entity object for this session
       let user: UserEntity = new UserEntity();
       user.isAuthenticated = true;
       user.username = results.userName;
       user.token = results.token;
-      user.id = "0";
+
+      // Decrypt token and store import information about user and session
+      let token = this.getDecodedToken(user.token);
+      user.id = token.nameid;
+      user.tokenExpires = results.tokenExpires;
+
       this._user = user;
       this._currentUserSource.next(this._user);
       localStorage.setItem(this.storeKey, JSON.stringify(this._user));
-      console.log(results);
     }));
   }
 
@@ -99,6 +121,10 @@ export class AuthService {
 
   getIsAuthenticated(): boolean {
     return this._user.isAuthenticated;
+  }
+
+  getDecodedToken(token: string) : ITokenParts {
+    return JSON.parse(atob(token.split('.')[1]));
   }
 
   getName(): string {

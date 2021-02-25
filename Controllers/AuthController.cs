@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 using tk3full.Data;
 using tk3full.DTOs;
@@ -47,9 +48,10 @@ namespace tk3full.Controllers
         }
 
         [HttpGet("whoami")]
-        public ActionResult<WhoAmIDto> WhoAmI()
+        public async Task<ActionResult<WhoAmIDto>> WhoAmI()
 		{
-            return Ok(new WhoAmIDto { Username = User.GetUsername() });
+            Tk3User user = await _uow.UserRepository.GetUserByGuidAsync(Guid.Parse(User.GetUserId()));
+            return Ok(new WhoAmIDto { Username = String.Format("{0} {1}", user.firstName, user.lastName) });
 		}
 
         [HttpPost("login")]
@@ -59,6 +61,7 @@ namespace tk3full.Controllers
             if (results.IsValid)
             {
                 results.userDto.Token = await _tokenService.CreateTokenAsync(results.User);
+                results.userDto.tokenExpires = DateTime.UtcNow.AddMinutes(120);
                 return Ok(results.userDto);
             }
 

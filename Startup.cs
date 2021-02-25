@@ -32,11 +32,12 @@ namespace tk3full
             services.AddApplicationServices(_config);
             services.AddControllers();
             services.AddCors();
+            services.AddIdentityServices(_config);
+
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "tk3full", Version = "v1" });
+                c.SwaggerDoc("v3", new OpenApiInfo { Title = "TimeKeeper3", Version = "v3" });
             });
-            services.AddIdentityServices(_config);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -46,16 +47,22 @@ namespace tk3full
             {
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "tk3full v1"));
+                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v3/swagger.json", "tk3full v3"));
             }
 
             app.UseHttpsRedirection();
 
             app.UseRouting();
 
-            app.UseCors(x => x.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
+            app.UseCors(x => x.AllowAnyHeader()
+                .AllowAnyMethod()
+                .AllowAnyOrigin());
 
+            app.UseAuthentication();
             app.UseAuthorization();
+
+            app.UseDefaultFiles();
+            app.UseStaticFiles();
 
             app.UseEndpoints(endpoints =>
             {

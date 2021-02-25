@@ -24,9 +24,11 @@ namespace tk3full.Services
 
 		public async Task<string> CreateTokenAsync(Tk3User user)
 		{
+			DateTime expDate = DateTime.Now.AddMinutes(120);
 			var claims = new List<Claim>
 			{
-				new Claim(JwtRegisteredClaimNames.NameId, user.userName)
+				new Claim(JwtRegisteredClaimNames.NameId, user.guId.ToString()),
+				new Claim(JwtRegisteredClaimNames.Exp, expDate.ToString())
 			};
 
 			var creds = new SigningCredentials(_key, SecurityAlgorithms.HmacSha512Signature);
@@ -39,7 +41,7 @@ namespace tk3full.Services
 			var tokenHandler = new JwtSecurityTokenHandler();
 			var token = tokenHandler.CreateToken(tokenDescriptor);
 
-			// Add token to validations
+			// Adding token to validations
 			TokenEntity te = new TokenEntity
 			{
 				Token = tokenHandler.WriteToken(token),
