@@ -85,7 +85,8 @@ namespace tk3full.Data
                 middleName = user.middleName,
                 lastname = user.lastName,
                 positionDescription = user.title,
-                hoursPerWeek = user.workHoursPerWeek,
+                hoursPerWeek = 40.0m,
+                hoursPerDay = 8.0m,
                 startDate = start,
                 endDate = end
             };

@@ -15,6 +15,7 @@ import { MenuComponent } from './menu/menu.component';
 import { HomeComponent } from './home/home.component';
 import { JwtInterceptor } from './interceptors/jwt.interceptor';
 import { AuthComponent } from './auth/auth.component';
+import { StaticFieldsComponent } from './helpers/static-fields/static-fields.component';
 
 @NgModule({
   declarations: [
@@ -25,7 +26,8 @@ import { AuthComponent } from './auth/auth.component';
     TimesheetsComponent,
     MenuComponent,
     HomeComponent,
-    AuthComponent
+    AuthComponent,
+    StaticFieldsComponent
   ],
   imports: [
     BrowserModule,

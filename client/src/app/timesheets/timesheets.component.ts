@@ -1,6 +1,6 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { take } from 'rxjs/operators';
-import { TimesheetEntity } from '../entities/timesheets/timesheetEntity';
 import { TimesheetListEntity } from '../entities/timesheets/timesheetListEntity';
 import { TimesheetsService } from '../services/timesheets.service';
 
@@ -10,25 +10,37 @@ import { TimesheetsService } from '../services/timesheets.service';
   styleUrls: ['./timesheets.component.less']
 })
 export class TimesheetsComponent implements OnInit {
-  @ViewChild('tsSelect') timesheetSelector: ElementRef;
+  @ViewChild('tsSelect') timesheetSelector: ElementRef = new ElementRef({});
   public timesheetList: TimesheetListEntity[] = [];
 
-  public timesheet: TimesheetEntity = new TimesheetEntity();
   public isTimesheetLoaded: boolean = false;
 
-  constructor(private tsService: TimesheetsService) { }
+  constructor(private tsService: TimesheetsService, private activeRoute: ActivatedRoute, private route: Router) { }
 
   ngOnInit(): void {
+    let tsGuid = this.activeRoute.snapshot.params.guid;
+
     this.tsService.getTimesheetList().pipe(take(1)).subscribe(response => {
       this.timesheetList = response;
     });
+    if (tsGuid !== undefined) {
+      this.loadTimesheet(tsGuid);
+    }
   }
 
-  onChangeTimesheet() {
-    this.tsService.getTimesheet(this.timesheetSelector.nativeElement.value).pipe(take(1)).subscribe(results => {
-      this.isTimesheetLoaded = true;
-      this.timesheet = results;
-    });
+  onChangeTimesheet(timesheetItem: any) {
+    let tsGuid = this.timesheetSelector.nativeElement.value;
+    this.route.navigate(['/', 'timesheet', tsGuid]);
+  }
+
+  loadTimesheet(tsGuid: string) {
+    this.isTimesheetLoaded = false;
+    if (tsGuid.length > 0) {
+      this.tsService.getTimesheet(tsGuid).pipe(take(1)).subscribe(results => {
+        this.tsService.setTimesheet(results);
+        this.isTimesheetLoaded = true;
+      });
+    }
   }
 
 }

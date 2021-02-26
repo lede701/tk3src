@@ -31,10 +31,12 @@ namespace tk3full.Entities.TimeSheets
 		#endregion
 
 		#region Linked data
+
 		public Tk3User User { get; set; }
 
 		public ICollection<TimeDetails> TimeDetails { get; set; }
 		public ICollection<TimeLunch> TimeLunch { get; set; }
+		public ICollection<HolidayEmployee> Holidays { get; set; }
 
 		#endregion
 

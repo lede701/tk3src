@@ -12,7 +12,7 @@ namespace tk3full.DTOs.Timesheets
 		public String positionDescription { get; set; }
 		public String firstName { get; set; }
 		public String middleName { get; set; }
-		public String lastname { get; set; }
+		public String lastName { get; set; }
 		public decimal hoursPerDay { get; set; }
 		public decimal hoursPerWeek { get; set; }
 		public int employeeStatus { get; set; }

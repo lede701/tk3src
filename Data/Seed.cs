@@ -21,6 +21,8 @@ namespace tk3full.Data
 			var user = new Tk3User()
 			{
 				guId = Guid.NewGuid(),
+				locationId = 1,
+				departmentId = 1,
 				userName = "lede",
 				passwordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes("test1234")),
 				hashKey = hmac.Key,
@@ -29,7 +31,6 @@ namespace tk3full.Data
 				lastName = "Ede",
 				title = "Web/Database Developer",
 				workScheduleId = 1,
-				workHoursPerWeek = 40.0m,
 				created = DateTime.Now,
 				modified = DateTime.Now,
 				status = 1
@@ -77,6 +78,8 @@ namespace tk3full.Data
 
 		public static async Task SeedTimesheets(DataContext ctx)
 		{
+			if (await ctx.Timesheet.AnyAsync()) return;
+
 			ctx.Timesheet.Add(new Timesheet()
 			{
 				userId = 1,
@@ -102,6 +105,24 @@ namespace tk3full.Data
 				positionDescription = "Full stack developer"
 			});
 			await ctx.SaveChangesAsync();
+			var ts = await ctx.Timesheet.Where(ts => ts.userId == 1)
+				.FirstOrDefaultAsync();
+			ts.TimeDetails.Add(
+				new TimeDetails
+				{
+					timesheetId = ts.id,
+					projectId = 1,
+					timeDate = Convert.ToDateTime("2021-02-16"),
+					hrWorked = 8.2m
+				});
+			ts.TimeDetails.Add(new TimeDetails()
+			{
+				timesheetId = ts.id,
+				projectId = 1,
+				timeDate = Convert.ToDateTime("2021-02-17"),
+				hrWorked = 8.0m
+
+			});
 		}
 	}
 }

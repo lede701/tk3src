@@ -1,6 +1,6 @@
 <div class="container" *ngIf="timesheetList.length > 0" #timesheetDrawList>
   <div class="row">
-    <div class="col-md-10 col-md-offset-1">
+    <div class="col-md-12">
       <select #tsSelect (change)="onChangeTimesheet(tsSelect)">
         <option value="">Select timesheet</option>
         <option *ngFor="let ts of timesheetList" [value]="ts.guid">{{ts.startDate | date}} - {{ts.endDate | date}}</option>
@@ -8,10 +8,11 @@
     </div>
   </div>
 </div>
-<div class="container" *ngIf="isTimesheetLoaded">
-  <div class="row">
-    <div class="col.md-12">
-      <app-sheetview [(timesheet)]="timesheet"></app-sheetview>
+
+<div class="container">
+  <div class="row" *ngIf="isTimesheetLoaded">
+    <div class="col-md-12">
+      <app-sheetview></app-sheetview>
     </div>
   </div>
 </div>

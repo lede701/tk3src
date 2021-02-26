@@ -49,6 +49,7 @@ export class AuthService {
   private _keepAliveTimer: number = -1;
   private _baseUri: string = environment.apiUrl;
 
+  // Create observable for current user
   private _currentUserSource = new ReplaySubject<UserEntity>(1);
   currentUser$ = this._currentUserSource.asObservable();
 

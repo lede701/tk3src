@@ -30,6 +30,7 @@
 
   <ItemGroup>
     <Folder Include="client\src\app\models\" />
+    <Folder Include="client\src\app\helpers\" />
     <Folder Include="Models\" />
   </ItemGroup>
 

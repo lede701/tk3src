@@ -9,8 +9,10 @@ import { TimesheetsComponent } from './timesheets/timesheets.component';
 const routes: Routes = [
   {
     path: 'timesheet', component: TimesheetsComponent, children: [
-
     ]
+  },
+  {
+    path: 'timesheet/:guid', component: TimesheetsComponent
   },
   { path: 'auth/:task', component: AuthComponent },
   { path: '', component: HomeComponent }
