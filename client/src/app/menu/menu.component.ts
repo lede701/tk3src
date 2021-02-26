@@ -7,6 +7,7 @@ import { environment } from '../../environments/environment';
 import { AuthService } from '../services/auth.service';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { NgForm } from '@angular/forms';
 
 @Component({
   selector: 'app-menu',
@@ -15,6 +16,7 @@ import { Subscription } from 'rxjs';
 })
 export class MenuComponent implements OnInit, OnDestroy {
   @Input() title: string = "Site Title";
+
   public menuItems: MenuItemEntity[] = [];
   model: any = {};
 
@@ -44,8 +46,9 @@ export class MenuComponent implements OnInit, OnDestroy {
     });
   }
 
-  login() {
+  login(loginForm: NgForm) {
     this.auth.login(this.model.userName, this.model.password).pipe(take(1)).subscribe(results => {
+      loginForm.reset();
       this.route.navigate(['/']);
     });
   }

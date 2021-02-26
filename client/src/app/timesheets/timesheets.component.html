@@ -8,3 +8,10 @@
     </div>
   </div>
 </div>
+<div class="container" *ngIf="isTimesheetLoaded">
+  <div class="row">
+    <div class="col.md-12">
+      <app-sheetview [(timesheet)]="timesheet"></app-sheetview>
+    </div>
+  </div>
+</div>

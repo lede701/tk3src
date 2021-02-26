@@ -11,7 +11,7 @@
       <form class="form-inline mt-2 mt-md-0"
             *ngIf="!auth.getIsAuthenticated()"
             #loginForm="ngForm"
-            (ngSubmit)="login()"
+            (ngSubmit)="login(loginForm)"
             autocomplete="off">
         <input
                [(ngModel)]="model.userName"

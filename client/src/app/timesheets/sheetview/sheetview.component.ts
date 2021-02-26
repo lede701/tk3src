@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { TimesheetEntity } from '../../entities/timesheets/timesheetEntity';
 
 @Component({
   selector: 'app-sheetview',
@@ -6,10 +7,12 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./sheetview.component.less']
 })
 export class SheetviewComponent implements OnInit {
+  @Input() timesheet: TimesheetEntity;
 
   constructor() { }
 
   ngOnInit(): void {
+    console.log(this.timesheet);
   }
 
 }

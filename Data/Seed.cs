@@ -101,6 +101,7 @@ namespace tk3full.Data
 				guid = Guid.NewGuid(),
 				positionDescription = "Full stack developer"
 			});
+			await ctx.SaveChangesAsync();
 		}
 	}
 }

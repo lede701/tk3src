@@ -14,19 +14,20 @@ export class TimesheetsComponent implements OnInit {
   public timesheetList: TimesheetListEntity[] = [];
 
   public timesheet: TimesheetEntity = new TimesheetEntity();
+  public isTimesheetLoaded: boolean = false;
 
   constructor(private tsService: TimesheetsService) { }
 
   ngOnInit(): void {
     this.tsService.getTimesheetList().pipe(take(1)).subscribe(response => {
       this.timesheetList = response;
-      console.log(response);
     });
   }
 
   onChangeTimesheet() {
     this.tsService.getTimesheet(this.timesheetSelector.nativeElement.value).pipe(take(1)).subscribe(results => {
-      
+      this.isTimesheetLoaded = true;
+      this.timesheet = results;
     });
   }
 
