@@ -16,7 +16,7 @@ using tk3full.Interfaces;
 
 namespace tk3full.Controllers
 {
-    //[Authorize]
+    [Authorize]
     public class TimesheetController : Tk3BaseController
     {
         private readonly ITimesheetRepository _tsRepo;

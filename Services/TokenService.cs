@@ -16,21 +16,26 @@ namespace tk3full.Services
     {
 		private readonly SymmetricSecurityKey _key;
 		private Dictionary<String, TokenEntity> _validations = new Dictionary<String, TokenEntity>();
+		private int _expiresInMinutes;
 
 		public TokenService(IConfiguration config)
 		{
 			_key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["TokenKey"]));
+			_expiresInMinutes = Convert.ToInt32(config["TokenAgeInMinutes"]);
 		}
 
 		public async Task<string> CreateTokenAsync(Tk3User user)
 		{
-			DateTime expDate = DateTime.Now.AddMinutes(120);
+			// Create token experation date
+			DateTime expDate = DateTime.Now.AddMinutes(_expiresInMinutes);
+			// Create new cliam
 			var claims = new List<Claim>
 			{
 				new Claim(JwtRegisteredClaimNames.NameId, user.guId.ToString()),
 				new Claim(JwtRegisteredClaimNames.Exp, expDate.ToString())
 			};
 
+			// Create new cedentials
 			var creds = new SigningCredentials(_key, SecurityAlgorithms.HmacSha512Signature);
 			var tokenDescriptor = new SecurityTokenDescriptor
 			{

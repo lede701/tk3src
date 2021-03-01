@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,11 +22,13 @@ namespace tk3full.Controllers
     {
 		private readonly IUnitOfWork _uow;
 		private readonly ITokenService _tokenService;
+        private int _tokenExpiresInMinutes;
 
-        public AuthController(IUnitOfWork uow, ITokenService tokenService)
+        public AuthController(IUnitOfWork uow, ITokenService tokenService, IConfiguration config)
         {
 			_uow = uow;
 			_tokenService = tokenService;
+            _tokenExpiresInMinutes = Convert.ToInt32(config["TokenAgeInMinutes"]);
         }
 
         [HttpGet]
@@ -66,7 +69,7 @@ namespace tk3full.Controllers
             if (results.IsValid)
             {
                 results.userDto.Token = await _tokenService.CreateTokenAsync(results.User);
-                results.userDto.tokenExpires = DateTime.UtcNow.AddMinutes(120);
+                results.userDto.tokenExpires = DateTime.UtcNow.AddMinutes(_tokenExpiresInMinutes);
                 return Ok(results.userDto);
             }
 

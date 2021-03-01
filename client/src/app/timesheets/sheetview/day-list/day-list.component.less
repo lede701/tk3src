@@ -1,0 +1,20 @@
+@backColor: white;
+@borderColor: darken(@backColor, 25%);
+
+.col-day {
+  border-bottom: 1px solid @borderColor;
+}
+
+.col-day-right::after{
+    border-right: 1px solid @borderColor;
+}
+
+.col-project {
+  border-right: 1px solid @borderColor;
+  border-bottom: 1px solid @borderColor;
+}
+
+.today {
+  font-weight: bolder;
+  background-color: darken(@backColor, 5%);
+}

@@ -1,0 +1,6 @@
+<div class="row align-items-end">
+  <div class="col-2 col-project mt-auto">Project</div>
+  <div class="col col-day mt-auto" *ngFor="let day of dayList" [ngClass]="{'today': day == isToday}">
+    {{day}}
+  </div>
+</div>
