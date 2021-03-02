@@ -9,8 +9,8 @@ using tk3full.Data;
 namespace tk3full.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20210226225256_AddingTSTables")]
-    partial class AddingTSTables
+    [Migration("20210301213417_AddingEmployeeTable")]
+    partial class AddingEmployeeTable
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -96,6 +96,9 @@ namespace tk3full.Data.Migrations
                     b.Property<string>("deptParams")
                         .HasColumnType("TEXT");
 
+                    b.Property<Guid>("guid")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("name")
                         .HasColumnType("TEXT");
 
@@ -105,6 +108,70 @@ namespace tk3full.Data.Migrations
                     b.HasKey("id");
 
                     b.ToTable("Departments");
+                });
+
+            modelBuilder.Entity("tk3full.Entities.TimeSheets.DepartmentsEmployees", b =>
+                {
+                    b.Property<int>("DepartmentsId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("EmpoyeesId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("DepartmentsId", "EmpoyeesId");
+
+                    b.HasIndex("EmpoyeesId");
+
+                    b.ToTable("DepartmentsEmployees");
+                });
+
+            modelBuilder.Entity("tk3full.Entities.TimeSheets.Employee", b =>
+                {
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime?>("accuralDate")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("created")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("createdById")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("departmentId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<Guid>("guid")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int?>("locationId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("modified")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("modifiedById")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("startDate")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("teminationDate")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("userId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("workScheduleId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("id");
+
+                    b.HasIndex("userId");
+
+                    b.ToTable("Employees");
                 });
 
             modelBuilder.Entity("tk3full.Entities.TimeSheets.HolidayEmployee", b =>
@@ -302,15 +369,13 @@ namespace tk3full.Data.Migrations
                     b.Property<string>("locationState")
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("parentId")
+                    b.Property<int?>("parentId")
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("status")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("id");
-
-                    b.HasIndex("parentId");
 
                     b.ToTable("Locations");
                 });
@@ -497,6 +562,9 @@ namespace tk3full.Data.Migrations
                     b.Property<bool>("earlySign")
                         .HasColumnType("INTEGER");
 
+                    b.Property<int>("employeeId")
+                        .HasColumnType("INTEGER");
+
                     b.Property<DateTime>("employeeSignDate")
                         .HasColumnType("TEXT");
 
@@ -542,12 +610,9 @@ namespace tk3full.Data.Migrations
                     b.Property<string>("supervisorSignature")
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("userId")
-                        .HasColumnType("INTEGER");
-
                     b.HasKey("id");
 
-                    b.HasIndex("userId");
+                    b.HasIndex("employeeId");
 
                     b.ToTable("Timesheet");
                 });
@@ -641,9 +706,6 @@ namespace tk3full.Data.Migrations
                     b.Property<DateTime>("created")
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("departmentId")
-                        .HasColumnType("INTEGER");
-
                     b.Property<string>("firstName")
                         .HasColumnType("TEXT");
 
@@ -658,9 +720,6 @@ namespace tk3full.Data.Migrations
 
                     b.Property<string>("lastName")
                         .HasColumnType("TEXT");
-
-                    b.Property<int>("locationId")
-                        .HasColumnType("INTEGER");
 
                     b.Property<string>("middleName")
                         .HasColumnType("TEXT");
@@ -682,9 +741,6 @@ namespace tk3full.Data.Migrations
 
                     b.Property<string>("userParams")
                         .HasColumnType("TEXT");
-
-                    b.Property<int>("workScheduleId")
-                        .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 
@@ -708,6 +764,36 @@ namespace tk3full.Data.Migrations
                     b.Navigation("CreatedUser");
 
                     b.Navigation("ModifiedUser");
+                });
+
+            modelBuilder.Entity("tk3full.Entities.TimeSheets.DepartmentsEmployees", b =>
+                {
+                    b.HasOne("tk3full.Entities.TimeSheets.Departments", "Departments")
+                        .WithMany("Employees")
+                        .HasForeignKey("DepartmentsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("tk3full.Entities.TimeSheets.Employee", "Employees")
+                        .WithMany("Departments")
+                        .HasForeignKey("EmpoyeesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Departments");
+
+                    b.Navigation("Employees");
+                });
+
+            modelBuilder.Entity("tk3full.Entities.TimeSheets.Employee", b =>
+                {
+                    b.HasOne("tk3full.Entities.Tk3User", "User")
+                        .WithMany()
+                        .HasForeignKey("userId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("tk3full.Entities.TimeSheets.HolidayEmployee", b =>
@@ -746,17 +832,6 @@ namespace tk3full.Data.Migrations
                     b.Navigation("Bank");
 
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("tk3full.Entities.TimeSheets.Locations", b =>
-                {
-                    b.HasOne("tk3full.Entities.TimeSheets.Locations", "parent")
-                        .WithMany()
-                        .HasForeignKey("parentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("parent");
                 });
 
             modelBuilder.Entity("tk3full.Entities.TimeSheets.ProjectCode", b =>
@@ -838,13 +913,13 @@ namespace tk3full.Data.Migrations
 
             modelBuilder.Entity("tk3full.Entities.TimeSheets.Timesheet", b =>
                 {
-                    b.HasOne("tk3full.Entities.Tk3User", "User")
+                    b.HasOne("tk3full.Entities.TimeSheets.Employee", "Employee")
                         .WithMany()
-                        .HasForeignKey("userId")
+                        .HasForeignKey("employeeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("User");
+                    b.Navigation("Employee");
                 });
 
             modelBuilder.Entity("tk3full.Entities.TimeSheets.TimesheetExceptions", b =>
@@ -864,6 +939,16 @@ namespace tk3full.Data.Migrations
                     b.Navigation("Supervisor");
 
                     b.Navigation("Timesheet");
+                });
+
+            modelBuilder.Entity("tk3full.Entities.TimeSheets.Departments", b =>
+                {
+                    b.Navigation("Employees");
+                });
+
+            modelBuilder.Entity("tk3full.Entities.TimeSheets.Employee", b =>
+                {
+                    b.Navigation("Departments");
                 });
 
             modelBuilder.Entity("tk3full.Entities.TimeSheets.TimeDetails", b =>

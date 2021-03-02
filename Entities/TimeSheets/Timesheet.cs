@@ -11,7 +11,7 @@ namespace tk3full.Entities.TimeSheets
 
 		public int id { get; set; }
         public Guid guid { get; set; }
-        public int userId { get; set; }
+        public int employeeId { get; set; }
 		public bool earlySign { get; set; }
 		public String positionDescription { get; set; }
 		public String firstName { get; set; }
@@ -32,7 +32,7 @@ namespace tk3full.Entities.TimeSheets
 
 		#region Linked data
 
-		public Tk3User User { get; set; }
+		public Employee Employee { get; set; }
 
 		public ICollection<TimeDetails> TimeDetails { get; set; }
 		public ICollection<TimeLunch> TimeLunch { get; set; }

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using tk3full.DTOs;
 using tk3full.Entities;
+using tk3full.Entities.TimeSheets;
 using tk3full.Results;
 
 namespace tk3full.Interfaces
@@ -13,6 +14,8 @@ namespace tk3full.Interfaces
 		void Update(Tk3User user);
 		Task<IEnumerable<Tk3User>> GetUsersAsync();
 		Task<Tk3User> FindAsync(int id);
+		Task<Employee> FindEmployeeAsync(int id);
+		Task<Employee> GetEmployeeByGuidAsync(Guid guid);
 		Task<Tk3User> GetUserByUsernameAsync(String username);
 		Task<Tk3User> GetUserByGuidAsync(Guid guid);
 		Task<UserDto> GetUserDtoByGuidAsync(Guid guid);

@@ -12,6 +12,7 @@ using tk3full.Interfaces;
 using System.Security.Cryptography;
 using System.Text;
 using tk3full.Results;
+using tk3full.Entities.TimeSheets;
 
 namespace tk3full.Data
 {
@@ -34,6 +35,20 @@ namespace tk3full.Data
 				.Users
 				.FindAsync(id);
 		}
+
+		public async Task<Employee> FindEmployeeAsync(int id) {
+			return await _context
+				.Employees
+				.FindAsync(id);
+		}
+
+
+		public async Task<Employee> GetEmployeeByGuidAsync(Guid guid)
+		{
+			return await _context.Employees
+				.SingleOrDefaultAsync(emp => emp.User.guId == guid);
+		}
+
 
 		public async Task<Tk3User> GetUserByGuidAsync(Guid guid)
 		{

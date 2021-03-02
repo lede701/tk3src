@@ -3,13 +3,39 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace tk3full.Data.Migrations
 {
-    public partial class AddingTSTables : Migration
+    public partial class AddingEmployeeTable : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropForeignKey(
+                name: "FK_Timesheet_Users_userId",
+                table: "Timesheet");
+
+            migrationBuilder.DropColumn(
+                name: "departmentId",
+                table: "Users");
+
+            migrationBuilder.DropColumn(
+                name: "locationId",
+                table: "Users");
+
             migrationBuilder.DropColumn(
                 name: "workHoursPerWeek",
                 table: "Users");
+
+            migrationBuilder.DropColumn(
+                name: "workScheduleId",
+                table: "Users");
+
+            migrationBuilder.RenameColumn(
+                name: "userId",
+                table: "Timesheet",
+                newName: "employeeId");
+
+            migrationBuilder.RenameIndex(
+                name: "IX_Timesheet_userId",
+                table: "Timesheet",
+                newName: "IX_Timesheet_employeeId");
 
             migrationBuilder.CreateTable(
                 name: "Departments",
@@ -17,6 +43,7 @@ namespace tk3full.Data.Migrations
                 {
                     id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
+                    guid = table.Column<Guid>(type: "TEXT", nullable: false),
                     name = table.Column<string>(type: "TEXT", nullable: true),
                     departmentCode = table.Column<string>(type: "TEXT", nullable: true),
                     status = table.Column<int>(type: "INTEGER", nullable: false),
@@ -25,6 +52,36 @@ namespace tk3full.Data.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Departments", x => x.id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Employees",
+                columns: table => new
+                {
+                    id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    guid = table.Column<Guid>(type: "TEXT", nullable: false),
+                    userId = table.Column<int>(type: "INTEGER", nullable: false),
+                    locationId = table.Column<int>(type: "INTEGER", nullable: true),
+                    departmentId = table.Column<int>(type: "INTEGER", nullable: true),
+                    workScheduleId = table.Column<int>(type: "INTEGER", nullable: true),
+                    startDate = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    teminationDate = table.Column<DateTime>(type: "TEXT", nullable: true),
+                    accuralDate = table.Column<DateTime>(type: "TEXT", nullable: true),
+                    created = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    createdById = table.Column<int>(type: "INTEGER", nullable: false),
+                    modified = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    modifiedById = table.Column<int>(type: "INTEGER", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Employees", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_Employees_Users_userId",
+                        column: x => x.userId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -71,7 +128,7 @@ namespace tk3full.Data.Migrations
                     id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     guid = table.Column<Guid>(type: "TEXT", nullable: false),
-                    parentId = table.Column<int>(type: "INTEGER", nullable: false),
+                    parentId = table.Column<int>(type: "INTEGER", nullable: true),
                     locationCity = table.Column<string>(type: "TEXT", nullable: true),
                     locationState = table.Column<string>(type: "TEXT", nullable: true),
                     status = table.Column<int>(type: "INTEGER", nullable: false)
@@ -79,12 +136,6 @@ namespace tk3full.Data.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Locations", x => x.id);
-                    table.ForeignKey(
-                        name: "FK_Locations_Locations_parentId",
-                        column: x => x.parentId,
-                        principalTable: "Locations",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -168,6 +219,30 @@ namespace tk3full.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "DepartmentsEmployees",
+                columns: table => new
+                {
+                    DepartmentsId = table.Column<int>(type: "INTEGER", nullable: false),
+                    EmpoyeesId = table.Column<int>(type: "INTEGER", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_DepartmentsEmployees", x => new { x.DepartmentsId, x.EmpoyeesId });
+                    table.ForeignKey(
+                        name: "FK_DepartmentsEmployees_Departments_DepartmentsId",
+                        column: x => x.DepartmentsId,
+                        principalTable: "Departments",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_DepartmentsEmployees_Employees_EmpoyeesId",
+                        column: x => x.EmpoyeesId,
+                        principalTable: "Employees",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "HolidayEmployee",
                 columns: table => new
                 {
@@ -197,6 +272,16 @@ namespace tk3full.Data.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_DepartmentsEmployees_EmpoyeesId",
+                table: "DepartmentsEmployees",
+                column: "EmpoyeesId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Employees_userId",
+                table: "Employees",
+                column: "userId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_HolidayEmployee_holidayId",
                 table: "HolidayEmployee",
                 column: "holidayId");
@@ -205,11 +290,6 @@ namespace tk3full.Data.Migrations
                 name: "IX_HolidayEmployee_timesheetId",
                 table: "HolidayEmployee",
                 column: "timesheetId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Locations_parentId",
-                table: "Locations",
-                column: "parentId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Signatures_userId",
@@ -225,12 +305,24 @@ namespace tk3full.Data.Migrations
                 name: "IX_TimesheetExceptions_timesheetId",
                 table: "TimesheetExceptions",
                 column: "timesheetId");
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_Timesheet_Employees_employeeId",
+                table: "Timesheet",
+                column: "employeeId",
+                principalTable: "Employees",
+                principalColumn: "id",
+                onDelete: ReferentialAction.Cascade);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropForeignKey(
+                name: "FK_Timesheet_Employees_employeeId",
+                table: "Timesheet");
+
             migrationBuilder.DropTable(
-                name: "Departments");
+                name: "DepartmentsEmployees");
 
             migrationBuilder.DropTable(
                 name: "HolidayEmployee");
@@ -251,7 +343,37 @@ namespace tk3full.Data.Migrations
                 name: "WorkSchedule");
 
             migrationBuilder.DropTable(
+                name: "Departments");
+
+            migrationBuilder.DropTable(
+                name: "Employees");
+
+            migrationBuilder.DropTable(
                 name: "Holidays");
+
+            migrationBuilder.RenameColumn(
+                name: "employeeId",
+                table: "Timesheet",
+                newName: "userId");
+
+            migrationBuilder.RenameIndex(
+                name: "IX_Timesheet_employeeId",
+                table: "Timesheet",
+                newName: "IX_Timesheet_userId");
+
+            migrationBuilder.AddColumn<int>(
+                name: "departmentId",
+                table: "Users",
+                type: "INTEGER",
+                nullable: false,
+                defaultValue: 0);
+
+            migrationBuilder.AddColumn<int>(
+                name: "locationId",
+                table: "Users",
+                type: "INTEGER",
+                nullable: false,
+                defaultValue: 0);
 
             migrationBuilder.AddColumn<decimal>(
                 name: "workHoursPerWeek",
@@ -259,6 +381,21 @@ namespace tk3full.Data.Migrations
                 type: "TEXT",
                 nullable: false,
                 defaultValue: 0m);
+
+            migrationBuilder.AddColumn<int>(
+                name: "workScheduleId",
+                table: "Users",
+                type: "INTEGER",
+                nullable: false,
+                defaultValue: 0);
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_Timesheet_Users_userId",
+                table: "Timesheet",
+                column: "userId",
+                principalTable: "Users",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Cascade);
         }
     }
 }

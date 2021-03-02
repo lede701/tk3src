@@ -19,10 +19,6 @@ namespace tk3full.Controllers
     [Authorize]
     public class TimesheetController : Tk3BaseController
     {
-        private readonly ITimesheetRepository _tsRepo;
-		private readonly IProjectRepository _projectRepo;
-		private readonly IMapper _mapper;
-		private readonly IUserRepository _userRepo;
 		private readonly IUnitOfWork _uow;
 
 		public TimesheetController(IUnitOfWork uow)
@@ -45,8 +41,8 @@ namespace tk3full.Controllers
         [HttpGet("list")]
         public async Task<ActionResult<ICollection<TimesheetListDto>>> GetTimesheetList()
 		{
-            Tk3User user = await _uow.UserRepository.GetUserByGuidAsync(Guid.Parse(User.GetUserId()));
-            var data = await _uow.TimesheetRepositoy.GetTimesheetListAsync(user);
+            Employee emp = await _uow.UserRepository.GetEmployeeByGuidAsync(Guid.Parse(User.GetUserId()));
+            var data = await _uow.TimesheetRepositoy.GetTimesheetListAsync(emp);
             if(data != null)
 			{
                 return Ok(data);
@@ -58,8 +54,9 @@ namespace tk3full.Controllers
         [HttpGet("new/{start}/{end}")]
         public async Task<ActionResult<TimesheetDto>> Create(DateTime start, DateTime end)
         {
-            var user = await _uow.UserRepository.FindAsync(1);
-            var tso = await _uow.TimesheetRepositoy.CreateTimesheetAsync(user, start, end);
+            Guid guid = Guid.Parse(User.GetUserId());
+            var emp = await _uow.UserRepository.GetEmployeeByGuidAsync(guid);
+            var tso = await _uow.TimesheetRepositoy.CreateTimesheetAsync(emp, start, end);
             if (tso != null) return Ok(tso);
 
             return BadRequest("ERROR: Could not create timesheet");

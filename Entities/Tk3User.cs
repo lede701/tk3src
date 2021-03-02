@@ -20,23 +20,11 @@ namespace tk3full.Entities
 		public String lastName { get; set; }
 		public String title { get; set; }
 
-		public int locationId { get; set; }
-//		[ForeignKey("PrimaryDepartment")]
-		public int departmentId { get; set; }
-		public int workScheduleId { get; set; }
 
 		public DateTime created { get; set; }
 		public DateTime modified { get; set; }
 		public String userParams { get; set; }
 		public int status { get; set; }
 
-		#region External Data
-
-		//public ICollection<Departments> Departments { get; set; }
-		//public Locations Location { get; set; }
-		//public Departments PrimaryDepartment { get; set; }
-		//public WorkSchedule WorkSchedule { get; set; }
-		
-		#endregion
 	}
 }

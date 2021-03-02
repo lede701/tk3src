@@ -21,8 +21,6 @@ namespace tk3full.Data
 			var user = new Tk3User()
 			{
 				guId = Guid.NewGuid(),
-				locationId = 1,
-				departmentId = 1,
 				userName = "lede",
 				passwordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes("test1234")),
 				hashKey = hmac.Key,
@@ -30,12 +28,56 @@ namespace tk3full.Data
 				middleName = "",
 				lastName = "Ede",
 				title = "Web/Database Developer",
-				workScheduleId = 1,
 				created = DateTime.Now,
 				modified = DateTime.Now,
 				status = 1
 			};
 			ctx.Add(user);
+			await ctx.SaveChangesAsync();
+
+			var emp = new Employee()
+			{
+				userId = user.Id,
+				locationId = 1,
+				departmentId = 1,
+				workScheduleId = 1,
+				startDate = DateTime.Now,
+				created = DateTime.Now,
+				createdById = 1,
+				modified = DateTime.Now,
+				modifiedById = 1,
+			};
+			ctx.Add(emp);
+			await ctx.SaveChangesAsync();
+
+			var loc = new Locations()
+			{
+				guid = Guid.NewGuid(),
+				locationCity = "Reno",
+				locationState = "Nevada",
+				status = 1
+			};
+			ctx.Add(loc);
+			await ctx.SaveChangesAsync();
+
+			var dept = new Departments()
+			{
+				guid = Guid.NewGuid(),
+				name = "Administration",
+				departmentCode = "ADM",
+				status = 1,
+				deptParams = ""
+			};
+			ctx.Add(dept);
+			await ctx.SaveChangesAsync();
+
+			var de = new DepartmentsEmployees()
+			{
+				Departments = dept,
+				Employees = emp
+			};
+			emp.Departments.Add(de);
+
 			await ctx.SaveChangesAsync();
 		}
 
@@ -80,9 +122,22 @@ namespace tk3full.Data
 		{
 			if (await ctx.Timesheet.AnyAsync()) return;
 
+			ctx.ProjectCode.Add(new ProjectCode()
+			{
+				guid = Guid.NewGuid(),
+				commentType = 1,
+				ProjectTitle = "12021-00",
+				ProjectDescription = "General Operations",
+				status = 1,
+				created = DateTime.Now,
+				createdBy = 1,
+				modified = DateTime.Now,
+				modifiedBy = 1
+			});
+
 			ctx.Timesheet.Add(new Timesheet()
 			{
-				userId = 1,
+				employeeId = 1,
 				startDate = DateTime.Parse("2021-02-16"),
 				endDate = DateTime.Parse("2021-02-28"),
 				firstName = "Leland",
@@ -94,7 +149,7 @@ namespace tk3full.Data
 			});
 			ctx.Timesheet.Add(new Timesheet()
 			{
-				userId = 1,
+				employeeId = 1,
 				startDate = DateTime.Parse("2021-03-01"),
 				endDate = DateTime.Parse("2021-03-15"),
 				firstName = "Leland",
@@ -105,7 +160,7 @@ namespace tk3full.Data
 				positionDescription = "Full stack developer"
 			});
 			await ctx.SaveChangesAsync();
-			var ts = await ctx.Timesheet.Where(ts => ts.userId == 1)
+			var ts = await ctx.Timesheet.Where(ts => ts.employeeId == 1)
 				.FirstOrDefaultAsync();
 			ts.TimeDetails.Add(
 				new TimeDetails
@@ -123,6 +178,7 @@ namespace tk3full.Data
 				hrWorked = 8.0m
 
 			});
+			await ctx.SaveChangesAsync();
 		}
 	}
 }

@@ -14,7 +14,29 @@ namespace tk3full.Data
 		{
 		}
 
+		protected override void OnModelCreating(ModelBuilder builder)
+		{
+			builder.Entity<DepartmentsEmployees>()
+				.HasKey(de => new { de.DepartmentsId, de.EmpoyeesId });
+			builder.Entity<DepartmentsEmployees>()
+				.HasOne(de => de.Departments)
+				.WithMany(d => d.Employees)
+				.HasForeignKey(de => de.DepartmentsId);
+			builder.Entity<DepartmentsEmployees>()
+				.HasOne(de => de.Employees)
+				.WithMany(e => e.Departments)
+				.HasForeignKey(de => de.EmpoyeesId);
+
+			/*
+			builder.Entity<Locations>()
+				.HasOne(loc => loc.Parent)
+				.WithMany()
+				.HasForeignKey(loc => loc.parentId);
+			//*/
+		}
+
 		public DbSet<Departments> Departments { get; set; }
+		public DbSet<Employee> Employees { get; set; }
 		public DbSet<Holidays> Holidays { get; set; }
 		public DbSet<LeaveAccural> LeaveAccrual { get; set; }
 		public DbSet<LeaveBank> LeaveBank { get; set; }

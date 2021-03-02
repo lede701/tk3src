@@ -74,17 +74,17 @@ namespace tk3full.Data
                 .SingleOrDefaultAsync();
         }
 
-        public async Task<TimesheetDto> CreateTimesheetAsync(Tk3User user, DateTime start, DateTime end)
+        public async Task<TimesheetDto> CreateTimesheetAsync(Employee emp, DateTime start, DateTime end)
         {
             // Create new timesheet
             Timesheet ts = new Timesheet()
             {
-                userId = user.Id,
+                employeeId= emp.id,
                 guid = Guid.NewGuid(),
-                firstName = user.firstName,
-                middleName = user.middleName,
-                lastname = user.lastName,
-                positionDescription = user.title,
+                firstName = emp.User.firstName,
+                middleName = emp.User.middleName,
+                lastname = emp.User.lastName,
+                positionDescription = emp.User.title,
                 hoursPerWeek = 40.0m,
                 hoursPerDay = 8.0m,
                 startDate = start,
@@ -113,10 +113,10 @@ namespace tk3full.Data
                 .SingleOrDefaultAsync();
 		}
 
-		public async Task<ICollection<TimesheetListDto>> GetTimesheetListAsync(Tk3User user)
+		public async Task<ICollection<TimesheetListDto>> GetTimesheetListAsync(Employee emp)
 		{
             return await _context.Timesheet
-                .Where(ts => ts.userId == user.Id)
+                .Where(ts => ts.employeeId == emp.id)
                 .ProjectTo<TimesheetListDto>(_mapper.ConfigurationProvider)
                 .ToArrayAsync();
 		}
