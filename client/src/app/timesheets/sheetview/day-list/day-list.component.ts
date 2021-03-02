@@ -48,7 +48,7 @@ export class DayListComponent implements OnInit {
     let monthFullName: Array<string> = ["January", "Febuary", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
     // Add the day label
-    this.dayList.push(`${dayNames[day.getDay()]} ${day.getDate()}`);
+    this.dayList.push(`${dayNames[day.getDay()]}<br />\r\n${day.getDate()}`);
   }
 
   IsDayToday(day: Date) {

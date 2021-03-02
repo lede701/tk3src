@@ -1,17 +1,32 @@
-@backColor: white;
+@backColor: #7a8fa9;
 @borderColor: darken(@backColor, 25%);
 
-.col-day {
-  border-bottom: 1px solid @borderColor;
+.row-days {
+  background-color: @backColor;
+  border-top: 1px solid @borderColor;
+  border-bottom: 3px solid @borderColor;
+
+  div:nth-child(2) {
+    border-left: 2px solid @borderColor;
+  }
+
+  div:last-child {
+      border-right: none;
+  }
+
+  .col-day {
+    border-right: 1px solid @borderColor;
+  }
 }
 
-.col-day-right::after{
+.col-day {
+}
+
+.col-day-right{
     border-right: 1px solid @borderColor;
 }
 
 .col-project {
-  border-right: 1px solid @borderColor;
-  border-bottom: 1px solid @borderColor;
 }
 
 .today {

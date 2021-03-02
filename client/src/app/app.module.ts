@@ -17,6 +17,7 @@ import { JwtInterceptor } from './interceptors/jwt.interceptor';
 import { AuthComponent } from './auth/auth.component';
 import { StaticFieldsComponent } from './helpers/static-fields/static-fields.component';
 import { DayListComponent } from './timesheets/sheetview/day-list/day-list.component';
+import { ProjectListComponent } from './timesheets/sheetview/project-list/project-list.component';
 
 @NgModule({
   declarations: [
@@ -29,7 +30,8 @@ import { DayListComponent } from './timesheets/sheetview/day-list/day-list.compo
     HomeComponent,
     AuthComponent,
     StaticFieldsComponent,
-    DayListComponent
+    DayListComponent,
+    ProjectListComponent
   ],
   imports: [
     BrowserModule,
