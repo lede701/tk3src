@@ -10,7 +10,7 @@ namespace tk3full.Entities.TimeSheets
 	{
 		#region Table Parameters
 
-		public int id { get; set; }
+		public int Id { get; set; }
 		public Guid guid { get; set; }
 		public String ProjectTitle { get; set; }
 		public String ProjectDescription { get; set; }
@@ -26,6 +26,8 @@ namespace tk3full.Entities.TimeSheets
 		#endregion
 
 		#region Linked Data
+
+		public ICollection<TimesheetProjects> Timesheets { get; set; }
 
 		public Tk3User CreatedUser { get; set; }
 		public Tk3User ModifiedUser { get; set; }

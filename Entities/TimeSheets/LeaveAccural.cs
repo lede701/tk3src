@@ -7,7 +7,7 @@ namespace tk3full.Entities.TimeSheets
 {
 	public class LeaveAccural
 	{
-		public int id { get; set; }
+		public int Id { get; set; }
 		public decimal earnedHours { get; set; }
 		public decimal startYear { get; set; }
 		public decimal endYear { get; set; }

@@ -9,9 +9,21 @@
     <div class="col-md-3">
       <app-static-fields label="Month" [text]="getStartDate() | date:'MMMM'"></app-static-fields>
     </div>
+    <div class="col-md-3">
+      <app-static-fields label="Status" [text]="getEmployeeStatus()"></app-static-fields>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-3">
+      <app-static-fields label="Hours" [text]="getNumberOfHours()"></app-static-fields>
+    </div>
+    <div class="col-md-3">
+      <app-static-fields label="Year" [text]="getStartDate() | date:'YYYY'"></app-static-fields>
+    </div>
   </div>
 </div>
 
 <div class="container">
   <app-day-list></app-day-list>
+  <app-project-list></app-project-list>
 </div>

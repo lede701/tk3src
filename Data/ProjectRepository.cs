@@ -65,7 +65,7 @@ namespace tk3full.Data
 		public async Task<ProjectCodeDto> GetProjectByIdAsync(int id)
 		{
 			return await _context.ProjectCode
-				.Where(pr => pr.id == id)
+				.Where(pr => pr.Id == id)
 				.ProjectTo<ProjectCodeDto>(_mapper.ConfigurationProvider)
 				.SingleOrDefaultAsync();
 		}

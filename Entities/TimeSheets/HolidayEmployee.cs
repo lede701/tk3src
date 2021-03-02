@@ -7,7 +7,7 @@ namespace tk3full.Entities.TimeSheets
 {
 	public class HolidayEmployee
 	{
-		public int id { get; set; }
+		public int Id { get; set; }
 		public Guid guid { get; set; }
 		public int holidayId { get; set; }
 		public int timesheetId { get; set; }

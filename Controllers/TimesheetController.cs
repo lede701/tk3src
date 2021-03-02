@@ -16,7 +16,7 @@ using tk3full.Interfaces;
 
 namespace tk3full.Controllers
 {
-    [Authorize]
+    //[Authorize]
     public class TimesheetController : Tk3BaseController
     {
 		private readonly IUnitOfWork _uow;
@@ -74,7 +74,7 @@ namespace tk3full.Controllers
             var td = new TimeDetails()
             {
                 guid = Guid.NewGuid(),
-                projectId = project.id,
+                projectId = project.Id,
                 timeDate = day,
                 hrWorked = time,
                 status = RecordStatus.ACTIVE

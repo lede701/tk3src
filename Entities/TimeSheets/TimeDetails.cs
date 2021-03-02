@@ -10,7 +10,7 @@ namespace tk3full.Entities.TimeSheets
 	{
 		#region Table Properties
 
-		public int id { get; set; }
+		public int Id { get; set; }
 		public Guid guid { get; set; }
 		[ForeignKey("ProjectCode")]
 		public int projectId { get; set; }
@@ -24,7 +24,7 @@ namespace tk3full.Entities.TimeSheets
 		#region Linked data
 
 		public ProjectCode ProjectCode { get; set; }
-		public ICollection<TimeDetailsComments> Comments { get; set; }
+		public ICollection<TimeDetailsComments> Comments { get; set; } = new List<TimeDetailsComments>();
 
 		#endregion
 	}

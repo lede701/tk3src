@@ -10,7 +10,7 @@ namespace tk3full.Entities.TimeSheets
 	{
 		#region Employee Parameters
 
-		public int id { get; set; }
+		public int Id { get; set; }
 		// Remving guid because it mayne redundant and make things more confusing
 //		public Guid guid { get; set; }
 		public int userId { get; set; }

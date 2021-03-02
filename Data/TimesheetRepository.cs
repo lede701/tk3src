@@ -43,7 +43,7 @@ namespace tk3full.Data
             TimeLunch tl = new TimeLunch
             {
                 guid = Guid.NewGuid(),
-                timesheetId = ts.id,
+                timesheetId = ts.Id,
                 lunchTime = time,
                 lunchDate = day
             };
@@ -54,7 +54,7 @@ namespace tk3full.Data
 
         public async Task AddTimeAsync(TimeDetails td, Timesheet ts)
         {
-            td.timesheetId = ts.id;
+            td.timesheetId = ts.Id;
             await _context.TimeDetails.AddAsync(td);
         }
 
@@ -79,7 +79,7 @@ namespace tk3full.Data
             // Create new timesheet
             Timesheet ts = new Timesheet()
             {
-                employeeId= emp.id,
+                employeeId= emp.Id,
                 guid = Guid.NewGuid(),
                 firstName = emp.User.firstName,
                 middleName = emp.User.middleName,
@@ -102,7 +102,7 @@ namespace tk3full.Data
 		{
             return await _context
                 .Timesheet
-                .Where(ts => ts.id == id)
+                .Where(ts => ts.Id == id)
                 .ProjectTo<TimesheetDto>(_mapper.ConfigurationProvider)
                 .FirstOrDefaultAsync();
 		}
@@ -116,7 +116,7 @@ namespace tk3full.Data
 		public async Task<ICollection<TimesheetListDto>> GetTimesheetListAsync(Employee emp)
 		{
             return await _context.Timesheet
-                .Where(ts => ts.employeeId == emp.id)
+                .Where(ts => ts.employeeId == emp.Id)
                 .ProjectTo<TimesheetListDto>(_mapper.ConfigurationProvider)
                 .ToArrayAsync();
 		}

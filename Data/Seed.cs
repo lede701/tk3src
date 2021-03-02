@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +13,34 @@ namespace tk3full.Data
 {
 	public class Seed
 	{
+		public static async Task SeedData(DataContext ctx, ILoggerFactory logFactory)
+		{
+			try
+			{
+				await SeedUsers(ctx);
+			}catch(Exception ex)
+			{
+				var logger = logFactory.CreateLogger<Seed>();
+				logger.LogError(ex.Message);
+			}
+			try
+			{
+				await SeedMenu(ctx);
+			}catch(Exception ex)
+			{
+				var logger = logFactory.CreateLogger<Seed>();
+				logger.LogError(ex.Message);
+			}
+			try
+			{
+				await SeedTimesheets(ctx);
+			}catch(Exception ex)
+			{
+				var logger = logFactory.CreateLogger<Seed>();
+				logger.LogError(ex.Message);
+			}
+		}
+
 		public static async Task SeedUsers(DataContext ctx)
 		{
 			if (await ctx.Users.AnyAsync()) return;
@@ -165,14 +194,14 @@ namespace tk3full.Data
 			ts.TimeDetails.Add(
 				new TimeDetails
 				{
-					timesheetId = ts.id,
+					timesheetId = ts.Id,
 					projectId = 1,
 					timeDate = Convert.ToDateTime("2021-02-16"),
 					hrWorked = 8.2m
 				});
 			ts.TimeDetails.Add(new TimeDetails()
 			{
-				timesheetId = ts.id,
+				timesheetId = ts.Id,
 				projectId = 1,
 				timeDate = Convert.ToDateTime("2021-02-17"),
 				hrWorked = 8.0m

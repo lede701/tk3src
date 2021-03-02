@@ -28,4 +28,21 @@ export class SheetviewComponent implements OnInit {
     return new Date(this.timesheet.startDate);
   }
 
+  getEmployeeStatus(): string {
+    switch (this.timesheet.employeeStatus) {
+      case 1:
+        return "Exempt";
+      case 2:
+        return "Non-Exempt";
+      case 3:
+        return "Part-Time";
+    }
+
+    return "undefined";
+  }
+
+  getNumberOfHours(): number {
+    return 0;
+  }
+
 }

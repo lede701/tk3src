@@ -7,7 +7,7 @@ namespace tk3full.Entities.TimeSheets
 {
 	public class WorkSchedule
 	{
-		public int id { get; set; }
+		public int Id { get; set; }
 		public Guid guid { get; set; }
 		public String title { get; set; }
 		public decimal hoursPerDay { get; set; }

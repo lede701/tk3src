@@ -8,7 +8,7 @@ namespace tk3full.Entities.TimeSheets
 {
 	public class Locations
 	{
-		public int id { get; set; }
+		public int Id { get; set; }
 		public Guid guid { get; set; }
 		public int? parentId { get; set; }
 		public String locationCity { get; set; }

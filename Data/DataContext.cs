@@ -27,6 +27,18 @@ namespace tk3full.Data
 				.WithMany(e => e.Departments)
 				.HasForeignKey(de => de.EmpoyeesId);
 
+			// Create relationship between Timesheets and ProjectCodes
+			builder.Entity<TimesheetProjects>()
+				.HasKey(tp => new { tp.TimesheetId, tp.ProjectCodeId });
+			builder.Entity<TimesheetProjects>()
+				.HasOne(tp => tp.Timesheet)
+				.WithMany(ts => ts.Projects)
+				.HasForeignKey(tp => tp.TimesheetId);
+			builder.Entity<TimesheetProjects>()
+				.HasOne(tp => tp.ProjectCode)
+				.WithMany(p => p.Timesheets)
+				.HasForeignKey(tp => tp.ProjectCodeId);
+
 			/*
 			builder.Entity<Locations>()
 				.HasOne(loc => loc.Parent)

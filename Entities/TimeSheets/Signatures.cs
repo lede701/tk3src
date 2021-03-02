@@ -7,7 +7,7 @@ namespace tk3full.Entities.TimeSheets
 {
 	public class Signatures
 	{
-		public int id { get; set; }
+		public int Id { get; set; }
 		public Guid guid { get; set; }
 		public int userId { get; set; }
 		public DateTime DateAdded { get; set; }

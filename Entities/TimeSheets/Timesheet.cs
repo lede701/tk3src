@@ -9,7 +9,7 @@ namespace tk3full.Entities.TimeSheets
     {
 		#region Table Properties
 
-		public int id { get; set; }
+		public int Id { get; set; }
         public Guid guid { get; set; }
         public int employeeId { get; set; }
 		public bool earlySign { get; set; }
@@ -34,6 +34,7 @@ namespace tk3full.Entities.TimeSheets
 
 		public Employee Employee { get; set; }
 
+		public ICollection<TimesheetProjects> Projects { get; set; }
 		public ICollection<TimeDetails> TimeDetails { get; set; }
 		public ICollection<TimeLunch> TimeLunch { get; set; }
 		public ICollection<HolidayEmployee> Holidays { get; set; }
