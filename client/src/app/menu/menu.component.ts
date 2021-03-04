@@ -37,7 +37,7 @@ export class MenuComponent implements OnInit, OnDestroy {
 
   setupMenu() {
     let url = environment.apiUrl + '/Menu';
-    // Creating a memory leak that needs to be fixed!
+    // Loading menu from API server
     this.http.get<MenuItemEntity[]>(url).pipe(take(1)).subscribe(menu => {
       this.menuItems = menu;
       if (this.auth.getIsAuthenticated()) {

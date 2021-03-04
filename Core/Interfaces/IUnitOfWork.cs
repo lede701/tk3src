@@ -12,6 +12,7 @@ namespace Core.Interfaces
 	public interface IUnitOfWork
 	{
 		IGenericRepository<Employee> EmployeesRepository { get; }
+		IGenericRepository<LeaveTransactions> LeaveRepository { get; }
 		IGenericRepository<MenuItem> MenusRepository { get; }
 		IGenericRepository<ProjectCode> ProjectsRepository { get; }
 		IGenericRepository<Timesheet> TimesheetsRepository { get; }

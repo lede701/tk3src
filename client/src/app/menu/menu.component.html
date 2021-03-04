@@ -28,6 +28,7 @@
                placeholder="Password"
                aria-label="Password">
         <button class="btn btn-outline-success" type="submit">Login</button>
+        <button class="btn btn-outline-primary" type="button" [routerLink]="'/auth/create'">Create</button>
       </form>
       <div *ngIf="auth.getIsAuthenticated()">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">

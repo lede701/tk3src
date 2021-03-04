@@ -3,8 +3,10 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { AuthComponent } from './auth/auth.component';
 import { HomeComponent } from './home/home.component';
+import { LeaveComponent } from './leave/leave.component';
 import { MenuComponent } from './menu/menu.component';
 import { TimesheetsComponent } from './timesheets/timesheets.component';
+import { TimsheetCreateComponent } from './timesheets/timsheet-create/timsheet-create.component';
 
 const routes: Routes = [
   {
@@ -12,9 +14,13 @@ const routes: Routes = [
     ]
   },
   {
-    path: 'timesheet/:guid', component: TimesheetsComponent
+    path: 'timesheet/sheet/:guid', component: TimesheetsComponent
+  },
+  {
+    path: 'timesheet/create', component: TimsheetCreateComponent
   },
   { path: 'auth/:task', component: AuthComponent },
+  { path: 'leave', component: LeaveComponent },
   { path: '', component: HomeComponent }
 ];
 

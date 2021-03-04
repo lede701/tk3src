@@ -21,7 +21,7 @@ namespace Core.Interfaces
 		Task<T> GetByGuidAsync(Guid guid);
 		Task<T> GetByIdAsync(int id);
 		Task<IReadOnlyCollection<T>> ListAllAsync();
-		Task<IReadOnlyCollection<T>> ListAllBySpec(ISpecification<T> spec);
+		Task<IReadOnlyCollection<T>> ListAllBySpecAsync(ISpecification<T> spec);
 
 		#endregion
 

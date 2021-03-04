@@ -30,7 +30,11 @@ export class TimesheetsComponent implements OnInit {
 
   onChangeTimesheet(timesheetItem: any) {
     let tsGuid = this.timesheetSelector.nativeElement.value;
-    this.route.navigate(['/', 'timesheet', tsGuid]);
+    if (tsGuid != 'create') {
+      this.route.navigate(['/', 'timesheet', 'sheet', tsGuid]);
+    } else {
+      this.route.navigate(['/', 'timesheet', 'create']);
+    }
   }
 
   loadTimesheet(tsGuid: string) {

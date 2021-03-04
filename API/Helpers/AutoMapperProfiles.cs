@@ -16,11 +16,29 @@ namespace API.Helpers
 		{
 			CreateMap<Tk3User, UserDto>();
 			CreateMap<MenuItem, MenuItemDto>();
+			MapTimesheets();
+			MapLeave();
+			MapProjects();
+		}
+
+		private void MapTimesheets()
+		{
 			CreateMap<Timesheet, TimesheetDto>();
 			CreateMap<Timesheet, TimesheetListDto>();
 			CreateMap<TimeDetails, TimeDetailsDto>();
 			CreateMap<TimeDetailsComments, TimeDetailsCommentsDto>();
 			CreateMap<TimeLunch, TimeLunchDto>();
+		}
+
+		private void MapLeave()
+		{
+			CreateMap<LeaveTransactions, LeaveTransactionDto>()
+				.ForMember(lt => lt.BankCode, b => b.MapFrom(m => m.Bank.displayCode))
+				.ForMember(lt => lt.BankName, b => b.MapFrom(m => m.Bank.bankDescription));
+		}
+
+		private void MapProjects()
+		{
 			CreateMap<ProjectCode, ProjectCodeDto>();
 		}
 	}

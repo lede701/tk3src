@@ -19,6 +19,10 @@ import { AuthComponent } from './auth/auth.component';
 import { StaticFieldsComponent } from './helpers/static-fields/static-fields.component';
 import { DayListComponent } from './timesheets/sheetview/day-list/day-list.component';
 import { ProjectListComponent } from './timesheets/sheetview/project-list/project-list.component';
+import { TimsheetCreateComponent } from './timesheets/timsheet-create/timsheet-create.component';
+import { AuthCreateComponent } from './auth/auth-create/auth-create.component';
+import { InputFieldComponent } from './helpers/input-field/input-field.component';
+import { LeaveComponent } from './leave/leave.component';
 
 @NgModule({
   declarations: [
@@ -32,7 +36,11 @@ import { ProjectListComponent } from './timesheets/sheetview/project-list/projec
     AuthComponent,
     StaticFieldsComponent,
     DayListComponent,
-    ProjectListComponent
+    ProjectListComponent,
+    TimsheetCreateComponent,
+    AuthCreateComponent,
+    InputFieldComponent,
+    LeaveComponent,
   ],
   imports: [
     BrowserAnimationsModule,

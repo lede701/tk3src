@@ -34,7 +34,17 @@ namespace Framework.Data
 			try
 			{
 				await SeedTimesheets(ctx);
-			}catch(Exception ex)
+			}
+			catch (Exception ex)
+			{
+				var logger = logFactory.CreateLogger<Seed>();
+				logger.LogError(ex.Message);
+			}
+			try
+			{
+				await SeedLeave(ctx);
+			}
+			catch (Exception ex)
 			{
 				var logger = logFactory.CreateLogger<Seed>();
 				logger.LogError(ex.Message);
@@ -230,6 +240,94 @@ namespace Framework.Data
 				projectId = 1,
 				timeDate = Convert.ToDateTime("2021-02-17"),
 				hrWorked = 8.0m,
+				Created = DateTime.Now,
+				CreatedById = 1,
+				Modified = DateTime.Now,
+				ModifiedById = 1,
+				StatusCode = RecordStatus.ACTIVE
+			});
+			await ctx.SaveChangesAsync();
+		}
+
+		public static async Task SeedLeave(DataContext ctx)
+		{
+			if (await ctx.LeaveBank.AnyAsync()) return;
+
+			ctx.LeaveBank.Add(new LeaveBank()
+			{
+				guid = Guid.NewGuid(),
+				displayCode = "AL",
+				bankDescription = "Annual Leave",
+				expiresInDays = 365,
+				Created = DateTime.Now,
+				CreatedById = 1,
+				Modified = DateTime.Now,
+				ModifiedById = 1,
+				StatusCode = RecordStatus.ACTIVE
+			});
+			ctx.LeaveBank.Add(new LeaveBank()
+			{
+				guid = Guid.NewGuid(),
+				displayCode = "SL",
+				bankDescription = "Sick Leave",
+				expiresInDays = 365,
+				Created = DateTime.Now,
+				CreatedById = 1,
+				Modified = DateTime.Now,
+				ModifiedById = 1,
+				StatusCode = RecordStatus.ACTIVE
+			});
+			ctx.LeaveBank.Add(new LeaveBank()
+			{
+				guid = Guid.NewGuid(),
+				displayCode = "PTO",
+				bankDescription = "Paid Time Off",
+				expiresInDays = 365,
+				Created = DateTime.Now,
+				CreatedById = 1,
+				Modified = DateTime.Now,
+				ModifiedById = 1,
+				StatusCode = RecordStatus.ACTIVE
+			});
+			await ctx.SaveChangesAsync();
+
+			// Add leave records
+			ctx.LeaveTansactions.Add(new LeaveTransactions()
+			{
+				guid = Guid.NewGuid(),
+				parentId = 0,
+				locationId = 0,
+				employeeId = 1,
+				bankId = 1,
+				tranType = 'C',
+				tranTime = 336,
+				tranDate = DateTime.Now,
+				displayDate = DateTime.Now,
+				employeeSigned = true,
+				approved = true,
+				isAccrual = false,
+				isParent = false,
+				Created = DateTime.Now,
+				CreatedById = 1,
+				Modified = DateTime.Now,
+				ModifiedById = 1,
+				StatusCode = RecordStatus.ACTIVE
+			});
+			ctx.LeaveTansactions.Add(new LeaveTransactions()
+			{
+				guid = Guid.NewGuid(),
+				parentId = 0,
+				locationId = 0,
+				employeeId = 1,
+				bankId = 2,
+				tranType = 'C',
+				tranTime = 221,
+				tranDate = DateTime.Now,
+				displayDate = DateTime.Now,
+				employeeSigned = true,
+				approved = true,
+				isAccrual = false,
+				isParent = false,
 				Created = DateTime.Now,
 				CreatedById = 1,
 				Modified = DateTime.Now,

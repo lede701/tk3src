@@ -11,6 +11,26 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core", "Core\Core.csproj", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Framework", "framework\Framework.csproj", "{FA832D63-13F5-4991-92EC-28A951C149BE}"
 EndProject
+Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "client", "client\", "{30CACE0A-AF7A-4631-90FE-3048EF99863D}"
+	ProjectSection(WebsiteProperties) = preProject
+		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.0"
+		Debug.AspNetCompiler.VirtualPath = "/localhost_52556"
+		Debug.AspNetCompiler.PhysicalPath = "client\"
+		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_52556\"
+		Debug.AspNetCompiler.Updateable = "true"
+		Debug.AspNetCompiler.ForceOverwrite = "true"
+		Debug.AspNetCompiler.FixedNames = "false"
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.VirtualPath = "/localhost_52556"
+		Release.AspNetCompiler.PhysicalPath = "client\"
+		Release.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_52556\"
+		Release.AspNetCompiler.Updateable = "true"
+		Release.AspNetCompiler.ForceOverwrite = "true"
+		Release.AspNetCompiler.FixedNames = "false"
+		Release.AspNetCompiler.Debug = "False"
+		VWDPort = "52556"
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +53,10 @@ Global
 		{FA832D63-13F5-4991-92EC-28A951C149BE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FA832D63-13F5-4991-92EC-28A951C149BE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FA832D63-13F5-4991-92EC-28A951C149BE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{30CACE0A-AF7A-4631-90FE-3048EF99863D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{30CACE0A-AF7A-4631-90FE-3048EF99863D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{30CACE0A-AF7A-4631-90FE-3048EF99863D}.Release|Any CPU.ActiveCfg = Debug|Any CPU
+		{30CACE0A-AF7A-4631-90FE-3048EF99863D}.Release|Any CPU.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

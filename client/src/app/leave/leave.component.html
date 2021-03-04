@@ -1,0 +1,9 @@
+<div class="container" *ngIf="leave.length">
+  <div class="row" *ngFor="let lv of leave">
+    <div class="col">{{getRowNumber()}}</div>
+    <div class="col">{{lv.bankName}}</div>
+    <div class="col">{{getTranType(lv.tranType)}}</div>
+    <div class="col">{{lv.tranTime}}</div>
+    <div class="col">{{lv.displayDate | date: 'MM/dd/YYYY'}}</div>
+  </div>
+</div>

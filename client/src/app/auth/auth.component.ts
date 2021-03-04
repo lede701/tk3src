@@ -28,6 +28,10 @@ export class AuthComponent implements OnInit {
       this.WhoAmI();
       this.showTask = false;
     }
+    // Check if we are to show the create form
+    if (this.task == 'create') {
+      this.showTask = false;
+    }
   }
 
   WhoAmI() {

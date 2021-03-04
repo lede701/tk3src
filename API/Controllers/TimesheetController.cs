@@ -41,7 +41,7 @@ namespace API.Controllers
         public async Task<ActionResult<ICollection<TimesheetListDto>>> GetTimesheetList()
 		{
             Employee emp = await _uow.EmployeesRepository.GetByGuidAsync(Guid.Parse(User.GetUserId()));
-            var data = await _uow.TimesheetsRepository.ListAllBySpec(new TimesheetsForEmployeeSpec(emp.Id));
+            var data = await _uow.TimesheetsRepository.ListAllBySpecAsync(new TimesheetsForEmployeeSpec(emp.Id));
 
             //var data = await _uow.TimesheetsRepository.ListAllByUserAsync(emp.Id);
             //var data = await _uow.TimesheetRepositoy.GetTimesheetListAsync(emp);

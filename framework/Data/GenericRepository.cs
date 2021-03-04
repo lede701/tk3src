@@ -48,7 +48,7 @@ namespace Framework.Data
 			return await _context.Set<T>().ToListAsync();
 		}
 
-		public async Task<IReadOnlyCollection<T>> ListAllBySpec(ISpecification<T> spec)
+		public async Task<IReadOnlyCollection<T>> ListAllBySpecAsync(ISpecification<T> spec)
 		{
 			// Create query with privded specification
 			var query = ApplySpecification(spec);

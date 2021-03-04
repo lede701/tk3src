@@ -30,6 +30,7 @@ namespace Framework.Data
 		public IMapper Mapper { get { return _mapper; } }
 
 		public IGenericRepository<Employee> EmployeesRepository => new GenericRepository<Employee>(_context);
+		public IGenericRepository<LeaveTransactions> LeaveRepository => new GenericRepository<LeaveTransactions>(_context);
 		public IGenericRepository<MenuItem> MenusRepository => new GenericRepository<MenuItem>(_context);
 		public IGenericRepository<ProjectCode> ProjectsRepository => new GenericRepository<ProjectCode>(_context);
 		public IGenericRepository<Timesheet> TimesheetsRepository => new GenericRepository<Timesheet>(_context);

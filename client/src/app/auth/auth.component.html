@@ -7,7 +7,12 @@
       {{data.name}}
     </div>
   </div>
+
   <div class="row" *ngIf="showTask">
     <div class="md-col">You would like to perform the following task: {{task}}</div>
   </div>
+</div>
+
+<div *ngIf="task == 'create'">
+  <app-auth-create></app-auth-create>
 </div>
