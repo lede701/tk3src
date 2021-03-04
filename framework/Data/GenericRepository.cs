@@ -50,12 +50,9 @@ namespace Framework.Data
 
 		public async Task<IReadOnlyCollection<T>> ListAllBySpec(ISpecification<T> spec)
 		{
-			var list = new List<T>();
-
-			await Task.Run(() => {
-			});
-
-			return list.AsReadOnly();
+			// Create query with privded specification
+			var query = ApplySpecification(spec);
+			return await query.ToListAsync();
 		}
 
 		public bool MarkForDeletion(T entity)
@@ -74,6 +71,11 @@ namespace Framework.Data
 			entity.ModifiedById = 1;
 
 			_context.Set<T>().Update(entity);
+		}
+
+		private IQueryable<T> ApplySpecification(ISpecification<T> spec)
+		{
+			return SpecificationEvaluator<T>.GetQuery(_context.Set<T>().AsQueryable(), spec);
 		}
 	}
 }

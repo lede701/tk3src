@@ -3,6 +3,7 @@ using API.Extensions;
 using AutoMapper;
 using Core.Entities.TimeSheets;
 using Core.Interfaces;
+using Core.Specifications;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -33,18 +34,20 @@ namespace API.Controllers
             if(ts != null) return Ok(_uow.Mapper.Map<TimesheetDto>(ts));
 
             // No valid object so send an error
-            return BadRequest("ERROR: Invalid timsheet code");
+            return BadRequest("ERROR: Invalid timsheet");
         }
 
         [HttpGet("list")]
         public async Task<ActionResult<ICollection<TimesheetListDto>>> GetTimesheetList()
 		{
             Employee emp = await _uow.EmployeesRepository.GetByGuidAsync(Guid.Parse(User.GetUserId()));
-            var data = await _uow.TimesheetsRepository.ListAllByUserAsync(emp.Id);
+            var data = await _uow.TimesheetsRepository.ListAllBySpec(new TimesheetsForEmployeeSpec(emp.Id));
+
+            //var data = await _uow.TimesheetsRepository.ListAllByUserAsync(emp.Id);
             //var data = await _uow.TimesheetRepositoy.GetTimesheetListAsync(emp);
             if(data != null)
 			{
-                return Ok(_uow.Mapper.Map<IReadOnlyCollection<TimesheetDto>>(data));
+                return Ok(_uow.Mapper.Map<IReadOnlyCollection<TimesheetListDto>>(data));
 			}
             return BadRequest("ERROR: No timesheets available to send back for current user");
 

@@ -166,7 +166,12 @@ namespace Framework.Data
 				lastname = "Ede",
 				employeeStatus = 1,
 				guid = Guid.NewGuid(),
-				positionDescription = "Full stack developer"
+				positionDescription = "Full stack developer",
+				Created = DateTime.Now,
+				CreatedById = 1,
+				Modified = DateTime.Now,
+				ModifiedById = 1,
+				StatusCode = RecordStatus.ACTIVE
 			});
 			ctx.Timesheet.Add(new Timesheet()
 			{
@@ -178,7 +183,29 @@ namespace Framework.Data
 				lastname = "Ede",
 				employeeStatus = 1,
 				guid = Guid.NewGuid(),
-				positionDescription = "Full stack developer"
+				positionDescription = "Full stack developer",
+				Created = DateTime.Now,
+				CreatedById = 1,
+				Modified = DateTime.Now,
+				ModifiedById = 1,
+				StatusCode = RecordStatus.ACTIVE
+			});
+			ctx.Timesheet.Add(new Timesheet()
+			{
+				employeeId = 1,
+				startDate = DateTime.Parse("2021-03-16"),
+				endDate = DateTime.Parse("2021-03-31"),
+				firstName = "Leland",
+				middleName = "",
+				lastname = "Ede",
+				employeeStatus = 1,
+				guid = Guid.NewGuid(),
+				positionDescription = "Full stack developer",
+				Created = DateTime.Now,
+				CreatedById = 1,
+				Modified = DateTime.Now,
+				ModifiedById = 1,
+				StatusCode = RecordStatus.ACTIVE
 			});
 			await ctx.SaveChangesAsync();
 			var ts = await ctx.Timesheet.Where(ts => ts.employeeId == 1)
@@ -189,15 +216,25 @@ namespace Framework.Data
 					timesheetId = ts.Id,
 					projectId = 1,
 					timeDate = Convert.ToDateTime("2021-02-16"),
-					hrWorked = 8.2m
+					hrWorked = 8.2m,
+					Created = DateTime.Now,
+					CreatedById = 1,
+					Modified = DateTime.Now,
+					ModifiedById = 1,
+					StatusCode = RecordStatus.ACTIVE
+
 				});
 			ts.TimeDetails.Add(new TimeDetails()
 			{
 				timesheetId = ts.Id,
 				projectId = 1,
 				timeDate = Convert.ToDateTime("2021-02-17"),
-				hrWorked = 8.0m
-
+				hrWorked = 8.0m,
+				Created = DateTime.Now,
+				CreatedById = 1,
+				Modified = DateTime.Now,
+				ModifiedById = 1,
+				StatusCode = RecordStatus.ACTIVE
 			});
 			await ctx.SaveChangesAsync();
 		}
