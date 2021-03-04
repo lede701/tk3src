@@ -48,9 +48,14 @@ namespace Framework.Data
 			return await _context.Set<T>().ToListAsync();
 		}
 
-		public Task<IReadOnlyCollection<T>> ListAllByUserAsync(int userId)
+		public async Task<IReadOnlyCollection<T>> ListAllBySpec(ISpecification<T> spec)
 		{
-			throw new NotImplementedException();
+			var list = new List<T>();
+
+			await Task.Run(() => {
+			});
+
+			return list.AsReadOnly();
 		}
 
 		public bool MarkForDeletion(T entity)

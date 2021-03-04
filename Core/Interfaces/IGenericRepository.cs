@@ -9,14 +9,33 @@ namespace Core.Interfaces
 {
 	public interface IGenericRepository<T> where T: CoreEntity
 	{
+
+		#region Create Records [C]
+
 		T Add(T entity);
+
+		#endregion
+
+		#region Read Records [R]
+
 		Task<T> GetByGuidAsync(Guid guid);
 		Task<T> GetByIdAsync(int id);
 		Task<IReadOnlyCollection<T>> ListAllAsync();
-		Task<IReadOnlyCollection<T>> ListAllByUserAsync(int userId);
+		Task<IReadOnlyCollection<T>> ListAllBySpec(ISpecification<T> spec);
+
+		#endregion
+
+		#region Update Records [U]
+
+		void Update(T entity);
+
+		#endregion
+
+		#region Delete Records [D]
 
 		bool MarkForDeletion(T entity);
-		void Update(T entity);
+
+		#endregion
 
 	}
 }

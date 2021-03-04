@@ -41,8 +41,8 @@ export class SheetviewComponent implements OnInit {
     return "undefined";
   }
 
-  getNumberOfHours(): number {
-    return 0;
+  getNumberOfHours(): string {
+    return "0";
   }
 
 }
