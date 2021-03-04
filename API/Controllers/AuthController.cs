@@ -1,4 +1,8 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using API.DTOs;
+using API.Extensions;
+using Core.Entities;
+using Core.Interfaces;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -9,39 +13,36 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
-using tk3full.Data;
-using tk3full.DTOs;
-using tk3full.Entities;
-using tk3full.Extensions;
-using tk3full.Interfaces;
-using tk3full.Results;
 
 namespace API.Controllers
 {
-    public class AuthController : Tk3BaseController
+    public class AuthController : CoreController
     {
 		private readonly IUnitOfWork _uow;
 		private readonly ITokenService _tokenService;
-        private int _tokenExpiresInMinutes;
+		private readonly IAuthService _auth;
+		private int _tokenExpiresInMinutes;
 
-        public AuthController(IUnitOfWork uow, ITokenService tokenService, IConfiguration config)
+        public AuthController(IUnitOfWork uow, ITokenService tokenService, IConfiguration config, IAuthService auth)
         {
 			_uow = uow;
 			_tokenService = tokenService;
-            _tokenExpiresInMinutes = Convert.ToInt32(config["TokenAgeInMinutes"]);
+			_auth = auth;
+			_tokenExpiresInMinutes = Convert.ToInt32(config["TokenAgeInMinutes"]);
         }
 
-        [HttpGet]
-        public async Task<ActionResult<UserDto>> Index()
+        [HttpGet("rest/{guid}")]
+        public async Task<ActionResult<UserDto>> RestUser(String guid)
         {
-            var user = await _uow.UserRepository.FindAsync(1);
+
+            var user = await _uow.EmployeesRepository.GetByGuidAsync(Guid.Parse(guid));
 
             using var hmac = new HMACSHA512();
             user.passwordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes("test1234"));
             user.hashKey = hmac.Key;
 
-            _uow.UserRepository.Update(user);
-            await _uow.Complete();
+            _uow.EmployeesRepository.Update(user);
+            await _uow.CompleteAsync();
 
             return new UserDto
             {
@@ -54,7 +55,8 @@ namespace API.Controllers
         public async Task<ActionResult<WhoAmIDto>> WhoAmI()
 		{
             // Load user infromation
-            Tk3User user = await _uow.UserRepository.GetUserByGuidAsync(Guid.Parse(User.GetUserId()));
+            var user = await _uow.EmployeesRepository.GetByGuidAsync(Guid.Parse(User.GetUserId()));
+            //var user = await _uow.UserRepository.GetUserByGuidAsync(Guid.Parse(User.GetUserId()));
             // Return user name
             return Ok(new WhoAmIDto { 
                 Name = String.Format("{0} {1}", user.firstName, user.lastName),
@@ -65,30 +67,37 @@ namespace API.Controllers
         [HttpPost("login")]
         public async Task<ActionResult<UserDto>> Login(LoginDto login)
 		{
-            LoginResults results = await _uow.UserRepository.LoginAsync(login.UserName, login.Password);
-            if (results.IsValid)
-            {
-                results.userDto.Token = await _tokenService.CreateTokenAsync(results.User);
-                results.userDto.tokenExpires = DateTime.UtcNow.AddMinutes(_tokenExpiresInMinutes);
-                return Ok(results.userDto);
-            }
+            if (!await _auth.Login(login.UserName, login.Password)) return BadRequest(_auth.Results);
 
-            return BadRequest(String.Format("{0}: {1}", results.ErrorCode, results.ErrorMessage));
+            var user = _auth.Results.User;
+
+
+            var userDto = new UserDto
+            {
+                UserName = user.userName,
+                Token = await _tokenService.CreateTokenAsync(user),
+                tokenExpires = DateTime.UtcNow.AddMinutes(_tokenExpiresInMinutes)
+            };
+
+            return Ok(userDto);
         }
 
         [HttpPost("logout")]
         public async Task<ActionResult> Logout()
 		{
-            String username = User.GetUsername();
-            if (username == null) return Ok("User token not passed");
-            var user = await _uow.UserRepository.GetUserByUsernameAsync(username);
-            if (await _uow.UserRepository.LogoutAsync(user)) return Ok();
+            String guid = User.GetUserId();
+            if (guid == null) return Ok("Token passed it was not.");
+            var user = await _uow.EmployeesRepository.GetByGuidAsync(Guid.Parse(guid));
+            if (user != null) return Ok();
+//            if (await _uow.UserRepository.LogoutAsync(user)) return Ok();
+
             return BadRequest("ERROR: Could not log user out of system");
 		}
 
         [HttpPost("tokenupdate")]
-        public async Task<ActionResult<UserDto>> TokenUpdate(string guid)
+        public ActionResult<UserDto> TokenUpdate(string guid)
 		{
+            /*
             // Load user recrod
             Tk3User user = await _uow.UserRepository.GetUserByGuidAsync(Guid.Parse(guid));
             // Validate we have a valid user
@@ -101,7 +110,8 @@ namespace API.Controllers
                 userDto.tokenExpires = DateTime.UtcNow.AddMinutes(120);
                 return Ok(userDto);
             }
-            return BadRequest("User can not update token at this time");
+            */
+            return BadRequest("Implamented token update is not.");
 		}
     }
 }

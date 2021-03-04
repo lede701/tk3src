@@ -1,4 +1,8 @@
-﻿using AutoMapper;
+﻿using API.DTOs.Timesheets;
+using API.Extensions;
+using AutoMapper;
+using Core.Entities.TimeSheets;
+using Core.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -7,17 +11,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using tk3full.Data;
-using tk3full.DTOs.Timesheets;
-using tk3full.Entities;
-using tk3full.Entities.TimeSheets;
-using tk3full.Extensions;
-using tk3full.Interfaces;
 
 namespace API.Controllers
 {
     //[Authorize]
-    public class TimesheetController : Tk3BaseController
+    public class TimesheetController : CoreController
     {
 		private readonly IUnitOfWork _uow;
 
@@ -30,9 +28,9 @@ namespace API.Controllers
         public async Task<ActionResult<TimesheetDto>> GetTimesheet(string guid)
         {
             // Pull object out of database
-            TimesheetDto tso = await _uow.TimesheetRepositoy.GetTimesheetDtoAsync(new Guid(guid));
+            var ts = await _uow.TimesheetsRepository.GetByGuidAsync(Guid.Parse(guid));
             // Check if a valid object was found
-            if(tso != null) return Ok(tso);
+            if(ts != null) return Ok(_uow.Mapper.Map<TimesheetDto>(ts));
 
             // No valid object so send an error
             return BadRequest("ERROR: Invalid timsheet code");
@@ -41,11 +39,12 @@ namespace API.Controllers
         [HttpGet("list")]
         public async Task<ActionResult<ICollection<TimesheetListDto>>> GetTimesheetList()
 		{
-            Employee emp = await _uow.UserRepository.GetEmployeeByGuidAsync(Guid.Parse(User.GetUserId()));
-            var data = await _uow.TimesheetRepositoy.GetTimesheetListAsync(emp);
+            Employee emp = await _uow.EmployeesRepository.GetByGuidAsync(Guid.Parse(User.GetUserId()));
+            var data = await _uow.TimesheetsRepository.ListAllByUserAsync(emp.Id);
+            //var data = await _uow.TimesheetRepositoy.GetTimesheetListAsync(emp);
             if(data != null)
 			{
-                return Ok(data);
+                return Ok(_uow.Mapper.Map<IReadOnlyCollection<TimesheetDto>>(data));
 			}
             return BadRequest("ERROR: No timesheets available to send back for current user");
 
@@ -55,9 +54,9 @@ namespace API.Controllers
         public async Task<ActionResult<TimesheetDto>> Create(DateTime start, DateTime end)
         {
             Guid guid = Guid.Parse(User.GetUserId());
-            var emp = await _uow.UserRepository.GetEmployeeByGuidAsync(guid);
-            var tso = await _uow.TimesheetRepositoy.CreateTimesheetAsync(emp, start, end);
-            if (tso != null) return Ok(tso);
+            var emp = await _uow.EmployeesRepository.GetByGuidAsync(guid);
+            //var tso = await _uow.TimesheetRepositoy.CreateTimesheetAsync(emp, start, end);
+            //if (tso != null) return Ok(tso);
 
             return BadRequest("ERROR: Could not create timesheet");
         }
@@ -65,6 +64,7 @@ namespace API.Controllers
         [HttpPost("project/create/{tsGuid}/{projectGuid}")]
         public async Task<ActionResult<TimeDetailsDto>> AddTime(Guid tsGuid, Guid projectGuid, decimal time, DateTime day, string? comment)
 		{
+            /*
             var project = await _uow.ProjectRepositoy.FindAsync(projectGuid);
             var ts = await _uow.TimesheetRepositoy.FindAsync(tsGuid);
 
@@ -93,18 +93,21 @@ namespace API.Controllers
                 // Return DTO object!
                 return Ok(_uow.Mapper.Map<TimeDetailsDto>(td));
             }
+            */
             // Something really went wrong so let app know
             return BadRequest("ERROR: Could not add time to timesheet");
 		}
         [HttpPost("lunch/create/{tsGuid}")]
         public async Task<ActionResult<TimeLunchDto>> AddLunch(Guid tsGuid, decimal time, DateTime day)
         {
+            /*
             Timesheet ts = await _uow.TimesheetRepositoy.FindAsync(tsGuid);
             var results = await _uow.TimesheetRepositoy.AddLunchAsync(ts, time, day);
             if (await _uow.Complete())
             {
                 return results;
             }
+            */
 
             return BadRequest("ERROR: Could not add lunch time to timesheet");
         }

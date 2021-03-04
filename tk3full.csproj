@@ -6,6 +6,21 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="API\**" />
+    <Compile Remove="Core\**" />
+    <Compile Remove="framework\**" />
+    <Content Remove="API\**" />
+    <Content Remove="Core\**" />
+    <Content Remove="framework\**" />
+    <EmbeddedResource Remove="API\**" />
+    <EmbeddedResource Remove="Core\**" />
+    <EmbeddedResource Remove="framework\**" />
+    <None Remove="API\**" />
+    <None Remove="Core\**" />
+    <None Remove="framework\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="client\src\app\entities\menuItemEntity.ts" />
     <None Remove="client\src\app\entities\timesheets\timeDetailsEntity.ts" />
     <None Remove="client\src\app\entities\timesheets\timesheetEntity.ts" />
@@ -24,7 +39,6 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="5.0.3" />
-    <PackageReference Include="MySql.Data.EntityFrameworkCore" Version="8.0.22" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.0.7" />
   </ItemGroup>
 

@@ -1,37 +1,41 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using API.DTOs;
+using AutoMapper;
+using Core.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using tk3full.Data;
-using tk3full.DTOs;
-using tk3full.Extensions;
-using tk3full.Interfaces;
 
 namespace API.Controllers
 {
-	public class MenuController : Tk3BaseController
+	public class MenuController : CoreController
 	{
 		private readonly IUnitOfWork _uow;
+		private readonly IMapper _mapper;
 
-		public MenuController(IUnitOfWork uow)
+		public MenuController(IUnitOfWork uow, IMapper mapper)
 		{
 			_uow = uow;
+			_mapper = mapper;
 		}
 
 		[HttpGet]
 		public async Task<ActionResult<IEnumerable<MenuItemDto>>> GetMenu()
 		{
-			return Ok(await _uow.MenuRepositoy.GetMenuItemsAsync(User.GetUsername()));
+			var items = await _uow.MenusRepository.ListAllAsync();
+			return Ok(_mapper.Map<IReadOnlyCollection<MenuItemDto>>(items));
 		}
 
 		[HttpPost]
 		[Authorize]
 		public async Task<ActionResult<IEnumerable<MenuItemDto>>> GetMyMenu(String username)
 		{
-			return Ok(await _uow.MenuRepositoy.GetMenuItemsAsync(User.GetUsername()));
+			//return Ok(await _uow.MenuRepositoy.GetMenuItemsAsync(User.GetUsername()));
+
+			return BadRequest("ERROR: Feature implamented it is not.");
 		}
 	}
 }
