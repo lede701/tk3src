@@ -139,7 +139,22 @@ namespace Framework.Data
 				type = "mainmenu",
 				published = DateTime.Now,
 				ordering = 1,
-				isHome = true,
+				isHome = false,
+				Created = DateTime.Now,
+				CreatedById = 1,
+				Modified = DateTime.Now,
+				ModifiedById = 1,
+				StatusCode = RecordStatus.ACTIVE
+			});
+			ctx.Menu.Add(new MenuItem()
+			{
+				parentId = 0,
+				name = "Leave",
+				route = "leave/",
+				type = "mainmenu",
+				published = DateTime.Now,
+				ordering = 1,
+				isHome = false,
 				Created = DateTime.Now,
 				CreatedById = 1,
 				Modified = DateTime.Now,
@@ -298,7 +313,7 @@ namespace Framework.Data
 				parentId = 0,
 				locationId = 0,
 				employeeId = 1,
-				bankId = 1,
+				bankId = 3,
 				tranType = 'C',
 				tranTime = 336,
 				tranDate = DateTime.Now,
