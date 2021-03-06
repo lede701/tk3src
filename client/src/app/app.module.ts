@@ -15,24 +15,20 @@ import { AppComponent } from './app.component';
 import { MenuComponent } from './menu/menu.component';
 import { HomeComponent } from './home/home.component';
 import { JwtInterceptor } from './interceptors/jwt.interceptor';
-import { AuthComponent } from './auth/auth.component';
-import { AuthCreateComponent } from './auth/auth-create/auth-create.component';
-import { LeaveComponent } from './leave/leave.component';
 import { ErrorInterceptor } from './interceptors/error.interceptor';
 import { NewmenuComponent } from './menu/newmenu/newmenu.component';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { LoadingInterceptor } from './interceptors/loading.interceptor';
 import { TimesheetsModule } from './timesheets/timesheets.module';
 import { HelpersModule } from './helpers/helpers.module';
+import { LeaveModule } from './leave/leave.module';
+import { AuthModule } from './auth/auth.module';
 
 @NgModule({
   declarations: [
     AppComponent,
     MenuComponent,
     HomeComponent,
-    AuthComponent,
-    AuthCreateComponent,
-    LeaveComponent,
     NewmenuComponent,
   ],
   imports: [
@@ -48,8 +44,10 @@ import { HelpersModule } from './helpers/helpers.module';
     MenubarModule,
     NgxSpinnerModule,
 
+    AuthModule,
     TimesheetsModule,
     HelpersModule,
+    LeaveModule,
   ],
   exports: [
     FormsModule,
