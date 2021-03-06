@@ -26,6 +26,8 @@ export interface AuthRefreshData {
 
 export interface Tk3AuthResponse {
   userName: string,
+  firstName: string,
+  lastName: string,
   token: string,
   tokenExpires: Date
 }
@@ -69,6 +71,8 @@ export class AuthService {
           this._user.id = oSess.id;
           this._user.token = oSess.token;
           this._user.username = oSess.username;
+          this._user.firstName = oSess.firstName;
+          this._user.lastName = oSess.lastName;
           this._user.isAuthenticated = oSess.isAuthenticated;
           this._user.tokenExpires = new Date(oSess.tokenExpires);
           this._user.refreshToken = oSess.refreshToken;
@@ -93,6 +97,8 @@ export class AuthService {
       let user: UserEntity = new UserEntity();
       user.isAuthenticated = true;
       user.username = results.userName;
+      user.firstName = results.firstName;
+      user.lastName = results.lastName;
       user.token = results.token;
 
       // Decrypt token and store import information about user and session
@@ -142,7 +148,7 @@ export class AuthService {
   }
 
   getName(): string {
-    return this.getUsername();
+    return this.getIsAuthenticated() ? this._user.firstName : '';
   }
 
   WhoAmI() {

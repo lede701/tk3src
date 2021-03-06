@@ -31,8 +31,8 @@ namespace API.Controllers
 			_tokenExpiresInMinutes = Convert.ToInt32(config["TokenAgeInMinutes"]);
         }
 
-        [HttpGet("rest/{guid}")]
-        public async Task<ActionResult<UserDto>> RestUser(String guid)
+        [HttpGet("reset/{guid}")]
+        public async Task<ActionResult<UserDto>> ResetUser(String guid)
         {
 
             var user = await _uow.EmployeesRepository.GetByGuidAsync(Guid.Parse(guid));
@@ -71,13 +71,9 @@ namespace API.Controllers
 
             var user = _auth.Results.User;
 
-
-            var userDto = new UserDto
-            {
-                UserName = user.userName,
-                Token = await _tokenService.CreateTokenAsync(user),
-                tokenExpires = DateTime.UtcNow.AddMinutes(_tokenExpiresInMinutes)
-            };
+            var userDto = _uow.Mapper.Map<UserDto>(user);
+            userDto.Token = await _tokenService.CreateTokenAsync(user);
+            userDto.tokenExpires = DateTime.UtcNow.AddMinutes(_tokenExpiresInMinutes);
 
             return Ok(userDto);
         }

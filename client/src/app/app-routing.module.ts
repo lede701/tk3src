@@ -5,14 +5,13 @@ import { AuthComponent } from './auth/auth.component';
 import { HomeComponent } from './home/home.component';
 import { LeaveComponent } from './leave/leave.component';
 import { MenuComponent } from './menu/menu.component';
+import { NewmenuComponent } from './menu/newmenu/newmenu.component';
 import { TimesheetsComponent } from './timesheets/timesheets.component';
 import { TimsheetCreateComponent } from './timesheets/timsheet-create/timsheet-create.component';
 
 const routes: Routes = [
-  {
-    path: 'timesheet', component: TimesheetsComponent, children: [
-    ]
-  },
+  { path: 'mega', component: NewmenuComponent },
+  { path: 'timesheet', component: TimesheetsComponent, children: [] },
   {
     path: 'timesheet/sheet/:guid', component: TimesheetsComponent
   },

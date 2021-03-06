@@ -22,6 +22,8 @@ namespace Core.Entities
 
 		#region Linked Data
 
+		public ICollection<MenuItem> Children { get; set; }
+
 		#endregion
 	}
 }

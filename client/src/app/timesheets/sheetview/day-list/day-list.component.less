@@ -1,8 +1,9 @@
-@backColor: #dff3f7;
-@borderColor: darken(@backColor, 25%);
+@import '../../../app.component.less';
+
+@borderColor: darken(@colorD, 10%);
 
 .row-days {
-  background-color: @backColor;
+  background-color: @colorD;
   border-top: 1px solid @borderColor;
   border-bottom: 3px solid @borderColor;
 
@@ -11,7 +12,7 @@
   }
 
   div:last-child {
-      border-right: none;
+    border-right: none;
   }
 
   .col-day {
@@ -20,6 +21,8 @@
 }
 
 .col-day {
+    //color: darken(@textColor, 10%);
+    color: white;
 }
 
 .col-day-right{
@@ -27,9 +30,19 @@
 }
 
 .col-project {
+    color: white;
 }
 
 .today {
   font-weight: bolder;
-  background-color: darken(@backColor, 5%);
+  background-color: darken(@colorD, 10%);
+}
+
+.day-weekend {
+  background-color: @colorC;
+  color: white;
+}
+
+.border-weekend {
+  border-right: 1px solid darken(@colorC, 15%) !important;
 }

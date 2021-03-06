@@ -8,7 +8,9 @@ namespace API.DTOs
     public class UserDto
     {
         public String UserName { get; set; }
-        public String Token { get; set; }
+		public String firstName { get; set; }
+		public String lastName { get; set; }
+		public String Token { get; set; }
 		public DateTime tokenExpires { get; set; }
 	}
 }

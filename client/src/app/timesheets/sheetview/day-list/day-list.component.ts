@@ -61,4 +61,15 @@ export class DayListComponent implements OnInit {
     }
   }
 
+  getDayClass(day: string): string {
+    let extraClass = '';
+    if (day.indexOf('Sat') >= 0 || day.indexOf('Sun') >= 0) {
+      extraClass = ' day-weekend';
+      if (day.indexOf('Sat') >= 0) {
+        extraClass += ' border-weekend';
+      }
+    }
+    return extraClass;
+  }
+
 }

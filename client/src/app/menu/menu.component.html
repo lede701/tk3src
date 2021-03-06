@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
   <div class="container-fluid">
     <a class="navbar-brand" [routerLink]="'/'"><img src="./assets/tk3Logo.png" width="30" height="30" class="mr-2" alt="{{title}}" />{{title}}</a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -34,7 +34,6 @@
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <li class="nav-item">
             <a [routerLink]="'auth/whoami'" class="nav-link"><i class="fa fa-user pr-2 pl-2"></i> <strong>{{getName()}}</strong></a>
-
           </li>
         </ul>
       </div>

@@ -16,7 +16,7 @@ export class ProjectListComponent implements OnInit {
   ngOnInit(): void {
     this.tsService.currentTimesheet$.pipe(take(1)).subscribe(results => {
       this.ts = results;
-      console.log(this.ts);
+      //console.log(this.ts);
     });
   }
 

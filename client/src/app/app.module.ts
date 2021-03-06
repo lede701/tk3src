@@ -4,7 +4,12 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
-import { NgbDropdownModule, NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbDropdownModule, NgbModule, NgbToastModule } from '@ng-bootstrap/ng-bootstrap';
+import { ToastModule } from 'primeng/toast';
+import { TableModule } from 'primeng/table';
+import { MessageService } from 'primeng/api'
+import { MenuModule } from 'primeng/menu';
+import { MenubarModule } from 'primeng/menubar';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -23,6 +28,11 @@ import { TimsheetCreateComponent } from './timesheets/timsheet-create/timsheet-c
 import { AuthCreateComponent } from './auth/auth-create/auth-create.component';
 import { InputFieldComponent } from './helpers/input-field/input-field.component';
 import { LeaveComponent } from './leave/leave.component';
+import { ToasterComponent } from './helpers/toaster/toaster.component';
+import { ErrorInterceptor } from './interceptors/error.interceptor';
+import { NewmenuComponent } from './menu/newmenu/newmenu.component';
+import { NgxSpinnerModule } from 'ngx-spinner';
+import { LoadingInterceptor } from './interceptors/loading.interceptor';
 
 @NgModule({
   declarations: [
@@ -41,21 +51,32 @@ import { LeaveComponent } from './leave/leave.component';
     AuthCreateComponent,
     InputFieldComponent,
     LeaveComponent,
+    ToasterComponent,
+    NewmenuComponent,
   ],
   imports: [
-    BrowserAnimationsModule,
-    BrowserModule,
-    AppRoutingModule,
+    FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
+    BrowserModule,
+    BrowserAnimationsModule,
+    AppRoutingModule,
     NgbModule,
     NgbDropdownModule,
-    FormsModule,
+    ToastModule,
+    TableModule,
+    MenuModule,
+    MenubarModule,
+    NgxSpinnerModule,
   ],
   exports: [
     FormsModule,
+    ToastModule,
+    TableModule,
   ],
   providers: [
+    { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: LoadingInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true }],
   bootstrap: [AppComponent]
 })

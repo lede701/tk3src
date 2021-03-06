@@ -1,6 +1,7 @@
 ﻿using API.DTOs;
 using AutoMapper;
 using Core.Interfaces;
+using Core.Specifications;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -25,7 +26,8 @@ namespace API.Controllers
 		[HttpGet]
 		public async Task<ActionResult<IEnumerable<MenuItemDto>>> GetMenu()
 		{
-			var items = await _uow.MenusRepository.ListAllAsync();
+			
+			var items = await _uow.MenusRepository.ListAllBySpecAsync(new MenuItemsForUserSpec());
 			return Ok(_mapper.Map<IReadOnlyCollection<MenuItemDto>>(items));
 		}
 

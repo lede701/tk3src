@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using API.Extensions;
 using API.Helpers;
+using API.Middleware;
 using Core.Interfaces;
 using Framework.Data;
 using Microsoft.AspNetCore.Builder;
@@ -48,6 +49,8 @@ namespace API
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseMiddleware<ExceptionMiddleware>();
+
             app.UseSwaggerDocs(env);
 
             app.UseHttpsRedirection();

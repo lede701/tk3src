@@ -1,0 +1,14 @@
+<p-menubar [model]="items">
+  <ng-template pTemplate="start">
+    <a class="navbar-brand" [routerLink]="'/'"><img src="./assets/tk3Logo.png" width="30" height="30" class="mr-2" alt="{{title}}" />{{title}}</a>
+  </ng-template>
+  <ng-template pTemplate="end">
+    <div *ngIf="auth.getIsAuthenticated()">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a [routerLink]="'/auth/whoami'" class="nav-link"><i class="fa fa-user pr-2 pl-2"></i> <strong>{{getName()}}</strong></a>
+        </li>
+      </ul>
+    </div>
+  </ng-template>
+</p-menubar>

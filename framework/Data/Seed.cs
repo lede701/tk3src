@@ -118,7 +118,7 @@ namespace Framework.Data
 
 			ctx.Menu.Add(new MenuItem()
 			{
-				parentId = 0,
+				guid = Guid.NewGuid(),
 				name = "Home",
 				route = "/",
 				type = "mainmenu",
@@ -133,7 +133,7 @@ namespace Framework.Data
 			});
 			ctx.Menu.Add(new MenuItem()
 			{
-				parentId = 0,
+				guid = Guid.NewGuid(),
 				name = "Timesheet",
 				route = "timesheet/",
 				type = "mainmenu",
@@ -148,7 +148,7 @@ namespace Framework.Data
 			});
 			ctx.Menu.Add(new MenuItem()
 			{
-				parentId = 0,
+				guid = Guid.NewGuid(),
 				name = "Leave",
 				route = "leave/",
 				type = "mainmenu",
