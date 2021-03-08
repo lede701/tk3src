@@ -8,6 +8,8 @@ import { AuthService } from '../services/auth.service';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { NgForm } from '@angular/forms';
+import { MenuService } from './menu.service';
+import { MenuItem } from 'primeng/api';
 
 @Component({
   selector: 'app-menu',
@@ -18,13 +20,19 @@ export class MenuComponent implements OnInit, OnDestroy {
   @Input() title: string = "Site Title";
 
   public menuItems: MenuItemEntity[] = [];
+  public items: MenuItem[] = [];
   model: any = {};
 
   private authSubscribe: Subscription;
 
-  constructor(private http: HttpClient, public auth: AuthService, private route: Router) {
+  constructor(private menuService: MenuService, public auth: AuthService, private route: Router) {
     this.authSubscribe = this.auth.currentUser$.subscribe(user => {
-      this.setupMenu();
+      this.menuItems = [];
+      if (user.isAuthenticated) {
+          menuService.currentMenu$.pipe(take(1)).subscribe(results => {
+          this.menuItems = results;
+        });
+      }
     });
   }
 
@@ -33,17 +41,6 @@ export class MenuComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.authSubscribe.unsubscribe();
-  }
-
-  setupMenu() {
-    let url = environment.apiUrl + '/Menu';
-    // Loading menu from API server
-    this.http.get<MenuItemEntity[]>(url).pipe(take(1)).subscribe(menu => {
-      this.menuItems = menu;
-      if (this.auth.getIsAuthenticated()) {
-        this.menuItems.push(new MenuItemEntity('Logout', 'auth/logout', ''));
-      }
-    });
   }
 
   login(loginForm: NgForm) {
@@ -55,11 +52,47 @@ export class MenuComponent implements OnInit, OnDestroy {
 
   logout() {
     this.auth.logout();
-    this.setupMenu();
+    this.menuService.currentMenu$.pipe(take(1)).subscribe(results => {
+      this.menuItems = [];
+    });
     this.route.navigate(['/']);
   }
 
   getName(): string {
     return this.auth.getName();
+  }
+
+  private addMenuItem(item: MenuItemEntity, parent?: MenuItem): MenuItem {
+    // Create the PrimeNG menu item interface object
+    let mItem: MenuItem = {
+      label: item.name,
+      routerLink: '/' + item.route,
+      id: item.guid,
+    };
+
+    // Check if parent is defined
+    if (parent !== undefined) {
+      // Check if parent items list is defined, if not create it
+      if (parent.items === undefined) {
+        parent.items = [];
+        parent.items.push({
+          label: parent.label,
+          routerLink: parent.routerLink
+        });
+        parent.routerLink = '';
+      }
+      // Add item to list of parent
+      parent.items.push(mItem);
+    }
+
+    // Check if we need to recursivaly add items from children records
+    if (item.children) {
+      // Process each child in the children array
+      for (let child of item.children) {
+        this.addMenuItem(child, mItem);
+      }
+    }
+
+    return mItem;
   }
 }

@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { EventEmitter, Injectable, Output } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
 import { UserEntity } from '../entities/userEntity';
@@ -76,13 +76,13 @@ export class AuthService {
           this._user.isAuthenticated = oSess.isAuthenticated;
           this._user.tokenExpires = new Date(oSess.tokenExpires);
           this._user.refreshToken = oSess.refreshToken;
-          // Send notification of current user to app listeners
-          this._currentUserSource.next(this._user);
           // Check if token need to be updated and also start the tracking prodcess
           this.updateToken(this);
         }
       }
     }
+    // Send notification of current user to app listeners
+    this._currentUserSource.next(this._user);
   }
 
   login(userName: string, password: string) {

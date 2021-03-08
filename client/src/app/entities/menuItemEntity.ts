@@ -1,4 +1,5 @@
 export class MenuItemEntity {
+  public guid: string = '';
   public name: string = '';
   public route: string = '';
   public alias: string = '';
