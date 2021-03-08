@@ -19,6 +19,7 @@ namespace Core.Specifications
 			AddInclude(lv => lv.Employee);
 			AddInclude(lv => lv.Bank);
 
+			AddOrderByDesc(lv => lv.tranDate);
 			AddOrderBy(lv => lv.Bank.displayCode);
 		}
 	}

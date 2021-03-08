@@ -15,20 +15,20 @@
             autocomplete="off">
         <input
                [(ngModel)]="model.userName"
-               class="form-control me-1"
+               class="form-control me-1 mr-1"
                type="text"
                name="userNAme"
                placeholder="Username"
                aria-label="Username">
         <input
                [(ngModel)]="model.password"
-               class="form-control me-1"
+               class="form-control me-1 mr-1"
                type="password"
                name="password"
                placeholder="Password"
                aria-label="Password">
         <button class="btn btn-outline-success" type="submit">Login</button>
-        <button class="btn btn-outline-primary" type="button" [routerLink]="'/auth/create'">Create</button>
+        <button class="btn btn-outline-primary" type="button" [routerLink]="'/auth/user/create'">Create</button>
       </form>
       <div *ngIf="auth.getIsAuthenticated()">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
