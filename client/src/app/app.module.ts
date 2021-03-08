@@ -23,6 +23,7 @@ import { TimesheetsModule } from './timesheets/timesheets.module';
 import { HelpersModule } from './helpers/helpers.module';
 import { LeaveModule } from './leave/leave.module';
 import { AuthModule } from './auth/auth.module';
+import { CacheInterceptor } from './interceptors/cache.interceptor';
 
 @NgModule({
   declarations: [
@@ -56,6 +57,7 @@ import { AuthModule } from './auth/auth.module';
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: CacheInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: LoadingInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true }],
   bootstrap: [AppComponent]
