@@ -27,7 +27,9 @@ export class NewmenuComponent implements OnInit {
     });
   }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {
+    console.log(this.auth.getIsAuthenticated());
+  }
 
   getName() {
     return 'User: ' + this.auth.getName();
