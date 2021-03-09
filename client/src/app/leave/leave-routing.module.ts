@@ -3,7 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { LeaveComponent } from './leave.component';
 
 const routes: Routes = [
-  { path: 'leave', component: LeaveComponent },
+  { path: '', component: LeaveComponent },
 ];
 
 @NgModule({

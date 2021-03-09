@@ -30,7 +30,7 @@ export class NewmenuComponent implements OnInit {
   ngOnInit(): void { }
 
   getName() {
-    return this.auth.getName();
+    return 'User: ' + this.auth.getName();
   }
 
   private addMenuItem(item: MenuItemEntity, parent?: MenuItem): MenuItem {

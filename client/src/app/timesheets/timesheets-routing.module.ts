@@ -4,12 +4,12 @@ import { TimesheetCreateComponent } from './timesheet-create/timesheet-create.co
 import { TimesheetsComponent } from './timesheets.component';
 
 const routes: Routes = [
-  { path: 'timesheet', component: TimesheetsComponent, children: [] },
+  { path: '', component: TimesheetsComponent, children: [] },
   {
-    path: 'timesheet/sheet/:guid', component: TimesheetsComponent
+    path: 'sheet/:guid', component: TimesheetsComponent
   },
   {
-    path: 'timesheet/create', component: TimesheetCreateComponent
+    path: 'create', component: TimesheetCreateComponent
   },
 ];
 
