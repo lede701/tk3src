@@ -2,6 +2,7 @@
 using AutoMapper;
 using Core.Entities.TimeSheets;
 using Core.Interfaces;
+using Core.Specifications;
 using Framework.Data;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -34,7 +35,7 @@ namespace API.Controllers
 		[HttpGet("adminlist")]
 		public async Task<ActionResult<IReadOnlyCollection<ProjectCodeDto>>> AdminList()
 		{
-			var list = await _uow.ProjectsRepository.ListAllAsync();
+			var list = await _uow.ProjectsRepository.ListAllBySpecAsync(new ProjectCodeSpec());
 			if (list != null) return Ok(_uow.Mapper.Map<IReadOnlyCollection<ProjectCodeDto>>(list));
 
 			return BadRequest("ERROR: Project list found it was not.");

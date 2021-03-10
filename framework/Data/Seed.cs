@@ -123,24 +123,8 @@ namespace Framework.Data
 				route = "/",
 				type = "mainmenu",
 				published = DateTime.Now,
-				ordering = 1,
+				ordering = 10,
 				isHome = true,
-				Created = DateTime.Now,
-				CreatedById = 1,
-				Modified = DateTime.Now,
-				ModifiedById = 1,
-				StatusCode = RecordStatus.ACTIVE
-			});
-
-			ctx.Menu.Add(new MenuItem()
-			{
-				guid = Guid.NewGuid(),
-				name = "Timesheets",
-				route = "",
-				type = "mainmenu",
-				published = DateTime.Now,
-				ordering = 3,
-				isHome = false,
 				Created = DateTime.Now,
 				CreatedById = 1,
 				Modified = DateTime.Now,
@@ -155,7 +139,7 @@ namespace Framework.Data
 				route = "leave/",
 				type = "mainmenu",
 				published = DateTime.Now,
-				ordering = 2,
+				ordering = 20,
 				isHome = false,
 				Created = DateTime.Now,
 				CreatedById = 1,
@@ -163,6 +147,39 @@ namespace Framework.Data
 				ModifiedById = 1,
 				StatusCode = RecordStatus.ACTIVE
 			});
+
+			ctx.Menu.Add(new MenuItem()
+			{
+				guid = Guid.NewGuid(),
+				name = "Timesheets",
+				route = "",
+				type = "mainmenu",
+				published = DateTime.Now,
+				ordering = 30,
+				isHome = false,
+				Created = DateTime.Now,
+				CreatedById = 1,
+				Modified = DateTime.Now,
+				ModifiedById = 1,
+				StatusCode = RecordStatus.ACTIVE
+			});
+
+			ctx.Menu.Add(new MenuItem()
+			{
+				guid = Guid.NewGuid(),
+				name = "Projects",
+				route = "/projects",
+				type = "mainmenu",
+				published = DateTime.Now,
+				ordering = 30,
+				isHome = false,
+				Created = DateTime.Now,
+				CreatedById = 1,
+				Modified = DateTime.Now,
+				ModifiedById = 1,
+				StatusCode = RecordStatus.ACTIVE
+			});
+
 			await ctx.SaveChangesAsync();
 		}
 
@@ -176,6 +193,19 @@ namespace Framework.Data
 				commentType = 1,
 				ProjectTitle = "12021-00",
 				ProjectDescription = "General Operations",
+				StatusCode = RecordStatus.ACTIVE,
+				Created = DateTime.Now,
+				CreatedById = 1,
+				Modified = DateTime.Now,
+				ModifiedById = 1
+			});
+
+			ctx.ProjectCode.Add(new ProjectCode()
+			{
+				guid = Guid.NewGuid(),
+				commentType = 1,
+				ProjectTitle = "12121-00",
+				ProjectDescription = "Proposal Development",
 				StatusCode = RecordStatus.ACTIVE,
 				Created = DateTime.Now,
 				CreatedById = 1,

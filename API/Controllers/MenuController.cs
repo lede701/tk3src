@@ -17,12 +17,10 @@ namespace API.Controllers
 	public class MenuController : CoreController
 	{
 		private readonly IUnitOfWork _uow;
-		private readonly IMapper _mapper;
 
-		public MenuController(IUnitOfWork uow, IMapper mapper)
+		public MenuController(IUnitOfWork uow)
 		{
 			_uow = uow;
-			_mapper = mapper;
 		}
 
 		[HttpGet]
@@ -30,7 +28,7 @@ namespace API.Controllers
 		{
 			
 			var items = await _uow.MenusRepository.ListAllBySpecAsync(new MenuItemsForUserSpec());
-			return Ok(_mapper.Map<IReadOnlyCollection<MenuItemDto>>(items));
+			return Ok(_uow.Mapper.Map<IReadOnlyCollection<MenuItemDto>>(items));
 		}
 
 		[HttpPost("create")]
@@ -70,10 +68,10 @@ namespace API.Controllers
 		public async Task<ActionResult<String>> UpdateMenu()
 		{
 			var item = _uow.MenusRepository.GetByGuidAsync(Guid.Parse("F4961391-DE2E-4B94-B042-EBC5F4565380"));
-			if (item == null)
+			if (!(item is MenuItem))
 			{
 				// Try and load the timesheet menu item
-				var tsItem = await _uow.MenusRepository.GetByIdAsync(2);
+				var tsItem = await _uow.MenusRepository.GetByIdAsync(3);
 				tsItem.Children.Add(new Core.Entities.MenuItem
 				{
 					guid = Guid.Parse("F4961391-DE2E-4B94-B042-EBC5F4565380"),
@@ -89,6 +87,8 @@ namespace API.Controllers
 					ModifiedById = 1,
 					StatusCode = RecordStatus.ACTIVE
 				});
+				_uow.MenusRepository.Update(tsItem);
+
 			}
 
 			await _uow.CompleteAsync();
