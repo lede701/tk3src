@@ -1,0 +1,17 @@
+<div class="container" *ngIf="projects.length > 0">
+  <div class="row mb-2">
+    <div class="col"><strong>Project</strong></div>
+    <div class="col"><strong>Description</strong></div>
+    <div class="col">
+      <button class="btn btn-primary" type="button" (click)="onAddProject()" title="Add Project"><i class="fa fa-plus"></i></button>
+    </div>
+  </div>
+  <div class="row mb-1" *ngFor="let item of projects">
+    <div class="col">{{item.projectTitle}}</div>
+    <div class="col">{{item.projectDescription}}</div>
+    <div class="col">
+      <button class="btn btn-primary btn-sm mr-2" type="button" (click)="edit(item.guid)" title="Edit Project"><i class="fa fa-edit mr-2"></i>Edit</button>
+      <button class="btn btn-danger btn-sm" type="button" (click)="delete(item.guid)" title="Delete Project"><i class="fa fa-remove mr-2"></i>Delete</button>
+    </div>
+  </div>
+</div>

@@ -36,15 +36,33 @@ namespace API.Controllers
 		[HttpPost("create")]
 		public async Task<ActionResult<MenuItemDto>> Create([FromForm]MenuItemDto item)
         {
-			if(item.guid == Guid.Empty)
-            {
-				item.guid = Guid.NewGuid();
-            }
-
+			// Map DTO to MenuItem object
 			var newItem = _uow.Mapper.Map<MenuItem>(item);
-			_uow.MenusRepository.Add(newItem);
+			// Check if guid is empty
+			if (item.guid == Guid.Empty)
+            {
+				// Add menu item to repository
+				_uow.MenusRepository.Add(newItem);
+			}
+			else
+			{
+				//TODO: Merge changes from DTO to entity
+				/*
+				var dbItem = await _uow.MenusRepository.GetByGuidAsync(item.guid);
+				var noUpdate = ["Created", "CreatedById", "guid"];
+				foreach(var pi in typeof(MenuItem).GetProperties())
+				{
+					var fieldName = pi.Name;
+					var newVal = pi.GetGetMethod().Invoke(newItem, null);
+					var dbVal = pi.GetGetMethod().Invoke(dbItem, null);
+				}
+				//*/
+			}
 
-			await _uow.CompleteAsync();
+			// Save changes
+			//await _uow.CompleteAsync();
+
+			// Return results of MenuItem being created or updated
 			return Ok(_uow.Mapper.Map<MenuItemDto>(newItem));
         }
 

@@ -11,6 +11,6 @@ namespace API.DTOs.Timesheets
 		public String ProjectTitle { get; set; }
 		public String ProjectDescription { get; set; }
 		public int commentType { get; set; }
-		public int status { get; set; }
+		public int statusCode { get; set; }
 	}
 }

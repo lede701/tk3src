@@ -1,0 +1,38 @@
+<div class="container" *ngIf="isEditable">
+  <h1>{{getEditType()}} Project Code</h1>
+  <form [formGroup]="projectForm" (ngSubmit)="store()" autocomplete="off">
+    <div class="row">
+      <div class="col">
+        <tk3-input-field [formControl]="projectForm.controls['projectTitle']" [label]="'Project'"></tk3-input-field>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col">
+        <tk3-input-field [formControl]="projectForm.controls['projectDescription']" [label]="'Description'" ></tk3-input-field>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col">
+        <label for="commentType">Comment</label>
+        <div class="form-check">
+          <div class="form-group my-0 py-0" *ngFor="let item of commentTypeList">
+            <input type="radio"
+                   id="cmtType{{item.id}}"
+                   [formControl]="projectForm.controls['commentType']"
+                   formControlName="commentType"
+                   [value]="item.id"
+                   class="form-check-input" />
+            <label for="cmtType{{item.id}}">{{item.value}}</label>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="btn-group">
+      <button class="btn btn-primary" type="submit"><i class="fa fa-save pr-2"></i>Save</button>
+      <button class="btn btn-danger" type="button" (click)="onCancel()"><i class="fa fa-remove pr-2"></i>Cancel</button>
+    </div>
+  </form>
+</div>
+<div class="container" *ngIf="!isEditable">
+  Loading...
+</div>

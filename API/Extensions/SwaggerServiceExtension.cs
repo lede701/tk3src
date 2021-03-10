@@ -19,7 +19,10 @@ namespace API.Extensions
 		{
 			services.AddSwaggerGen(c =>
 			{
-				c.SwaggerDoc(SwaggerServiceExtension.API_VERSION, new OpenApiInfo { Title = SwaggerServiceExtension.API_NAME, Version = SwaggerServiceExtension.API_VERSION });
+				c.SwaggerDoc(SwaggerServiceExtension.API_VERSION, new OpenApiInfo { 
+					Title = SwaggerServiceExtension.API_NAME, 
+					Version = SwaggerServiceExtension.API_VERSION 
+				});
 			});
 			return services;
 		}
@@ -31,8 +34,10 @@ namespace API.Extensions
 			{
 				app.UseDeveloperExceptionPage();
 				app.UseSwagger();
-				app.UseSwaggerUI(c => c.SwaggerEndpoint(String.Format("/swagger/{0}/swagger.json", SwaggerServiceExtension.API_VERSION)
-					, String.Format("API {0}", SwaggerServiceExtension.API_VERSION)));
+				app.UseSwaggerUI(c => c.SwaggerEndpoint(
+					String.Format("/swagger/{0}/swagger.json", SwaggerServiceExtension.API_VERSION),
+					String.Format("API {0}", SwaggerServiceExtension.API_VERSION)
+					));
 			}
 
 			return app;

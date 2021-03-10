@@ -1,15 +1,28 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, Self } from '@angular/core';
+import { ControlValueAccessor, NgControl } from '@angular/forms';
 
 @Component({
-  selector: 'app-input-field',
+  selector: 'tk3-input-field',
   templateUrl: './input-field.component.html',
   styleUrls: ['./input-field.component.less']
 })
-export class InputFieldComponent implements OnInit {
+export class InputFieldComponent implements ControlValueAccessor {
 
-  constructor() { }
+  @Input() type: string = 'text';
+  @Input() label: string = 'Label';
 
-  ngOnInit(): void {
+  constructor(@Self() public ngControl: NgControl) {
+    this.ngControl.valueAccessor = this;
   }
+
+  writeValue(obj: any): void {
+  }
+
+  registerOnChange(fn: any): void {
+  }
+
+  registerOnTouched(fn: any): void {
+  }
+
 
 }

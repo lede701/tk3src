@@ -5,6 +5,7 @@ import { StaticFieldsComponent } from './static-fields/static-fields.component';
 import { ToasterComponent } from './toaster/toaster.component';
 import { ToastModule } from 'primeng/toast';
 import { TableModule } from 'primeng/table';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 
 
@@ -18,6 +19,8 @@ import { TableModule } from 'primeng/table';
     CommonModule,
     ToastModule,
     TableModule,
+    FormsModule,
+    ReactiveFormsModule,
   ],
   exports: [
     InputFieldComponent,
