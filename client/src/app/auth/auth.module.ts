@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { AuthRoutingModule } from './auth-routing.module';
 import { AuthComponent } from './auth.component';
@@ -18,6 +19,8 @@ import { ResetpwComponent } from './resetpw/resetpw.component';
     CommonModule,
     AuthRoutingModule,
     HelpersModule,
+    FormsModule,
+    ReactiveFormsModule,
   ],
   exports: [
     AuthComponent,

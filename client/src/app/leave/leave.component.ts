@@ -29,6 +29,10 @@ export class LeaveComponent implements OnInit {
     switch (type) {
       case 'C':
         return 'Credit';
+      case 'D':
+        return 'Debit';
+      case 'R':
+        return 'Request';
     }
     return "";
   }

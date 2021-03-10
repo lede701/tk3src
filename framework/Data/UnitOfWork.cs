@@ -35,6 +35,7 @@ namespace Framework.Data
 		public IGenericRepository<ProjectCode> ProjectsRepository => new GenericRepository<ProjectCode>(_context);
 		public IGenericRepository<Timesheet> TimesheetsRepository => new GenericRepository<Timesheet>(_context);
 		public IGenericRepository<TimeDetails> TimeDetailsRepository => new GenericRepository<TimeDetails>(_context);
+		public IGenericRepository<Tk3User> UserRepository => new GenericRepository<Tk3User>(_context);
 
 		public bool HasChanges()
 		{

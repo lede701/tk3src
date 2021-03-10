@@ -1,7 +1,48 @@
-<div class="container-fluid">
-  <form>
-    <h1>Create Account</h1>
-    <tk3-input-field></tk3-input-field>
+<div class="container">
+  <form [formGroup]="userForm" (submit)="onSaveUser()" autocomplete="off">
+    <div class="row">
+      <div class="col-4 offset-3">
+        <h1>Create Account</h1>
+      </div>
+    </div>
+    <div class="row pt-2">
+      <div class="col-4 offset-1">
+        <tk3-input-field [formControl]="userForm.controls['firstName']" [label]="'First name'"></tk3-input-field>
+      </div>
+      <div class="col-3">
+        <tk3-input-field [formControl]="userForm.controls['middleName']" [label]="'Middle name'"></tk3-input-field>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-4 offset-1 pb-4">
+        <tk3-input-field [formControl]="userForm.controls['lastName']" [label]="'Last name'"></tk3-input-field>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-4 offset-1">
+        <tk3-input-field [formControl]="userForm.controls['userName']" [label]="'User name'"></tk3-input-field>
+      </div>
+      <div class="col-4">
+        <tk3-input-field [formControl]="userForm.controls['email']" [label]="'Email Address'"></tk3-input-field>
+      </div>
+    </div>
+    <div class="row">
+    </div>
+    <div class="row">
+      <div class="col-4 offset-1">
+        <tk3-input-field [formControl]="userForm.controls['passwd']" [label]="'Password'" [type]="'password'"></tk3-input-field>
+      </div>
+      <div class="col-4">
+        <tk3-input-field [formControl]="userForm.controls['confirmpw']" [label]="'Confirm Password'" [type]="'password'"></tk3-input-field>
+      </div>
+    </div>
+    <div class="row">
+    </div>
+    <div class="row">
+      <div class="col-4 offset-3">
+        <button class="btn btn-primary" type="submit">Create</button>
+      </div>
+    </div>
   </form>
 
 </div>

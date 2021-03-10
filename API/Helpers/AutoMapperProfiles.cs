@@ -15,6 +15,7 @@ namespace API.Helpers
 		public AutoMapperProfiles()
 		{
 			CreateMap<Tk3User, UserDto>();
+			CreateMap<Employee, UserDto>();
 			CreateMap<MenuItem, MenuItemDto>().ReverseMap();
 			MapTimesheets();
 			MapLeave();

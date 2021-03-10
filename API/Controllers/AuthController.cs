@@ -1,6 +1,7 @@
 ﻿using API.DTOs;
 using API.Extensions;
 using Core.Entities;
+using Core.Entities.TimeSheets;
 using Core.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -30,6 +31,46 @@ namespace API.Controllers
 			_auth = auth;
 			_tokenExpiresInMinutes = Convert.ToInt32(config["TokenAgeInMinutes"]);
         }
+
+        [HttpPost("create")]
+        public async Task<ActionResult<UserDto>> Create(RegisterDto user)
+		{
+            if (user.Password != user.Confirm) return BadRequest("ERROR: Passwords match they do not!");
+
+            var pw = await _auth.HashPassword(user.Password);
+
+            Employee newUser = new Employee()
+            {
+                firstName = user.FirstName,
+                lastName = user.LastName,
+                middleName = user.MiddleName,
+                userName = user.UserName,
+                passwordHash = pw.hash,
+                hashKey = pw.key,
+                accuralDate = DateTime.Now,
+                startDate = DateTime.Now,
+                title = "",
+                locationId = 1,
+                departmentId = 1,
+                workScheduleId = 1
+            };
+
+            // Add user to system            
+            newUser = _uow.EmployeesRepository.Add(newUser);
+            // Store changes to database
+            await _uow.CompleteAsync();
+
+            if (newUser is Tk3User)
+            {
+                // Convert Tk3User to Dto object
+                var userDto = _uow.Mapper.Map<UserDto>(newUser);
+                userDto.Token = await _tokenService.CreateTokenAsync(newUser);
+                userDto.tokenExpires = DateTime.UtcNow.AddMinutes(_tokenExpiresInMinutes);
+                return Ok(userDto);
+            }
+
+            return BadRequest("ERROR: User create it has not!");
+		}
 
         [HttpGet("reset/{guid}")]
         public async Task<ActionResult<UserDto>> ResetUser(String guid)

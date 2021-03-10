@@ -5,6 +5,7 @@ import { UserEntity } from '../entities/userEntity';
 import { ReplaySubject, Subject } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { map, take } from 'rxjs/operators';
+import { IRegsiterUserEntity } from '../entities/iregisterUserEntity';
 
 export interface AuthResponseData {
   idToken: string,
@@ -85,6 +86,12 @@ export class AuthService {
     this._currentUserSource.next(this._user);
   }
 
+  create(user: IRegsiterUserEntity) {
+    return this.http.post<Tk3AuthResponse>(this._baseUri + '/Auth/create', user).pipe(take(1)).subscribe(authed => {
+      this.setupUser(authed);
+    });
+  }
+
   login(userName: string, password: string) {
     // Create login DTO object
     let login: any = {
@@ -93,23 +100,27 @@ export class AuthService {
     };
     // Call auth service on server
     return this.http.post<Tk3AuthResponse>(this._baseUri + '/Auth/login', login).pipe(map(results => {
-      // Create a new User Entity object for this session
-      let user: UserEntity = new UserEntity();
-      user.isAuthenticated = true;
-      user.username = results.userName;
-      user.firstName = results.firstName;
-      user.lastName = results.lastName;
-      user.token = results.token;
-
-      // Decrypt token and store import information about user and session
-      let token = this.getDecodedToken(user.token);
-      user.id = token.nameid;
-      user.tokenExpires = results.tokenExpires;
-
-      this._user = user;
-      this._currentUserSource.next(this._user);
-      localStorage.setItem(this.storeKey, JSON.stringify(this._user));
+      this.setupUser(results);
     }));
+  }
+
+  setupUser(results: Tk3AuthResponse) {
+    // Create a new User Entity object for this session
+    let user: UserEntity = new UserEntity();
+    user.isAuthenticated = true;
+    user.username = results.userName;
+    user.firstName = results.firstName;
+    user.lastName = results.lastName;
+    user.token = results.token;
+
+    // Decrypt token and store import information about user and session
+    let token = this.getDecodedToken(user.token);
+    user.id = token.nameid;
+    user.tokenExpires = results.tokenExpires;
+
+    this._user = user;
+    this._currentUserSource.next(this._user);
+    localStorage.setItem(this.storeKey, JSON.stringify(this._user));
   }
 
   logout() {

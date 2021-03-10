@@ -1,4 +1,5 @@
-﻿using Core.Results;
+﻿using Core.Entities;
+using Core.Results;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,5 +12,6 @@ namespace Core.Interfaces
 	{
 		Task<bool> Login(String userName, String password);
 		LoginResults Results { get; }
+		Task<PasswordHash> HashPassword(String password);
 	}
 }

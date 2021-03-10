@@ -5,6 +5,7 @@ using Framework.Data;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
@@ -71,6 +72,21 @@ namespace Framework.Services
 
 			Results.IsValid = true;
 			return Results.IsValid;
+		}
+
+		public async Task<PasswordHash> HashPassword(string password)
+		{
+			var hashed = new PasswordHash();
+			using(var hmac = new HMACSHA512())
+			{
+				var data = Encoding.UTF8.GetBytes(password);
+				MemoryStream stream = new MemoryStream();
+				stream.Write(data, 0, data.Length);
+				hashed.hash = await hmac.ComputeHashAsync(stream);
+				hashed.key = hmac.Key;
+			}
+
+			return hashed;
 		}
 	}
 }

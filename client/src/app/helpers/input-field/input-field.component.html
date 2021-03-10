@@ -1,7 +1,8 @@
 <div class="form-group">
-  <input
-         type="{{type}}"
+  <input type="{{type}}"
          class="form-control"
          placeholder="{{label}}"
          [formControl]="ngControl.control" />
+  <div *ngIf="ngControl.touched && ngControl.control?.errors?.required" class="invalid-field">Pelase enter a {{label}}</div>
+  <div *ngIf="ngControl.touched && ngControl.control?.errors?.minlength" class="invalid-field">{{label}} must be at least {{ngControl.control.errors.minlength['requiredLength']}}</div>
 </div>

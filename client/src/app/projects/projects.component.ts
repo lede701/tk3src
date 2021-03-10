@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { take } from 'rxjs/operators';
 import { ProjectCodeEntity } from '../entities/timesheets/projectCodeEntity';
 import { ProjectsService } from './projects.service';
 
@@ -13,18 +14,15 @@ export class ProjectsComponent implements OnInit, OnDestroy {
 
   public projects: ProjectCodeEntity[] = [];
 
-  private _projectSubscription: Subscription;
+  constructor(private projectService: ProjectsService, private router: Router) {}
 
-  constructor(private projectService: ProjectsService, private router: Router) {
-    this._projectSubscription = this.projectService.currentList$.subscribe(results => {
+  ngOnInit(): void {
+    this.projectService.currentList$.pipe(take(1)).subscribe(results => {
       this.projects = results;
     });
   }
-  ngOnInit(): void {
-  }
 
   ngOnDestroy(): void {
-    this._projectSubscription?.unsubscribe();
   }
   
   edit(guid: string) {
