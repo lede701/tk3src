@@ -32,6 +32,8 @@ export class TimesheetsComponent implements OnInit {
     let tsGuid = this.timesheetSelector.nativeElement.value;
     if (tsGuid != 'create') {
       this.route.navigate(['/', 'timesheet', 'sheet', tsGuid]);
+      this.tsService.getTimesheet(tsGuid).pipe(take(1)).subscribe(() => {
+      });
     } else {
       this.route.navigate(['/', 'timesheet', 'create']);
     }

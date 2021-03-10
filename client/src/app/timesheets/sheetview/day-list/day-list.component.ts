@@ -1,4 +1,5 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { TimesheetEntity } from '../../../entities/timesheets/timesheetEntity';
 import { TimesheetsService } from '../../../services/timesheets.service';
@@ -8,36 +9,38 @@ import { TimesheetsService } from '../../../services/timesheets.service';
   templateUrl: './day-list.component.html',
   styleUrls: ['./day-list.component.less']
 })
-export class DayListComponent implements OnInit {
+export class DayListComponent implements OnInit, OnDestroy {
   public dayList: string[] = [];
   public isToday: string = '';
 
   private _today = new Date();
+  private _tsSubscription: Subscription;
 
   constructor(private tsService: TimesheetsService) {
+    this._tsSubscription = tsService.currentTimesheet$.subscribe(ts => {
+      this.dayList = [];
+      this.isToday = '';
+      let dayList = this.tsService.getDayList();
+      // Process days in list
+      for (let day of dayList) {
+        // Add current day to the list of days
+        this.AddDateToList(day);
+        // Check if the day is today
+        this.IsDayToday(day);
+      }
+    });
   }
 
   ngOnInit(): void {
     let ts: TimesheetEntity;
     // Pull currently loaded timesheet
     this.tsService.currentTimesheet$.pipe(take(1)).subscribe(ts => {
-      // Create dates for calulating the days in this timesheet
-      let end: Date = new Date(ts.endDate);
-      let day: Date = new Date(ts.startDate);
-      // Build a list days
-      while (day.valueOf() < end.valueOf()) {
-        // Add current day to the list of days
-        this.AddDateToList(day);
-        // Check if the day is today
-        this.IsDayToday(day);
-        // Incrament day marker
-        day.setDate(day.getDate() + 1);
-      }
-      // Add last day to timesheet
-      this.AddDateToList(day);
-      // Check if the last day is the current day
-      this.IsDayToday(day);
+
     });
+  }
+
+  ngOnDestroy(): void {
+    this._tsSubscription?.unsubscribe();
   }
 
   AddDateToList(day: Date) {

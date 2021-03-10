@@ -22,7 +22,7 @@ namespace Core.Entities
 
 		#region Linked Data
 
-		public ICollection<MenuItem> Children { get; set; }
+		public ICollection<MenuItem> Children { get; set; } = new List<MenuItem>();
 
 		#endregion
 	}

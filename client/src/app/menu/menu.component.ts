@@ -9,34 +9,60 @@ import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { NgForm } from '@angular/forms';
 import { MenuService } from './menu.service';
-import { MenuItem } from 'primeng/api';
+import { MenuItem, SharedModule } from 'primeng/api';
+import { MenubarModule } from 'primeng/menubar';
 
 @Component({
   selector: 'app-menu',
   templateUrl: './menu.component.html',
-  styleUrls: ['./menu.component.less']
+  styleUrls: ['./menu.component.less'],
+  providers: [MenubarModule, SharedModule]
 })
 export class MenuComponent implements OnInit, OnDestroy {
   @Input() title: string = "Site Title";
 
-  public menuItems: MenuItemEntity[] = [];
   public items: MenuItem[] = [];
+  public userItems: MenuItem[] = [];
+  public userButtonText: string = "";
+
   model: any = {};
+  private itemChecked: string[] = [];
 
   private authSubscribe: Subscription;
 
-  constructor(private menuService: MenuService, public auth: AuthService, private route: Router) {
-    this.authSubscribe = this.auth.currentUser$.subscribe(user => {
-      this.menuItems = [];
+  constructor(private menu: MenuService, public auth: AuthService, private route: Router) {
+    this.authSubscribe = auth.currentUser$.subscribe(user => {
       if (user.isAuthenticated) {
-          menuService.currentMenu$.pipe(take(1)).subscribe(results => {
-          this.menuItems = results;
+        this.userButtonText = `${user.firstName} ${user.lastName}`;
+        this.menu.currentMenu$.pipe(take(1)).subscribe((menuItems: MenuItemEntity[]) => {
+          this.items = [];
+          this.itemChecked = [];
+          // Convert menu items to primeng menu items
+          for (let item of menuItems) {
+            if (this.itemChecked.indexOf(item.guid) < 0) {
+              this.items.push(this.addMenuItem(item));
+            }
+          }
+          this.userItems.push({
+            label: 'Account',
+            icon: 'fa fa-user',
+            routerLink: '/auth/whoami'
+          });
+          this.userItems.push({
+            label: 'Logout',
+            icon: 'pi pi-sign-out',
+            routerLink: '/auth/logout'
+          });
+
         });
+      } else {
+        this.items = [];
       }
     });
   }
 
   ngOnInit(): void {
+
   }
 
   ngOnDestroy(): void {
@@ -48,14 +74,6 @@ export class MenuComponent implements OnInit, OnDestroy {
       loginForm.reset();
       this.route.navigate(['/']);
     });
-  }
-
-  logout() {
-    this.auth.logout();
-    this.menuService.currentMenu$.pipe(take(1)).subscribe(results => {
-      this.menuItems = [];
-    });
-    this.route.navigate(['/']);
   }
 
   getName(): string {
@@ -70,15 +88,13 @@ export class MenuComponent implements OnInit, OnDestroy {
       id: item.guid,
     };
 
+    this.itemChecked.push(item.guid);
+
     // Check if parent is defined
     if (parent !== undefined) {
       // Check if parent items list is defined, if not create it
       if (parent.items === undefined) {
         parent.items = [];
-        parent.items.push({
-          label: parent.label,
-          routerLink: parent.routerLink
-        });
         parent.routerLink = '';
       }
       // Add item to list of parent

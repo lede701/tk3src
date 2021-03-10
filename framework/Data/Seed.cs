@@ -131,11 +131,12 @@ namespace Framework.Data
 				ModifiedById = 1,
 				StatusCode = RecordStatus.ACTIVE
 			});
+
 			ctx.Menu.Add(new MenuItem()
 			{
 				guid = Guid.NewGuid(),
-				name = "Timesheet",
-				route = "timesheet/",
+				name = "Timesheets",
+				route = "",
 				type = "mainmenu",
 				published = DateTime.Now,
 				ordering = 3,
@@ -146,6 +147,7 @@ namespace Framework.Data
 				ModifiedById = 1,
 				StatusCode = RecordStatus.ACTIVE
 			});
+
 			ctx.Menu.Add(new MenuItem()
 			{
 				guid = Guid.NewGuid(),
@@ -233,11 +235,12 @@ namespace Framework.Data
 				StatusCode = RecordStatus.ACTIVE
 			});
 			await ctx.SaveChangesAsync();
-			var ts = await ctx.Timesheet.Where(ts => ts.employeeId == 1)
+			var ts = await ctx.Timesheet.Where(ts => ts.employeeId == 1 && ts.startDate == Convert.ToDateTime("2021-02-16"))
 				.FirstOrDefaultAsync();
 			ts.TimeDetails.Add(
 				new TimeDetails
 				{
+					guid = Guid.NewGuid(),
 					timesheetId = ts.Id,
 					projectId = 1,
 					timeDate = Convert.ToDateTime("2021-02-16"),
@@ -251,6 +254,7 @@ namespace Framework.Data
 				});
 			ts.TimeDetails.Add(new TimeDetails()
 			{
+				guid = Guid.NewGuid(),
 				timesheetId = ts.Id,
 				projectId = 1,
 				timeDate = Convert.ToDateTime("2021-02-17"),

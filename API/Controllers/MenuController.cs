@@ -2,6 +2,7 @@
 using AutoMapper;
 using Core.Interfaces;
 using Core.Specifications;
+using Framework.Data;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -29,6 +30,32 @@ namespace API.Controllers
 			
 			var items = await _uow.MenusRepository.ListAllBySpecAsync(new MenuItemsForUserSpec());
 			return Ok(_mapper.Map<IReadOnlyCollection<MenuItemDto>>(items));
+		}
+
+		[HttpGet("updatemenu")]
+		public async Task<ActionResult<String>> UpdateMenu()
+		{
+			// Try and load the timesheet menu item
+			var tsItem = await _uow.MenusRepository.GetByIdAsync(2);
+			tsItem.Children.Add(new Core.Entities.MenuItem
+			{
+				guid = Guid.NewGuid(),
+				name = "Sheet View",
+				route = "/timesheet",
+				type = "mainmenu",
+				published = DateTime.Now,
+				ordering = 200,
+				isHome = false,
+				Created = DateTime.Now,
+				CreatedById = 1,
+				Modified = DateTime.Now,
+				ModifiedById = 1,
+				StatusCode = RecordStatus.ACTIVE
+			});
+
+			await _uow.CompleteAsync();
+
+			return Ok("Menu update it was.");
 		}
 
 		[HttpPost]

@@ -13,10 +13,12 @@ namespace Framework.Data
 	public class GenericRepository<T> : IGenericRepository<T> where T: CoreEntity
 	{
 		private readonly DataContext _context;
+		private readonly DbSet<T> _dbSet;
 
 		public GenericRepository(DataContext context)
 		{
 			_context = context;
+			_dbSet = _context.Set<T>();
 		}
 
 		public T Add(T entity)
@@ -27,25 +29,31 @@ namespace Framework.Data
 			entity.Modified = DateTime.Now;
 			entity.StatusCode = RecordStatus.ACTIVE;
 
-			_context.Set<T>().Add(entity);
+			_dbSet.Add(entity);
 			return entity;
 		}
 
 		public async Task<T> GetByGuidAsync(Guid guid)
 		{
-			return await _context.Set<T>()
+			return await _dbSet
 				.Where(item => item.guid == guid && item.StatusCode == RecordStatus.ACTIVE)
 				.FirstOrDefaultAsync();
 		}
 
 		public async Task<T> GetByIdAsync(int id)
 		{
-			return await _context.Set<T>().FindAsync(id);
+			return await _dbSet.FindAsync(id);
+		}
+
+		public async Task<T> GetBySpecAsync(ISpecification<T> spec)
+		{
+			var query = ApplySpecification(spec);
+			return await query.FirstOrDefaultAsync();
 		}
 
 		public async Task<IReadOnlyCollection<T>> ListAllAsync()
 		{
-			return await _context.Set<T>().ToListAsync();
+			return await _dbSet.ToListAsync();
 		}
 
 		public async Task<IReadOnlyCollection<T>> ListAllBySpecAsync(ISpecification<T> spec)
@@ -61,8 +69,13 @@ namespace Framework.Data
 			entity.Modified = DateTime.Now;
 			entity.ModifiedById = 1;
 
-			_context.Set<T>().Update(entity);
+			_dbSet.Update(entity);
 			return true;
+		}
+
+		public IQueryable<T> QueryWithSpec(ISpecification<T> spec)
+		{
+			return ApplySpecification(spec);
 		}
 
 		public void Update(T entity)
@@ -70,12 +83,12 @@ namespace Framework.Data
 			entity.Modified = DateTime.Now;
 			entity.ModifiedById = 1;
 
-			_context.Set<T>().Update(entity);
+			_dbSet.Update(entity);
 		}
 
 		private IQueryable<T> ApplySpecification(ISpecification<T> spec)
 		{
-			return SpecificationEvaluator<T>.GetQuery(_context.Set<T>().AsQueryable(), spec);
+			return SpecificationEvaluator<T>.GetQuery(_dbSet.AsQueryable(), spec);
 		}
 	}
 }

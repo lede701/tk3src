@@ -1,27 +1,24 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-  <div class="container-fluid">
+<p-menubar [model]="items" styleClass="mainmenu">
+  <ng-template pTemplate="start">
     <a class="navbar-brand" [routerLink]="'/'"><img src="./assets/tk3Logo.png" width="30" height="30" class="mr-2" alt="{{title}}" />{{title}}</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        <ng-container *ngTemplateOutlet="recursiveList; context:{items: menuItems}"></ng-container>
-      </ul>
+  </ng-template>
+  <ng-template pTemplate="end">
+    <div *ngIf="auth.getIsAuthenticated()">
+      <p-menu #menu [popup]="true" [model]="userItems"></p-menu>
+      <button type="button" pButton icon="pi pi-list" label="show" class="btn btn-outline-primary" (click)="menu.toggle($event)">{{userButtonText}}</button>
+    </div>
+    <div *ngIf="!auth.getIsAuthenticated()">
       <form class="form-inline mt-2 mt-md-0"
-            *ngIf="!auth.getIsAuthenticated()"
             #loginForm="ngForm"
             (ngSubmit)="login(loginForm)"
             autocomplete="off">
-        <input
-               [(ngModel)]="model.userName"
+        <input [(ngModel)]="model.userName"
                class="form-control me-1 mr-1"
                type="text"
-               name="userNAme"
+               name="userName"
                placeholder="Username"
                aria-label="Username">
-        <input
-               [(ngModel)]="model.password"
+        <input [(ngModel)]="model.password"
                class="form-control me-1 mr-1"
                type="password"
                name="password"
@@ -30,39 +27,6 @@
         <button class="btn btn-outline-success" type="submit">Login</button>
         <button class="btn btn-outline-primary" type="button" [routerLink]="'/auth/user/create'">Create</button>
       </form>
-      <div *ngIf="auth.getIsAuthenticated()">
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-          <li class="nav-item">
-            <a [routerLink]="'auth/whoami'" class="nav-link"><i class="fa fa-user pr-2 pl-2"></i> <strong>{{getName()}}</strong></a>
-          </li>
-        </ul>
-      </div>
     </div>
-  </div>
-</nav>
-
-<ng-template #recursiveList let-items="items">
-  <li *ngFor="let m of items" class="nav-item">
-    <a [routerLink]="m.route" class="nav-link">{{m.name}}</a>
-    
-  </li>
-</ng-template>
-
-<!--
-<nav>
-  <ul class="dropdown menu" data-dropdown-menu>
-    <li class="menu-text nav-heading"><span class="nav-logo"><img src="./assets/tk3Logo.png" height="21" width="22" /></span> {{title}}</li>
-    <ng-container *ngTemplateOutlet="recursiveListTmpl; context:{ items: menuItems}"></ng-container>
-  </ul>
-</nav>
-
-<ng-template #recursiveListTmpl let-items="items">
-  <li *ngFor="let m of items"
-      routerLinkActive="{{m.activeClass}}"
-      [routerLinkActiveOptions]="{exact: m.exactRoute}">
-    <a [routerLink]="m.route">{{m.link}}</a><ul class="menu" *ngIf="m.children.length > 0">
-      <ng-container *ngTemplateOutlet="recursiveListTmpl; context:{ items: m.children}"></ng-container>
-    </ul>
-  </li>
-</ng-template>
--->
+  </ng-template>
+</p-menubar>

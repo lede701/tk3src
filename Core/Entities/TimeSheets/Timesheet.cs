@@ -31,9 +31,9 @@ namespace Core.Entities.TimeSheets
 		public Employee Employee { get; set; }
 
 		public ICollection<TimesheetProjects> Projects { get; set; }
-		public ICollection<TimeDetails> TimeDetails { get; set; }
-		public ICollection<TimeLunch> TimeLunch { get; set; }
-		public ICollection<HolidayEmployee> Holidays { get; set; }
+		public ICollection<TimeDetails> TimeDetails { get; set; } = new List<TimeDetails>();
+		public ICollection<TimeLunch> TimeLunch { get; set; } = new List<TimeLunch>();
+		public ICollection<HolidayEmployee> Holidays { get; set; } = new List<HolidayEmployee>();
 
 		#endregion
 

@@ -1,4 +1,5 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { take } from 'rxjs/operators';
 
 import { TimesheetEntity } from '../../entities/timesheets/timesheetEntity';
@@ -9,15 +10,23 @@ import { TimesheetsService } from '../../services/timesheets.service';
   templateUrl: './sheetview.component.html',
   styleUrls: ['./sheetview.component.less']
 })
-export class SheetviewComponent implements OnInit {
+export class SheetviewComponent implements OnInit, OnDestroy {
   @Input() timesheet: TimesheetEntity = new TimesheetEntity();
 
-  constructor(private tsServer: TimesheetsService) { }
+  private _tsSubscription: Subscription;
 
-  ngOnInit(): void {
-    this.tsServer.currentTimesheet$.pipe(take(1)).subscribe(ts => {
+  constructor(private tsService: TimesheetsService) {
+    this._tsSubscription = this.tsService.currentTimesheet$.subscribe(ts => {
       this.timesheet = ts;
     });
+  }
+
+  ngOnInit(): void { }
+
+  ngOnDestroy(): void {
+    if (this._tsSubscription) {
+      this._tsSubscription.unsubscribe();
+    }
   }
 
   getFullName(): string {

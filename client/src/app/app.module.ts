@@ -16,7 +16,6 @@ import { MenuComponent } from './menu/menu.component';
 import { HomeComponent } from './home/home.component';
 import { JwtInterceptor } from './interceptors/jwt.interceptor';
 import { ErrorInterceptor } from './interceptors/error.interceptor';
-import { NewmenuComponent } from './menu/newmenu/newmenu.component';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { LoadingInterceptor } from './interceptors/loading.interceptor';
 import { TimesheetsModule } from './timesheets/timesheets.module';
@@ -24,13 +23,13 @@ import { HelpersModule } from './helpers/helpers.module';
 import { LeaveModule } from './leave/leave.module';
 import { AuthModule } from './auth/auth.module';
 import { CacheInterceptor } from './interceptors/cache.interceptor';
+import { SharedModule } from 'primeng/api';
 
 @NgModule({
   declarations: [
     AppComponent,
     MenuComponent,
     HomeComponent,
-    NewmenuComponent,
   ],
   imports: [
     FormsModule,
@@ -41,6 +40,7 @@ import { CacheInterceptor } from './interceptors/cache.interceptor';
     AppRoutingModule,
     NgbModule,
     NgbDropdownModule,
+    SharedModule,
     MenuModule,
     MenubarModule,
     NgxSpinnerModule,
@@ -51,6 +51,7 @@ import { CacheInterceptor } from './interceptors/cache.interceptor';
     LeaveModule,
   ],
   exports: [
+    SharedModule,
     FormsModule,
     ToastModule,
     TableModule,

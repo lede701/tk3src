@@ -14,7 +14,7 @@ export class CacheInterceptor implements HttpInterceptor {
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     // Check if the request has already been cached so we load it instead of pulling off the server
-    console.log(request);
+    //console.log(request);
     return next.handle(request);
   }
 }

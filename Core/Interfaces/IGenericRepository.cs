@@ -19,9 +19,12 @@ namespace Core.Interfaces
 		#region Read Records [R]
 
 		Task<T> GetByGuidAsync(Guid guid);
+		Task<T> GetBySpecAsync(ISpecification<T> spec);
 		Task<T> GetByIdAsync(int id);
 		Task<IReadOnlyCollection<T>> ListAllAsync();
 		Task<IReadOnlyCollection<T>> ListAllBySpecAsync(ISpecification<T> spec);
+
+		IQueryable<T> QueryWithSpec(ISpecification<T> spec);
 
 		#endregion
 

@@ -3,10 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { HomeComponent } from './home/home.component';
 
-import { NewmenuComponent } from './menu/newmenu/newmenu.component';
-
 const routes: Routes = [
-  { path: 'mega', component: NewmenuComponent },
   { path: '', component: HomeComponent },
   { path: 'auth', loadChildren: () => import('./auth/auth.module').then(mod => mod.AuthModule), data: {} },
   { path: 'timesheet', loadChildren: () => import('./timesheets/timesheets.module').then(mod => mod.TimesheetsModule), data: {} },

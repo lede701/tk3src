@@ -38,7 +38,6 @@ export class AuthComponent implements OnInit {
     this.auth.WhoAmI().pipe(take(1)).subscribe(results => {
       this.data = results;
       this.isReady = true;
-      console.log(results);
     });
   }
 }

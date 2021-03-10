@@ -16,6 +16,7 @@ namespace Core.Interfaces
 		IGenericRepository<MenuItem> MenusRepository { get; }
 		IGenericRepository<ProjectCode> ProjectsRepository { get; }
 		IGenericRepository<Timesheet> TimesheetsRepository { get; }
+		IGenericRepository<TimeDetails> TimeDetailsRepository { get; }
 
 		Task<bool> CompleteAsync();
 		bool HasChanges();

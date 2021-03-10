@@ -32,9 +32,10 @@ namespace Core.Specifications
 
 		public bool IsPagingEnabled { get; private set; }
 
-		protected void AddInclude(Expression<Func<T, object>> includeExpression)
+		protected ICollection<Expression<Func<T, object>>> AddInclude(Expression<Func<T, object>> includeExpression)
 		{
 			Includes.Add(includeExpression);
+			return Includes;
 		}
 
 		protected void AddOrderBy(Expression<Func<T, object>> orderByExpression)

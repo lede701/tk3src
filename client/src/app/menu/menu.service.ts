@@ -21,7 +21,7 @@ export class MenuService implements OnDestroy {
   constructor(private http: HttpClient, auth: AuthService) {
     this.authSubscription = auth.currentUser$.subscribe(user => {
       this.http.get<MenuItemEntity[]>(this._baseUri + '/Menu').pipe(take(1)).subscribe(results => {
-        let menu = [...results, new MenuItemEntity('Logout', 'auth/logout', '')];
+        let menu = [...results];
         this._currentMenu.next(menu);
       });
     });

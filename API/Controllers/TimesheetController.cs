@@ -29,9 +29,9 @@ namespace API.Controllers
         public async Task<ActionResult<TimesheetDto>> GetTimesheet(string guid)
         {
             // Pull object out of database
-            var ts = await _uow.TimesheetsRepository.GetByGuidAsync(Guid.Parse(guid));
+            var tsWithSpec = await _uow.TimesheetsRepository.GetBySpecAsync(new TimesheetSpec(Guid.Parse(guid)));
             // Check if a valid object was found
-            if(ts != null) return Ok(_uow.Mapper.Map<TimesheetDto>(ts));
+            if(tsWithSpec != null) return Ok(_uow.Mapper.Map<TimesheetDto>(tsWithSpec));
 
             // No valid object so send an error
             return BadRequest("ERROR: Invalid timsheet");
