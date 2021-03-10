@@ -19,7 +19,7 @@ export class AuthComponent implements OnInit {
   constructor(private activeRoute: ActivatedRoute, private router: Router, private auth: AuthService) { }
 
   ngOnInit(): void {
-    this.task = this.activeRoute.snapshot.params.task;
+    this.task = this.router.url.split('/').pop() as string;
     if (this.task == 'logout') {
       this.auth.logout();
       this.router.navigate(['/']);

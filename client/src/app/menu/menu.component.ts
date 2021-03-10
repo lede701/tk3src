@@ -37,6 +37,7 @@ export class MenuComponent implements OnInit, OnDestroy {
         this.menu.currentMenu$.pipe(take(1)).subscribe((menuItems: MenuItemEntity[]) => {
           this.items = [];
           this.itemChecked = [];
+          this.userItems = [];
           // Convert menu items to primeng menu items
           for (let item of menuItems) {
             if (this.itemChecked.indexOf(item.guid) < 0) {
@@ -47,6 +48,11 @@ export class MenuComponent implements OnInit, OnDestroy {
             label: 'Account',
             icon: 'fa fa-user',
             routerLink: '/auth/whoami'
+          });
+          this.userItems.push({
+            label: 'Reset Password',
+            icon: 'fa fa-key',
+            routerLink: '/auth/resetpw'
           });
           this.userItems.push({
             label: 'Logout',

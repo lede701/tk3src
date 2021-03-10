@@ -1,5 +1,6 @@
 ﻿using API.DTOs;
 using AutoMapper;
+using Core.Entities;
 using Core.Interfaces;
 using Core.Specifications;
 using Framework.Data;
@@ -32,26 +33,45 @@ namespace API.Controllers
 			return Ok(_mapper.Map<IReadOnlyCollection<MenuItemDto>>(items));
 		}
 
+		[HttpPost("create")]
+		public async Task<ActionResult<MenuItemDto>> Create([FromForm]MenuItemDto item)
+        {
+			if(item.guid == Guid.Empty)
+            {
+				item.guid = Guid.NewGuid();
+            }
+
+			var newItem = _uow.Mapper.Map<MenuItem>(item);
+			_uow.MenusRepository.Add(newItem);
+
+			await _uow.CompleteAsync();
+			return Ok(_uow.Mapper.Map<MenuItemDto>(newItem));
+        }
+
 		[HttpGet("updatemenu")]
 		public async Task<ActionResult<String>> UpdateMenu()
 		{
-			// Try and load the timesheet menu item
-			var tsItem = await _uow.MenusRepository.GetByIdAsync(2);
-			tsItem.Children.Add(new Core.Entities.MenuItem
+			var item = _uow.MenusRepository.GetByGuidAsync(Guid.Parse("F4961391-DE2E-4B94-B042-EBC5F4565380"));
+			if (item == null)
 			{
-				guid = Guid.NewGuid(),
-				name = "Sheet View",
-				route = "/timesheet",
-				type = "mainmenu",
-				published = DateTime.Now,
-				ordering = 200,
-				isHome = false,
-				Created = DateTime.Now,
-				CreatedById = 1,
-				Modified = DateTime.Now,
-				ModifiedById = 1,
-				StatusCode = RecordStatus.ACTIVE
-			});
+				// Try and load the timesheet menu item
+				var tsItem = await _uow.MenusRepository.GetByIdAsync(2);
+				tsItem.Children.Add(new Core.Entities.MenuItem
+				{
+					guid = Guid.Parse("F4961391-DE2E-4B94-B042-EBC5F4565380"),
+					name = "Sheet View",
+					route = "/sheetview",
+					type = "mainmenu",
+					published = DateTime.Now,
+					ordering = 200,
+					isHome = false,
+					Created = DateTime.Now,
+					CreatedById = 1,
+					Modified = DateTime.Now,
+					ModifiedById = 1,
+					StatusCode = RecordStatus.ACTIVE
+				});
+			}
 
 			await _uow.CompleteAsync();
 
