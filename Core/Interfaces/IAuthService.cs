@@ -12,6 +12,6 @@ namespace Core.Interfaces
 	{
 		Task<bool> Login(String userName, String password);
 		LoginResults Results { get; }
-		Task<PasswordHash> HashPassword(String password);
+		PasswordHash HashPassword(String password);
 	}
 }

@@ -6,6 +6,7 @@ import { ReplaySubject, Subject } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { map, take } from 'rxjs/operators';
 import { IRegsiterUserEntity } from '../entities/iregisterUserEntity';
+import { IPasswordReset } from '../entities/ipasswordreset';
 
 export interface AuthResponseData {
   idToken: string,
@@ -102,6 +103,10 @@ export class AuthService {
     return this.http.post<Tk3AuthResponse>(this._baseUri + '/Auth/login', login).pipe(map(results => {
       this.setupUser(results);
     }));
+  }
+
+  resetPassword(pw: IPasswordReset) {
+    return this.http.post(this._baseUri + '/Auth/reset', pw);
   }
 
   setupUser(results: Tk3AuthResponse) {

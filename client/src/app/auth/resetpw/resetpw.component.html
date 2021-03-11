@@ -1,1 +1,29 @@
-<p>resetpw works!</p>
+<div class="container">
+  <div class="row">
+    <div class="col-4 offset-1">
+      <h1>Reset Password</h1>
+    </div>
+  </div>
+  <form [formGroup]="pwForm" (submit)="onUpdatePw()">
+    <div class="row">
+      <div class="col-4 offset-1">
+        <tk3-input-field [formControl]="pwForm.controls['currentPw']" [label]="'Current Password'" [type]="'password'"></tk3-input-field>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-4 offset-1">
+        <tk3-input-field [formControl]="pwForm.controls['password']" [label]="'Password'" [type]="'password'"></tk3-input-field>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-4 offset-1">
+        <tk3-input-field [formControl]="pwForm.controls['confirm']" [label]="'Confirm password'" [type]="'password'"></tk3-input-field>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-4 offset-1">
+        <button class="btn btn-primary" type="submit">Update</button>
+      </div>
+    </div>
+  </form>
+</div>

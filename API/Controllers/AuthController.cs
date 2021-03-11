@@ -37,7 +37,7 @@ namespace API.Controllers
 		{
             if (user.Password != user.Confirm) return BadRequest("ERROR: Passwords match they do not!");
 
-            var pw = await _auth.HashPassword(user.Password);
+            var pw = _auth.HashPassword(user.Password);
 
             Employee newUser = new Employee()
             {
@@ -71,6 +71,29 @@ namespace API.Controllers
 
             return BadRequest("ERROR: User create it has not!");
 		}
+
+        [HttpPost("reset")]
+        public async Task<ActionResult<UserDto>> ResetPassword(PasswordResetDto pw)
+        {
+            // Check if current password is correct
+            var user = await _uow.EmployeesRepository.GetByGuidAsync(Guid.Parse(User.GetUserId()));
+            if(await _auth.Login(user.userName, pw.OriginalPassword) && pw.Password == pw.ConfirmPassword)
+            {
+                // Create the hash password
+                var pwHash = _auth.HashPassword(pw.Password);
+                user.passwordHash = pwHash.hash;
+                user.hashKey = pwHash.key;
+                // Set entity for updating
+                _uow.EmployeesRepository.Update(user);
+                await _uow.CompleteAsync();
+
+                // Return proper results
+                return Ok(_uow.Mapper.Map<UserDto>(user));
+            }
+
+            // Error occured in the change password process
+            return BadRequest("ERROR: Password reset failed to complete it did.");
+        }
 
         [HttpGet("reset/{guid}")]
         public async Task<ActionResult<UserDto>> ResetUser(String guid)
