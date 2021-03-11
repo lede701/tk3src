@@ -35,15 +35,19 @@ export class MenuComponent implements OnInit, OnDestroy {
       if (user.isAuthenticated) {
         this.userButtonText = `${user.firstName} ${user.lastName}`;
         this.menu.currentMenu$.pipe(take(1)).subscribe((menuItems: MenuItemEntity[]) => {
+          // Clear the menu data structures
           this.items = [];
           this.itemChecked = [];
           this.userItems = [];
           // Convert menu items to primeng menu items
           for (let item of menuItems) {
             if (this.itemChecked.indexOf(item.guid) < 0) {
+              // Create menu item and add it to the data array
               this.items.push(this.addMenuItem(item));
             }
           }
+
+          // Add general user commands
           this.userItems.push({
             label: 'Account',
             icon: 'fa fa-user',
@@ -62,6 +66,7 @@ export class MenuComponent implements OnInit, OnDestroy {
 
         });
       } else {
+        // Make sure the login menu is cleared for non authenticated users
         this.items = [];
       }
     });

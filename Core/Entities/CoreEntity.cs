@@ -10,6 +10,7 @@ namespace Core.Entities
 	{
 		public int Id { get; set; }
 		public Guid guid { get; set; }
+		public Guid? OrginizationGuid { get; set; }
 		public DateTime Created { get; set; }
 		public int CreatedById { get; set; }
 		public DateTime Modified { get; set; }

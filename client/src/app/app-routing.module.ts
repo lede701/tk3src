@@ -12,6 +12,7 @@ const routes: Routes = [
   { path: 'leave', loadChildren: () => import('./leave/leave.module').then(mod => mod.LeaveModule), data: {} },
   { path: 'projects', loadChildren: () => import('./projects/projects.module').then(mod => mod.ProjectsModule), data: {} },
   { path: 'project', loadChildren: () => import('./projects/projects.module').then(mod => mod.ProjectsModule), data: {} },
+  { path: 'tools', loadChildren: () => import('./tools/tools.module').then(mod => mod.ToolsModule), data: {} },
 ];
 
 @NgModule({

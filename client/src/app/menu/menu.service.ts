@@ -11,7 +11,7 @@ import { AuthService } from '../services/auth.service';
 })
 export class MenuService implements OnDestroy {
 
-  private _baseUri = environment.apiUrl;
+  private _baseUri = environment.apiUrl + '/Menu';
 
   private _currentMenu = new ReplaySubject<MenuItemEntity[]>(1);
   public currentMenu$ = this._currentMenu.asObservable();
@@ -20,7 +20,7 @@ export class MenuService implements OnDestroy {
 
   constructor(private http: HttpClient, auth: AuthService) {
     this.authSubscription = auth.currentUser$.subscribe(user => {
-      this.http.get<MenuItemEntity[]>(this._baseUri + '/Menu').pipe(take(1)).subscribe(results => {
+      this.http.get<MenuItemEntity[]>(this._baseUri).pipe(take(1)).subscribe(results => {
         let menu = [...results];
         this._currentMenu.next(menu);
       });
@@ -31,5 +31,9 @@ export class MenuService implements OnDestroy {
     if (this.authSubscription) {
       this.authSubscription.unsubscribe();
     }
+  }
+
+  public getMenuItem(guid: string) {
+    return this.http.get<MenuItemEntity>(this._baseUri + '/get/' + guid);
   }
 }

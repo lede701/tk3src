@@ -13,7 +13,7 @@ namespace Core.Entities.TimeSheets
 		public int? departmentId { get; set; }
 		public int? workScheduleId { get; set; }
 		public DateTime startDate { get; set; }
-		public DateTime? teminationDate { get; set; }
+		public DateTime? terminationDate { get; set; }
 		public DateTime? accuralDate { get; set; }
 
 		#endregion

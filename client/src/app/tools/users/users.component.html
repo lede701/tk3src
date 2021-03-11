@@ -1,0 +1,33 @@
+<div class="container">
+  <div class="row">
+    <div class="col">
+      <h1>Orginization Users</h1>
+    </div>
+  </div>
+</div>
+<div class="container" *ngIf="userList.length > 0">
+  <div class="row row-header mb-2">
+    <div class="col col-header">Name</div>
+    <div class="col col-header">Title</div>
+    <div class="col col-header">Start Date</div>
+    <div class="col">
+      <form [formGroup]="searchForm" (ngSubmit)="onSearch()" autocomplete="off">
+        <div class="input-group">
+          <input [formControl]="searchForm.controls.search" class="form-control" />
+          <div class="input-group-append">
+            <button class="btn btn-outline-primary" type="submit"><i class="fa fa-search"></i></button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+  <div class="row user-table mb-1" *ngFor="let user of userList">
+    <div class="col pt-2">{{user.lastName}}, {{user.firstName}}</div>
+    <div class="col pt-2">{{user.title}}</div>
+    <div class="col pt-2">{{user.startDate | date}}</div>
+    <div class="col">
+      <button class="btn btn-primary mr-1" type="button" (click)="onUserEdit(user)"><i class="fa fa-edit mr-2"></i>Edit</button>
+      <button class="btn btn-danger" type="button" (click)="onUserDelete(user)" *ngIf="isNotCurrentUser(user)"><i class="fa fa-remove mr-2"></i>Delete</button>
+    </div>
+  </div>
+</div>

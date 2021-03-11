@@ -3,6 +3,7 @@ using API.Extensions;
 using Core.Entities;
 using Core.Entities.TimeSheets;
 using Core.Interfaces;
+using Core.Specifications;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -19,22 +20,22 @@ namespace API.Controllers
 {
     public class AuthController : CoreController
     {
-		private readonly IUnitOfWork _uow;
-		private readonly ITokenService _tokenService;
-		private readonly IAuthService _auth;
-		private int _tokenExpiresInMinutes;
+        private readonly IUnitOfWork _uow;
+        private readonly ITokenService _tokenService;
+        private readonly IAuthService _auth;
+        private int _tokenExpiresInMinutes;
 
         public AuthController(IUnitOfWork uow, ITokenService tokenService, IConfiguration config, IAuthService auth)
         {
-			_uow = uow;
-			_tokenService = tokenService;
-			_auth = auth;
-			_tokenExpiresInMinutes = Convert.ToInt32(config["TokenAgeInMinutes"]);
+            _uow = uow;
+            _tokenService = tokenService;
+            _auth = auth;
+            _tokenExpiresInMinutes = Convert.ToInt32(config["TokenAgeInMinutes"]);
         }
 
         [HttpPost("create")]
         public async Task<ActionResult<UserDto>> Create(RegisterDto user)
-		{
+        {
             if (user.Password != user.Confirm) return BadRequest("ERROR: Passwords match they do not!");
 
             var pw = _auth.HashPassword(user.Password);
@@ -70,14 +71,14 @@ namespace API.Controllers
             }
 
             return BadRequest("ERROR: User create it has not!");
-		}
+        }
 
         [HttpPost("reset")]
         public async Task<ActionResult<UserDto>> ResetPassword(PasswordResetDto pw)
         {
             // Check if current password is correct
             var user = await _uow.EmployeesRepository.GetByGuidAsync(Guid.Parse(User.GetUserId()));
-            if(await _auth.Login(user.userName, pw.OriginalPassword) && pw.Password == pw.ConfirmPassword)
+            if (await _auth.Login(user.userName, pw.OriginalPassword) && pw.Password == pw.ConfirmPassword)
             {
                 // Create the hash password
                 var pwHash = _auth.HashPassword(pw.Password);
@@ -117,20 +118,20 @@ namespace API.Controllers
 
         [HttpGet("whoami")]
         public async Task<ActionResult<WhoAmIDto>> WhoAmI()
-		{
+        {
             // Load user infromation
             var user = await _uow.EmployeesRepository.GetByGuidAsync(Guid.Parse(User.GetUserId()));
             //var user = await _uow.UserRepository.GetUserByGuidAsync(Guid.Parse(User.GetUserId()));
             // Return user name
-            return Ok(new WhoAmIDto { 
+            return Ok(new WhoAmIDto {
                 Name = String.Format("{0} {1}", user.firstName, user.lastName),
                 Username = user.userName
             });
-		}
+        }
 
         [HttpPost("login")]
         public async Task<ActionResult<UserDto>> Login(LoginDto login)
-		{
+        {
             if (!await _auth.Login(login.UserName, login.Password)) return BadRequest(_auth.Results);
 
             var user = _auth.Results.User;
@@ -144,19 +145,19 @@ namespace API.Controllers
 
         [HttpPost("logout")]
         public async Task<ActionResult> Logout()
-		{
+        {
             String guid = User.GetUserId();
             if (guid == null) return Ok("Token passed it was not.");
             var user = await _uow.EmployeesRepository.GetByGuidAsync(Guid.Parse(guid));
             if (user != null) return Ok();
-//            if (await _uow.UserRepository.LogoutAsync(user)) return Ok();
+            //            if (await _uow.UserRepository.LogoutAsync(user)) return Ok();
 
             return BadRequest("ERROR: Could not log user out of system");
-		}
+        }
 
         [HttpPost("tokenupdate")]
         public ActionResult<UserDto> TokenUpdate(string guid)
-		{
+        {
             /*
             // Load user recrod
             Tk3User user = await _uow.UserRepository.GetUserByGuidAsync(Guid.Parse(guid));
@@ -172,6 +173,15 @@ namespace API.Controllers
             }
             */
             return BadRequest("Implamented token update is not.");
+        }
+        [HttpGet("userlist")]
+        public async Task<ActionResult<IReadOnlyCollection<UserListDto>>> UserList()
+		{
+            var user = await _uow.UserRepository.GetByGuidAsync(Guid.Parse(User.GetUserId()));
+            var list = await _uow.EmployeesRepository.ListAllBySpecAsync(new EmployeeSpec(e => e.OrginizationGuid == user.OrginizationGuid));
+            if (list?.Count > 0) return Ok(_uow.Mapper.Map<IReadOnlyCollection<UserListDto>>(list));
+
+            return BadRequest("ERROR: There are no users to list.");
 		}
     }
 }

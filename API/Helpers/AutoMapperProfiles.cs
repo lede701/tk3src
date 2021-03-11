@@ -16,6 +16,8 @@ namespace API.Helpers
 		{
 			CreateMap<Tk3User, UserDto>();
 			CreateMap<Employee, UserDto>();
+			CreateMap<Tk3User, UserListDto>();
+			CreateMap<Employee, UserListDto>();
 			CreateMap<MenuItem, MenuItemDto>().ReverseMap();
 			MapTimesheets();
 			MapLeave();

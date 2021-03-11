@@ -58,7 +58,7 @@ namespace API.Controllers
 			}
 
 			// Save changes
-			//await _uow.CompleteAsync();
+			await _uow.CompleteAsync();
 
 			// Return results of MenuItem being created or updated
 			return Ok(_uow.Mapper.Map<MenuItemDto>(newItem));
@@ -67,31 +67,6 @@ namespace API.Controllers
 		[HttpGet("updatemenu")]
 		public async Task<ActionResult<String>> UpdateMenu()
 		{
-			var item = _uow.MenusRepository.GetByGuidAsync(Guid.Parse("F4961391-DE2E-4B94-B042-EBC5F4565380"));
-			if (!(item is MenuItem))
-			{
-				// Try and load the timesheet menu item
-				var tsItem = await _uow.MenusRepository.GetByIdAsync(3);
-				tsItem.Children.Add(new Core.Entities.MenuItem
-				{
-					guid = Guid.Parse("F4961391-DE2E-4B94-B042-EBC5F4565380"),
-					name = "Sheet View",
-					route = "/sheetview",
-					type = "mainmenu",
-					published = DateTime.Now,
-					ordering = 200,
-					isHome = false,
-					Created = DateTime.Now,
-					CreatedById = 1,
-					Modified = DateTime.Now,
-					ModifiedById = 1,
-					StatusCode = RecordStatus.ACTIVE
-				});
-				_uow.MenusRepository.Update(tsItem);
-
-			}
-
-			await _uow.CompleteAsync();
 
 			return Ok("Menu update it was.");
 		}
@@ -103,6 +78,33 @@ namespace API.Controllers
 			//return Ok(await _uow.MenuRepositoy.GetMenuItemsAsync(User.GetUsername()));
 
 			return BadRequest("ERROR: Feature implamented it is not.");
+		}
+
+		[HttpGet("get/{guid}")]
+		public async Task<ActionResult<MenuItemDto>> GetMenuItem(String guid)
+		{
+			var item = await _uow.MenusRepository.GetByGuidAsync(Guid.Parse(guid));
+			if (item != null) return Ok(_uow.Mapper.Map<MenuItemDto>(item));
+
+			return BadRequest("ERROR: Menu item found it was not!");
+		}
+
+		[HttpPost("store")]
+		public async Task<ActionResult<MenuItemDto>> Store(MenuItemDto item)
+		{
+			var mItem = _uow.Mapper.Map<MenuItem>(item);
+			if(item.guid == Guid.Empty)
+			{
+				_uow.MenusRepository.Add(mItem);
+			}
+			else
+			{
+				_uow.MenusRepository.Update(mItem);
+			}
+
+			await _uow.CompleteAsync();
+
+			return Ok(item);
 		}
 	}
 }

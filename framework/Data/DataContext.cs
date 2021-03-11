@@ -55,6 +55,7 @@ namespace Framework.Data
 		public DbSet<LeaveTransactions> LeaveTansactions { get; set; }
 		public DbSet<Locations> Locations { get; set; }
 		public DbSet<MenuItem> Menu { get; set; }
+		public DbSet<CoreOrginizationEntity> Orginizations { get; set; }
 		public DbSet<ProjectCode> ProjectCode { get; set; }
 		public DbSet<Signatures> Signatures { get; set; }
 		public DbSet<TimeDetails> TimeDetails { get; set; }

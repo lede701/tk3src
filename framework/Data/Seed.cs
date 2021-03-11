@@ -13,12 +13,24 @@ namespace Framework.Data
 {
 	public class Seed
 	{
+		private static Guid OrgGuid;
+
 		public static async Task SeedData(DataContext ctx, ILoggerFactory logFactory)
 		{
 			try
 			{
+				await SeedOrginization(ctx);
+			}
+			catch (Exception ex)
+			{
+				var logger = logFactory.CreateLogger<Seed>();
+				logger.LogError(ex.Message);
+			}
+			try
+			{
 				await SeedUsers(ctx);
-			}catch(Exception ex)
+			}
+			catch (Exception ex)
 			{
 				var logger = logFactory.CreateLogger<Seed>();
 				logger.LogError(ex.Message);
@@ -51,6 +63,31 @@ namespace Framework.Data
 			}
 		}
 
+		public static async Task SeedOrginization(DataContext ctx)
+		{
+			if (await ctx.Orginizations.AnyAsync())
+			{
+				var org = await ctx.Orginizations.FirstOrDefaultAsync();
+				OrgGuid = org.guid;
+				return;
+			}
+
+			OrgGuid = Guid.NewGuid();
+
+			ctx.Orginizations.Add(new CoreOrginizationEntity()
+			{
+				guid = OrgGuid,
+				OrginizationGuid = OrgGuid,
+				OrginizationName = "Initial Orginization",
+				Created = DateTime.Now,
+				CreatedById = 1,
+				Modified = DateTime.Now,
+				ModifiedById = 1,
+				StatusCode = RecordStatus.ACTIVE
+			});
+			
+		}
+
 		public static async Task SeedUsers(DataContext ctx)
 		{
 			if (await ctx.Users.AnyAsync()) return;
@@ -60,6 +97,7 @@ namespace Framework.Data
 			var emp = new Employee()
 			{
 				guid = Guid.NewGuid(),
+				OrginizationGuid = OrgGuid,
 				userName = "lede",
 				passwordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes("test1234")),
 				hashKey = hmac.Key,
@@ -84,6 +122,7 @@ namespace Framework.Data
 			var loc = new Locations()
 			{
 				guid = Guid.NewGuid(),
+				OrginizationGuid = OrgGuid,
 				locationCity = "Reno",
 				locationState = "Nevada",
 				StatusCode = RecordStatus.ACTIVE
@@ -94,6 +133,7 @@ namespace Framework.Data
 			var dept = new Departments()
 			{
 				guid = Guid.NewGuid(),
+				OrginizationGuid = OrgGuid,
 				name = "Administration",
 				departmentCode = "ADM",
 				StatusCode = RecordStatus.ACTIVE,
@@ -119,12 +159,13 @@ namespace Framework.Data
 			ctx.Menu.Add(new MenuItem()
 			{
 				guid = Guid.NewGuid(),
-				name = "Home",
-				route = "/",
+				OrginizationGuid = OrgGuid,
+				name = "Leave",
+				route = "leave/",
 				type = "mainmenu",
 				published = DateTime.Now,
 				ordering = 10,
-				isHome = true,
+				isHome = false,
 				Created = DateTime.Now,
 				CreatedById = 1,
 				Modified = DateTime.Now,
@@ -132,14 +173,16 @@ namespace Framework.Data
 				StatusCode = RecordStatus.ACTIVE
 			});
 
-			ctx.Menu.Add(new MenuItem()
+			List<MenuItem> tsKids = new List<MenuItem>();
+			tsKids.Add(new MenuItem()
 			{
 				guid = Guid.NewGuid(),
-				name = "Leave",
-				route = "leave/",
+				OrginizationGuid = OrgGuid,
+				name = "Sheet View",
+				route = "/sheetview",
 				type = "mainmenu",
 				published = DateTime.Now,
-				ordering = 20,
+				ordering = 200,
 				isHome = false,
 				Created = DateTime.Now,
 				CreatedById = 1,
@@ -151,7 +194,59 @@ namespace Framework.Data
 			ctx.Menu.Add(new MenuItem()
 			{
 				guid = Guid.NewGuid(),
+				OrginizationGuid = OrgGuid,
 				name = "Timesheets",
+				route = "",
+				type = "mainmenu",
+				published = DateTime.Now,
+				ordering = 20,
+				isHome = false,
+				Created = DateTime.Now,
+				CreatedById = 1,
+				Modified = DateTime.Now,
+				ModifiedById = 1,
+				StatusCode = RecordStatus.ACTIVE,
+				Children = tsKids
+			});
+
+			tsKids = new List<MenuItem>();
+			tsKids.Add(new MenuItem()
+			{
+				guid = Guid.NewGuid(),
+				OrginizationGuid = OrgGuid,
+				name = "Add Project",
+				route = "/projects/edit",
+				type = "mainmenu",
+				published = DateTime.Now,
+				ordering = 300,
+				isHome = false,
+				Created = DateTime.Now,
+				CreatedById = 1,
+				Modified = DateTime.Now,
+				ModifiedById = 1,
+				StatusCode = RecordStatus.ACTIVE
+			}); tsKids.Add(new MenuItem()
+			{
+				guid = Guid.NewGuid(),
+				OrginizationGuid = OrgGuid,
+				name = "Project List",
+				route = "/projects",
+				type = "mainmenu",
+				published = DateTime.Now,
+				ordering = 310,
+				isHome = false,
+				Created = DateTime.Now,
+				CreatedById = 1,
+				Modified = DateTime.Now,
+				ModifiedById = 1,
+				StatusCode = RecordStatus.ACTIVE
+			});
+
+			ctx.Menu.Add(new MenuItem()
+			{
+				guid = Guid.NewGuid(),
+				OrginizationGuid = OrgGuid,
+				name = "Projects",
 				route = "",
 				type = "mainmenu",
 				published = DateTime.Now,
@@ -161,17 +256,37 @@ namespace Framework.Data
 				CreatedById = 1,
 				Modified = DateTime.Now,
 				ModifiedById = 1,
-				StatusCode = RecordStatus.ACTIVE
+				StatusCode = RecordStatus.ACTIVE,
+				Children = tsKids
 			});
 
-			ctx.Menu.Add(new MenuItem()
+			// Create children items for tools drop down menu
+			tsKids = new List<MenuItem>();
+			tsKids.Add(new MenuItem()
 			{
 				guid = Guid.NewGuid(),
-				name = "Projects",
-				route = "/projects",
+				OrginizationGuid = OrgGuid,
+				name = "User Manager",
+				route = "/tools/users",
 				type = "mainmenu",
 				published = DateTime.Now,
-				ordering = 30,
+				ordering = 410,
+				isHome = false,
+				Created = DateTime.Now,
+				CreatedById = 1,
+				Modified = DateTime.Now,
+				ModifiedById = 1,
+				StatusCode = RecordStatus.ACTIVE
+			});
+			tsKids.Add(new MenuItem()
+			{
+				guid = Guid.NewGuid(),
+				OrginizationGuid = OrgGuid,
+				name = "Menu Manager",
+				route = "/tools/navbar",
+				type = "mainmenu",
+				published = DateTime.Now,
+				ordering = 400,
 				isHome = false,
 				Created = DateTime.Now,
 				CreatedById = 1,
@@ -180,6 +295,23 @@ namespace Framework.Data
 				StatusCode = RecordStatus.ACTIVE
 			});
 
+			ctx.Menu.Add(new MenuItem()
+			{
+				guid = Guid.NewGuid(),
+				OrginizationGuid = OrgGuid,
+				name = "Tools",
+				route = "",
+				type = "mainmenu",
+				published = DateTime.Now,
+				ordering = 40,
+				isHome = false,
+				Created = DateTime.Now,
+				CreatedById = 1,
+				Modified = DateTime.Now,
+				ModifiedById = 1,
+				StatusCode = RecordStatus.ACTIVE,
+				Children = tsKids
+			});
 			await ctx.SaveChangesAsync();
 		}
 
@@ -190,6 +322,7 @@ namespace Framework.Data
 			ctx.ProjectCode.Add(new ProjectCode()
 			{
 				guid = Guid.NewGuid(),
+				OrginizationGuid = OrgGuid,
 				commentType = 1,
 				ProjectTitle = "12021-00",
 				ProjectDescription = "General Operations",
@@ -203,6 +336,7 @@ namespace Framework.Data
 			ctx.ProjectCode.Add(new ProjectCode()
 			{
 				guid = Guid.NewGuid(),
+				OrginizationGuid = OrgGuid,
 				commentType = 1,
 				ProjectTitle = "12121-00",
 				ProjectDescription = "Proposal Development",
@@ -215,6 +349,7 @@ namespace Framework.Data
 
 			ctx.Timesheet.Add(new Timesheet()
 			{
+				OrginizationGuid = OrgGuid,
 				employeeId = 1,
 				startDate = DateTime.Parse("2021-02-16"),
 				endDate = DateTime.Parse("2021-02-28"),
@@ -232,6 +367,7 @@ namespace Framework.Data
 			});
 			ctx.Timesheet.Add(new Timesheet()
 			{
+				OrginizationGuid = OrgGuid,
 				employeeId = 1,
 				startDate = DateTime.Parse("2021-03-01"),
 				endDate = DateTime.Parse("2021-03-15"),
@@ -249,6 +385,7 @@ namespace Framework.Data
 			});
 			ctx.Timesheet.Add(new Timesheet()
 			{
+				OrginizationGuid = OrgGuid,
 				employeeId = 1,
 				startDate = DateTime.Parse("2021-03-16"),
 				endDate = DateTime.Parse("2021-03-31"),
@@ -271,6 +408,7 @@ namespace Framework.Data
 				new TimeDetails
 				{
 					guid = Guid.NewGuid(),
+					OrginizationGuid = OrgGuid,
 					timesheetId = ts.Id,
 					projectId = 1,
 					timeDate = Convert.ToDateTime("2021-02-16"),
@@ -285,6 +423,7 @@ namespace Framework.Data
 			ts.TimeDetails.Add(new TimeDetails()
 			{
 				guid = Guid.NewGuid(),
+				OrginizationGuid = OrgGuid,
 				timesheetId = ts.Id,
 				projectId = 1,
 				timeDate = Convert.ToDateTime("2021-02-17"),
@@ -305,6 +444,7 @@ namespace Framework.Data
 			ctx.LeaveBank.Add(new LeaveBank()
 			{
 				guid = Guid.NewGuid(),
+				OrginizationGuid = OrgGuid,
 				displayCode = "AL",
 				bankDescription = "Annual Leave",
 				expiresInDays = 365,
@@ -317,6 +457,7 @@ namespace Framework.Data
 			ctx.LeaveBank.Add(new LeaveBank()
 			{
 				guid = Guid.NewGuid(),
+				OrginizationGuid = OrgGuid,
 				displayCode = "SL",
 				bankDescription = "Sick Leave",
 				expiresInDays = 365,
@@ -329,6 +470,7 @@ namespace Framework.Data
 			ctx.LeaveBank.Add(new LeaveBank()
 			{
 				guid = Guid.NewGuid(),
+				OrginizationGuid = OrgGuid,
 				displayCode = "PTO",
 				bankDescription = "Paid Time Off",
 				expiresInDays = 365,
@@ -344,6 +486,7 @@ namespace Framework.Data
 			ctx.LeaveTansactions.Add(new LeaveTransactions()
 			{
 				guid = Guid.NewGuid(),
+				OrginizationGuid = OrgGuid,
 				parentId = 0,
 				locationId = 0,
 				employeeId = 1,
@@ -365,6 +508,7 @@ namespace Framework.Data
 			ctx.LeaveTansactions.Add(new LeaveTransactions()
 			{
 				guid = Guid.NewGuid(),
+				OrginizationGuid = OrgGuid,
 				parentId = 0,
 				locationId = 0,
 				employeeId = 1,

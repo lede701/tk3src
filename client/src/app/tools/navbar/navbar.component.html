@@ -1,0 +1,29 @@
+<div class="container" *ngIf="menuList.length > 0">
+  <div class="row row-header pb-3">
+    <div class="col col-header">Link Text</div>
+    <div class="col col-header">Route</div>
+    <div class="col">
+      <button class="btn btn-primary" type="button" (click)="onNewMenuItem()"><i class="fa fa-plus"></i></button>
+    </div>
+  </div>
+  <div class="navbar-list">
+    <ng-container *ngTemplateOutlet="menuRow; context{menu:menuList, tabspace: 0}"></ng-container>
+  </div>
+
+</div>
+
+<ng-template #menuRow let-menu="menu" let-tabspace="tabspace">
+  <div *ngFor="let item of menu">
+    <div class="row mb-1">
+      <div class="col pt-2"><span class="ml-{{tabspace}}">{{item.name}}</span></div>
+      <div class="col pt-2">{{item.route}}</div>
+      <div class="col">
+        <button class="btn btn-primary mr-1" type="button" (click)="onEditMenu(item)"><i class="fa fa-edit mr-2"></i>Edit</button>
+        <button class="btn btn-danger" type="button" (click)="onDeleteMenu(item)"><i class="fa fa-remove mr-2"></i>Delete</button>
+      </div>
+    </div>
+    <div *ngIf="item.children?.length > 0">
+      <ng-container *ngTemplateOutlet="menuRow; context:{menu: item.children, tabspace: tabspace+2}"></ng-container>
+    </div>
+  </div>
+</ng-template>

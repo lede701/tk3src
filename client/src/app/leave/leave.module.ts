@@ -3,11 +3,13 @@ import { CommonModule } from '@angular/common';
 
 import { LeaveRoutingModule } from './leave-routing.module';
 import { LeaveComponent } from './leave.component';
+import { LeaveEditComponent } from './leave-edit/leave-edit.component';
 
 
 @NgModule({
   declarations: [
-    LeaveComponent
+    LeaveComponent,
+    LeaveEditComponent
   ],
   imports: [
     CommonModule,

@@ -26,6 +26,10 @@ namespace Framework.Data
 		{
 			return await _context.SaveChangesAsync() > 0;
 		}
+		public bool HasChanges()
+		{
+			return _context.ChangeTracker.HasChanges();
+		}
 
 		public IMapper Mapper { get { return _mapper; } }
 
@@ -36,10 +40,7 @@ namespace Framework.Data
 		public IGenericRepository<Timesheet> TimesheetsRepository => new GenericRepository<Timesheet>(_context);
 		public IGenericRepository<TimeDetails> TimeDetailsRepository => new GenericRepository<TimeDetails>(_context);
 		public IGenericRepository<Tk3User> UserRepository => new GenericRepository<Tk3User>(_context);
+		public IGenericRepository<CoreOrginizationEntity> OrginizationRepository => new GenericRepository<CoreOrginizationEntity>(_context);
 
-		public bool HasChanges()
-		{
-			return _context.ChangeTracker.HasChanges();
-		}
 	}
 }

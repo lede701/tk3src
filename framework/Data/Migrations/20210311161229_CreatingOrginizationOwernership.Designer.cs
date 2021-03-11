@@ -3,14 +3,16 @@ using System;
 using Framework.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Framework.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20210311161229_CreatingOrginizationOwernership")]
+    partial class CreatingOrginizationOwernership
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -984,7 +986,7 @@ namespace Framework.Data.Migrations
                     b.Property<DateTime>("startDate")
                         .HasColumnType("TEXT");
 
-                    b.Property<DateTime?>("terminationDate")
+                    b.Property<DateTime?>("teminationDate")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("title")

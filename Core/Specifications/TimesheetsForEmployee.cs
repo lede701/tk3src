@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -9,6 +10,7 @@ namespace Core.Specifications
 {
 	public class TimesheetsForEmployee : BaseSpecification<Timesheet>
 	{
+
 		public TimesheetsForEmployee(TimesheetSpecParams specs) : base(ts => ts.employeeId == specs.Employee.Id)
 		{
 			// Add data to load with the timesheet
@@ -36,6 +38,9 @@ namespace Core.Specifications
 			AddInclude(ts => ts.TimeLunch);
 
 			AddOrderBy(ts => ts.startDate);
+		}
+		public TimesheetsForEmployee(Expression<Func<Timesheet, bool>> criteria) : base(criteria)
+		{
 		}
 	}
 }

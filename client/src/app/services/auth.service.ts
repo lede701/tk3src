@@ -7,6 +7,7 @@ import { environment } from '../../environments/environment';
 import { map, take } from 'rxjs/operators';
 import { IRegsiterUserEntity } from '../entities/iregisterUserEntity';
 import { IPasswordReset } from '../entities/ipasswordreset';
+import { IUserEntity } from '../entities/iuserentity';
 
 export interface AuthResponseData {
   idToken: string,
@@ -51,7 +52,7 @@ export class AuthService {
   private storeKey: string = 'tk3user';
   private _user: UserEntity;
   private _keepAliveTimer: number = -1;
-  private _baseUri: string = environment.apiUrl;
+  private _baseUri: string = environment.apiUrl + '/Auth';
 
   // Create observable for current user
   private _currentUserSource = new ReplaySubject<UserEntity>(1);
@@ -88,7 +89,7 @@ export class AuthService {
   }
 
   create(user: IRegsiterUserEntity) {
-    return this.http.post<Tk3AuthResponse>(this._baseUri + '/Auth/create', user).pipe(take(1)).subscribe(authed => {
+    return this.http.post<Tk3AuthResponse>(this._baseUri + '/create', user).pipe(take(1)).subscribe(authed => {
       this.setupUser(authed);
     });
   }
@@ -100,13 +101,13 @@ export class AuthService {
       password: password
     };
     // Call auth service on server
-    return this.http.post<Tk3AuthResponse>(this._baseUri + '/Auth/login', login).pipe(map(results => {
+    return this.http.post<Tk3AuthResponse>(this._baseUri + '/login', login).pipe(map(results => {
       this.setupUser(results);
     }));
   }
 
   resetPassword(pw: IPasswordReset) {
-    return this.http.post(this._baseUri + '/Auth/reset', pw);
+    return this.http.post(this._baseUri + '/reset', pw);
   }
 
   setupUser(results: Tk3AuthResponse) {
@@ -130,7 +131,7 @@ export class AuthService {
 
   logout() {
     // Tell server to dirty the token
-    this.http.post(this._baseUri + '/Auth/logout', { username: this._user.username }).pipe(take(1)).subscribe(() => {
+    this.http.post(this._baseUri + '/logout', { username: this._user.username }).pipe(take(1)).subscribe(() => {
     });
     // Set user to blank record
     this._user = new UserEntity();
@@ -142,7 +143,7 @@ export class AuthService {
   updateToken(src: AuthService) {
     let now = new Date();
     if (now > src._user.tokenExpires) {
-      this.http.post<Tk3AuthResponse>(this._baseUri + '/Auth/tokenupdate', {}).pipe(take(1)).subscribe(response => {
+      this.http.post<Tk3AuthResponse>(this._baseUri + '/tokenupdate', {}).pipe(take(1)).subscribe(response => {
         this._user.token = response.token;
         this._user.tokenExpires = response.tokenExpires;
       });
@@ -168,6 +169,10 @@ export class AuthService {
   }
 
   WhoAmI() {
-    return this.http.get<WhoAmIResponse>(this._baseUri + '/Auth/whoami');
+    return this.http.get<WhoAmIResponse>(this._baseUri + '/whoami');
+  }
+
+  getListOfUsers() {
+    return this.http.get<IUserEntity[]>(this._baseUri + '/userlist');
   }
 }
