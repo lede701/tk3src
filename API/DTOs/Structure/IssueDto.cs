@@ -12,5 +12,6 @@ namespace API.DTOs.Structure
 		public String IssueDescription { get; set; }
 		public int Severity { get; set; }
 		public IssueTypeDto IssueType { get; set; }
+		public ICollection<IssueCommentsDto> Comments { get; set; } = new List<IssueCommentsDto>();
 	}
 }

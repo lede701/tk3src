@@ -12,5 +12,7 @@ namespace Core.Entities.Structure
 		public String IssueDescription { get; set; }
 		public int Severity { get; set; }
 		public IssueType IssueType { get; set; }
+
+		public ICollection<IssueComments> Comments { get; set; } = new List<IssueComments>();
 	}
 }

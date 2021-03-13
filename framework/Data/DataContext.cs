@@ -65,6 +65,7 @@ namespace Framework.Data
         public DbSet<TimeDetailsComments> TimeDetailsComments { get; set; }
 		public DbSet<TimesheetExceptions> TimesheetExceptions { get; set; }
 		public DbSet<Issue> Issues { get; set; }
+		public DbSet<IssueComments> IssueComments { get; set; }
 		public DbSet<IssueType> IssueTypes { get; set; }
 		public DbSet<WorkSchedule> WorkSchedule { get; set; }
 		public DbSet<Tk3User> Users { get; set; }

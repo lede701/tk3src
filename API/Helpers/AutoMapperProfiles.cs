@@ -23,6 +23,7 @@ namespace API.Helpers
 			CreateMap<MenuItem, MenuItemDto>().ReverseMap();
 			CreateMap<Issue, IssueDto>().ReverseMap();
 			CreateMap<IssueType, IssueTypeDto>().ReverseMap();
+			CreateMap<IssueComments, IssueCommentsDto>().ReverseMap();
 			MapTimesheets();
 			MapLeave();
 			MapProjects();
