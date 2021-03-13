@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Core.Interfaces;
 using Core.Entities.TimeSheets;
 using Core.Entities;
+using Core.Entities.Structure;
 
 namespace Framework.Data
 {
@@ -41,6 +42,7 @@ namespace Framework.Data
 		public IGenericRepository<TimeDetails> TimeDetailsRepository => new GenericRepository<TimeDetails>(_context);
 		public IGenericRepository<Tk3User> UserRepository => new GenericRepository<Tk3User>(_context);
 		public IGenericRepository<CoreOrginizationEntity> OrginizationRepository => new GenericRepository<CoreOrginizationEntity>(_context);
+		public IGenericRepository<Issue> IssueRepository => new GenericRepository<Issue>(_context);
 
 	}
 }

@@ -1,7 +1,9 @@
 ﻿using API.DTOs;
+using API.DTOs.Structure;
 using API.DTOs.Timesheets;
 using AutoMapper;
 using Core.Entities;
+using Core.Entities.Structure;
 using Core.Entities.TimeSheets;
 using System;
 using System.Collections.Generic;
@@ -19,6 +21,8 @@ namespace API.Helpers
 			CreateMap<Tk3User, UserListDto>();
 			CreateMap<Employee, UserListDto>();
 			CreateMap<MenuItem, MenuItemDto>().ReverseMap();
+			CreateMap<Issue, IssueDto>().ReverseMap();
+			CreateMap<IssueType, IssueTypeDto>().ReverseMap();
 			MapTimesheets();
 			MapLeave();
 			MapProjects();

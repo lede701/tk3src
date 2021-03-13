@@ -14,14 +14,17 @@ namespace Framework.Services
 {
 	public class TokenService : ITokenService
 	{
+		const String TOKEN_CONFIG_NAME = "Token:Key";
 		private readonly SymmetricSecurityKey _key;
+		private readonly IConfiguration _config;
 		private Dictionary<String, TokenEntity> _validations = new Dictionary<String, TokenEntity>();
 		private int _expiresInMinutes;
 
 		public TokenService(IConfiguration config)
 		{
-			_key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["TokenKey"]));
-			_expiresInMinutes = Convert.ToInt32(config["TokenAgeInMinutes"]);
+			_key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config[TOKEN_CONFIG_NAME]));
+			_expiresInMinutes = Convert.ToInt32(config["Token:AgeInMinutes"]);
+			_config = config;
 		}
 
 		public async Task<string> CreateTokenAsync(Tk3User user)
@@ -41,7 +44,8 @@ namespace Framework.Services
 			{
 				Subject = new ClaimsIdentity(claims),
 				Expires = DateTime.Now.AddDays(7),
-				SigningCredentials = creds
+				SigningCredentials = creds,
+				Issuer = _config[TOKEN_CONFIG_NAME]
 			};
 			var tokenHandler = new JwtSecurityTokenHandler();
 			var token = tokenHandler.CreateToken(tokenDescriptor);

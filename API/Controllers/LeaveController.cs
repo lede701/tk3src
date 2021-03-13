@@ -25,10 +25,10 @@ namespace API.Controllers
 		[HttpGet("list")]
 		public async Task<ActionResult<IReadOnlyCollection<LeaveTransactionDto>>> ListUserLeave()
 		{
-			var guid = User.GetUserId();
-			if (String.IsNullOrEmpty(guid)) return BadRequest("Found was not your user ID.");
+			Guid guid = User.GetUserId();
+			if (guid == null) return BadRequest("Found was not your user ID.");
 
-			var user = await _uow.EmployeesRepository.GetByGuidAsync(Guid.Parse(guid));
+			var user = await _uow.EmployeesRepository.GetByGuidAsync(guid);
 			if (user != null)
 			{
 				var leave = await _uow.LeaveRepository.ListAllBySpecAsync(new LeaveForEmployeeSpec(user.Id));

@@ -30,7 +30,7 @@ namespace API.Controllers
             _uow = uow;
             _tokenService = tokenService;
             _auth = auth;
-            _tokenExpiresInMinutes = Convert.ToInt32(config["TokenAgeInMinutes"]);
+            _tokenExpiresInMinutes = Convert.ToInt32(config["Token:AgeInMinutes"]);
         }
 
         [HttpPost("create")]
@@ -77,7 +77,7 @@ namespace API.Controllers
         public async Task<ActionResult<UserDto>> ResetPassword(PasswordResetDto pw)
         {
             // Check if current password is correct
-            var user = await _uow.EmployeesRepository.GetByGuidAsync(Guid.Parse(User.GetUserId()));
+            var user = await _uow.EmployeesRepository.GetByGuidAsync(User.GetUserId());
             if (await _auth.Login(user.userName, pw.OriginalPassword) && pw.Password == pw.ConfirmPassword)
             {
                 // Create the hash password
@@ -120,8 +120,7 @@ namespace API.Controllers
         public async Task<ActionResult<WhoAmIDto>> WhoAmI()
         {
             // Load user infromation
-            var user = await _uow.EmployeesRepository.GetByGuidAsync(Guid.Parse(User.GetUserId()));
-            //var user = await _uow.UserRepository.GetUserByGuidAsync(Guid.Parse(User.GetUserId()));
+            var user = await _uow.EmployeesRepository.GetByGuidAsync(User.GetUserId());
             // Return user name
             return Ok(new WhoAmIDto {
                 Name = String.Format("{0} {1}", user.firstName, user.lastName),
@@ -146,9 +145,9 @@ namespace API.Controllers
         [HttpPost("logout")]
         public async Task<ActionResult> Logout()
         {
-            String guid = User.GetUserId();
+            Guid guid = User.GetUserId();
             if (guid == null) return Ok("Token passed it was not.");
-            var user = await _uow.EmployeesRepository.GetByGuidAsync(Guid.Parse(guid));
+            var user = await _uow.EmployeesRepository.GetByGuidAsync(guid);
             if (user != null) return Ok();
             //            if (await _uow.UserRepository.LogoutAsync(user)) return Ok();
 
@@ -177,7 +176,7 @@ namespace API.Controllers
         [HttpGet("userlist")]
         public async Task<ActionResult<IReadOnlyCollection<UserListDto>>> UserList()
 		{
-            var user = await _uow.UserRepository.GetByGuidAsync(Guid.Parse(User.GetUserId()));
+            var user = await _uow.UserRepository.GetByGuidAsync(User.GetUserId());
             var list = await _uow.EmployeesRepository.ListAllBySpecAsync(new EmployeeSpec(e => e.OrginizationGuid == user.OrginizationGuid));
             if (list?.Count > 0) return Ok(_uow.Mapper.Map<IReadOnlyCollection<UserListDto>>(list));
 

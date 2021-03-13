@@ -19,9 +19,9 @@ export class ToasterComponent implements OnInit {
     console.log("Hit me, yes you did");
     this.msgService.add({
       key: 'notices',
-      severity: "success",
-      summary: "Service Test",
-      detail: "Testing the toaster from PrimeNG"
+      severity: "error",
+      summary: "Toast",
+      detail: "You have just been toasted!"
     });
   }
 }

@@ -1,0 +1,28 @@
+<ng-container *ngIf="issues.length > 0">
+  <div class="container">
+    <div class="row">
+      <div class="col col-header mb-3">
+        Issue
+      </div>
+      <div class="col col-header">Type</div>
+      <div class="col col-header">Severity</div>
+      <div class="col">
+        <button class="btn btn-primary btn-sm" type="button" (click)="onIssueAdd()"><i class="fa fa-plus"></i></button>
+      </div>
+    </div>
+    <div class="row" *ngFor="let item of issues">
+      <div class="col mt-2">{{item.issueTitle}}</div>
+      <div class="col mt-2">{{item.issueType.typeTag}}</div>
+      <div class="col mt-2">{{item.severity}}</div>
+      <div class="col">
+        <button class="btn btn-primary mr-1" (click)="onIssueEdit(item.guid)"><i class="fa fa-edit mr-2"></i>Edit</button>
+        <button class="btn btn-danger" (click)="onIssueDelete(item.guid)"><i class="fa fa-remove mr-2"></i>Delete</button>
+      </div>
+    </div>
+  </div>
+</ng-container>
+<ng-container *ngIf="issues.length == 0">
+  <div class="container">
+    <string>No current issues to show...</string>
+  </div>
+</ng-container>

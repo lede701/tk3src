@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Core.Entities;
 using Core.Entities.TimeSheets;
+using Core.Entities.Structure;
 
 namespace Framework.Data
 {
@@ -63,6 +64,8 @@ namespace Framework.Data
 		public DbSet<Timesheet> Timesheet { get; set; }
         public DbSet<TimeDetailsComments> TimeDetailsComments { get; set; }
 		public DbSet<TimesheetExceptions> TimesheetExceptions { get; set; }
+		public DbSet<Issue> Issues { get; set; }
+		public DbSet<IssueType> IssueTypes { get; set; }
 		public DbSet<WorkSchedule> WorkSchedule { get; set; }
 		public DbSet<Tk3User> Users { get; set; }
 	}

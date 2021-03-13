@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Core.Entities;
+using Core.Entities.Structure;
 using Core.Entities.TimeSheets;
 using System.Threading.Tasks;
 
@@ -15,6 +16,7 @@ namespace Core.Interfaces
 		IGenericRepository<TimeDetails> TimeDetailsRepository { get; }
 		IGenericRepository<Tk3User> UserRepository { get; }
 		IGenericRepository<CoreOrginizationEntity> OrginizationRepository { get; }
+		IGenericRepository<Issue> IssueRepository { get; }
 
 		Task<bool> CompleteAsync();
 		bool HasChanges();

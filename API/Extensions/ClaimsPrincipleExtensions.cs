@@ -1,4 +1,9 @@
-﻿using System.Security.Claims;
+﻿using System.Threading.Tasks;
+using Core.Entities.TimeSheets;
+using Core.Interfaces;
+using System.Security.Claims;
+using Core.Entities;
+using System;
 
 namespace API.Extensions
 {
@@ -9,9 +14,16 @@ namespace API.Extensions
 			return user.FindFirst(ClaimTypes.Name)?.Value;
 		}
 
-		public static string GetUserId(this ClaimsPrincipal user)
+		public static Guid GetUserId(this ClaimsPrincipal user)
 		{
-			return user.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+			return Guid.Parse(user.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+		}
+
+		public static async Task<Tk3User> GetUserAsync(this ClaimsPrincipal user, IGenericRepository<Tk3User> userRepo)
+		{
+			Guid guid = Guid.Parse(user.FindFirstValue(ClaimTypes.NameIdentifier));
+			var who = await userRepo.GetByGuidAsync(guid);
+			return who;
 		}
 	}
 }

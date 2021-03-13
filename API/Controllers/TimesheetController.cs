@@ -40,7 +40,7 @@ namespace API.Controllers
         [HttpGet("list")]
         public async Task<ActionResult<ICollection<TimesheetListDto>>> GetTimesheetList()
 		{
-            Employee emp = await _uow.EmployeesRepository.GetByGuidAsync(Guid.Parse(User.GetUserId()));
+            Employee emp = await _uow.EmployeesRepository.GetByGuidAsync(User.GetUserId());
             var data = await _uow.TimesheetsRepository.ListAllBySpecAsync(new TimesheetsForEmployeeSpec(emp.Id));
 
             //var data = await _uow.TimesheetsRepository.ListAllByUserAsync(emp.Id);
@@ -56,7 +56,7 @@ namespace API.Controllers
         [HttpGet("new/{start}/{end}")]
         public async Task<ActionResult<TimesheetDto>> Create(DateTime start, DateTime end)
         {
-            Guid guid = Guid.Parse(User.GetUserId());
+            Guid guid = User.GetUserId();
             var emp = await _uow.EmployeesRepository.GetByGuidAsync(guid);
             //var tso = await _uow.TimesheetRepositoy.CreateTimesheetAsync(emp, start, end);
             //if (tso != null) return Ok(tso);
