@@ -13,5 +13,11 @@ namespace Core.Specifications.Structure
 		{
 			AddInclude(i => i.IssueType);
 		}
+
+		public IssueSpec(Guid guid) : base(i => i.guid == guid)
+        {
+			AddInclude(i => i.IssueType);
+			AddInclude(i => i.Comments);
+        }
 	}
 }

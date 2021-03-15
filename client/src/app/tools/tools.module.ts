@@ -11,6 +11,7 @@ import { UserEditComponent } from './users/user-edit/user-edit.component';
 import { NavbarEditComponent } from './navbar/navbar-edit/navbar-edit.component';
 import { IssuesComponent } from './issues/issues.component';
 import { IssueEditComponent } from './issues/issue-edit/issue-edit.component';
+import { IssueViewComponent } from './issues/issue-view/issue-view.component';
 
 
 @NgModule({
@@ -21,7 +22,8 @@ import { IssueEditComponent } from './issues/issue-edit/issue-edit.component';
     UserEditComponent,
     NavbarEditComponent,
     IssuesComponent,
-    IssueEditComponent
+    IssueEditComponent,
+    IssueViewComponent
   ],
   imports: [
     CommonModule,

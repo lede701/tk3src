@@ -11,7 +11,7 @@
       </div>
     </div>
     <div class="row" *ngFor="let item of issues">
-      <div class="col mt-2">{{item.issueTitle}}</div>
+      <div class="col mt-2"><a [routerLink]="['/', 'tools', 'issue', 'view', item.guid]">{{item.issueTitle}}</a></div>
       <div class="col mt-2">{{item.issueType.typeTag}}</div>
       <div class="col mt-2">{{item.severity}}</div>
       <div class="col">

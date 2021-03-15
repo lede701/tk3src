@@ -28,7 +28,16 @@ namespace API.Controllers
 			return Ok(_uow.Mapper.Map<IReadOnlyCollection<IssueDto>>(list));
 		}
 
-		[HttpPost("add/{guid}")]
+		[HttpGet("get/{guid}")]
+		public async Task<ActionResult<IssueDto>> GetIssue(String guid)
+        {
+			var issue = await _uow.IssueRepository.GetBySpecAsync(new IssueSpec(Guid.Parse(guid)));
+			if (issue != null) return Ok(_uow.Mapper.Map<IssueDto>(issue));
+
+			return BadRequest("ERROR: Issue found it was not.");
+        }
+
+		[HttpPost("comment/add/{guid}")]
 		public async Task<ActionResult<IssueDto>> AddComment(String guid, IssueCommentsDto comment)
 		{
 			var issue = await _uow.IssueRepository.GetByGuidAsync(Guid.Parse(guid));
@@ -53,6 +62,42 @@ namespace API.Controllers
 			return Ok(_uow.Mapper.Map<IssueDto>(issue));
 				
 		}
-			
+
+		[HttpGet("comment/up")]
+		public async Task<ActionResult<IssueCommentsDto>> CommentUp(String guid)
+		{
+			// Load comment from database
+			var comment = await _uow.IssueCommentRepository.GetByGuidAsync(Guid.Parse(guid));
+
+			// Check if we have a valid comment
+			if (comment == null) return BadRequest("ERROR: Comment updated it was not.");
+			// Update rating
+			comment.Rating++;
+			// Tell entiry framework the recrod was updaetd
+			_uow.IssueCommentRepository.Update(comment);
+			await _uow.CompleteAsync();
+
+			return Ok(_uow.Mapper.Map<IssueCommentsDto>(comment));
+
+		}
+
+		[HttpGet("comment/down")]
+		public async Task<ActionResult<IssueCommentsDto>> CommentDown(String guid)
+		{
+			// Load comment from database
+			var comment = await _uow.IssueCommentRepository.GetByGuidAsync(Guid.Parse(guid));
+
+			// Check if we have a valid comment
+			if (comment == null) return BadRequest("ERROR: Comment updated it was not.");
+			// Update rating
+			comment.Rating = Math.Max(0, comment.Rating - 1);
+			_uow.IssueCommentRepository.Update(comment);
+			// Tell entiry framework the recrod was updaetd
+			_uow.IssueCommentRepository.Update(comment);
+			await _uow.CompleteAsync();
+
+			return Ok(_uow.Mapper.Map<IssueCommentsDto>(comment));
+		}
+
 	}
 }

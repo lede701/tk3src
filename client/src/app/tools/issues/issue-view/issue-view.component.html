@@ -1,0 +1,38 @@
+<ng-container *ngIf="isValidIssue">
+  <div class="container">
+    <div class="row">
+      <div class="col-8">
+        {{issue.issueTitle}}
+      </div>
+    </div>
+    <div class="row mb-2">
+      <div class="col-8">
+        {{issue.issueDescription}}
+      </div>
+    </div>
+    <ng-container *ngIf="issue.comments.length > 0">
+      <div class="row mb-4" *ngFor="let comment of issue.comments">
+        <div class="col-1"><i class="fa fa-thumbs-up mr-1 vote" (click)="onVoteUp(comment)"></i><i class="fa fa-thumbs-down mr-1 vote" (click)="onVoteDown(comment)"></i>
+          <span *ngIf="comment.rating > 0">{{comment.rating}}</span></div>
+        <div class="col">{{comment.comment}}</div>
+      </div>
+    </ng-container>
+    <form [formGroup]="commentForm" (ngSubmit)="onAddComment()">
+      <div class="row">
+        <div class="col-6">
+          <textarea class="form-control" [formControl]="commentForm.controls.comment"></textarea>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <button class="btn btn-primary" type="submit">Add Comment</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</ng-container>
+<div class="container" *ngIf="!isValidIssue">
+  <div class="row">
+    <div class="col">Not a vaild issue</div>
+  </div>
+</div>

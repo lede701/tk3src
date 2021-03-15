@@ -4,6 +4,7 @@ import { Observable, ReplaySubject } from 'rxjs';
 import { map, take } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 import { IIssue } from '../../entities/structure/issue';
+import { IIssueComment } from '../../entities/structure/issuecomment';
 
 @Injectable({
   providedIn: 'root'
@@ -29,5 +30,17 @@ export class IssuesService {
 
   public getIssue(guid: string) {
     return this.http.get<IIssue>(this._baseUrl + '/get/' + guid);
+  }
+
+  public addIssueComment(guid: string, comment: IIssueComment) {
+    return this.http.post<IIssue>(this._baseUrl + '/comment/add/' + guid, comment);
+  }
+
+  public issueCommentUp(guid: string) {
+    return this.http.get<IIssueComment>(this._baseUrl + '/comment/up?guid=' + guid);
+  }
+
+  public issueCommentDown(guid: string) {
+    return this.http.get<IIssueComment>(this._baseUrl + '/comment/down?guid=' + guid);
   }
 }

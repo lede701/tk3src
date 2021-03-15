@@ -17,6 +17,7 @@ namespace Core.Interfaces
 		IGenericRepository<Tk3User> UserRepository { get; }
 		IGenericRepository<CoreOrginizationEntity> OrginizationRepository { get; }
 		IGenericRepository<Issue> IssueRepository { get; }
+		IGenericRepository<IssueComments> IssueCommentRepository { get; }
 
 		Task<bool> CompleteAsync();
 		bool HasChanges();

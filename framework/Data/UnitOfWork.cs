@@ -43,6 +43,7 @@ namespace Framework.Data
 		public IGenericRepository<Tk3User> UserRepository => new GenericRepository<Tk3User>(_context);
 		public IGenericRepository<CoreOrginizationEntity> OrginizationRepository => new GenericRepository<CoreOrginizationEntity>(_context);
 		public IGenericRepository<Issue> IssueRepository => new GenericRepository<Issue>(_context);
+		public IGenericRepository<IssueComments> IssueCommentRepository => new GenericRepository<IssueComments>(_context);
 
-	}
+    }
 }

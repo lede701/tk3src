@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { IssueEditComponent } from './issues/issue-edit/issue-edit.component';
+import { IssueViewComponent } from './issues/issue-view/issue-view.component';
 import { IssuesComponent } from './issues/issues.component';
 import { NavbarEditComponent } from './navbar/navbar-edit/navbar-edit.component';
 import { NavbarComponent } from './navbar/navbar.component';
@@ -16,6 +17,7 @@ const routes: Routes = [
   { path: 'users/:guid', component: UserEditComponent },
   { path: 'issues', component: IssuesComponent },
   { path: 'issue/edit/:guid', component: IssueEditComponent },
+  { path: 'issue/view/:guid', component: IssueViewComponent },
   { path: 'issue/new', component: IssueEditComponent }
 ];
 
