@@ -1,3 +1,4 @@
+import { IIssueComment } from './issuecomment';
 import { IIssueType } from './issuetype';
 
 export interface IIssue {
@@ -6,4 +7,5 @@ export interface IIssue {
   issueDescription: string;
   severity: number;
   issueType: IIssueType;
+  comments: IIssueComment[];
 }

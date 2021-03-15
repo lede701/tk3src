@@ -14,14 +14,15 @@ import { IssuesService } from '../issues.service';
 export class IssueViewComponent implements OnInit {
 
   issue: IIssue = {
-    guid: '',
+    guid: '00000000-0000-0000-0000-000000000000',
     issueDescription: '',
     issueTitle: '',
     issueType: {
       guid: '',
       typeTag: ''
     },
-    severity: 0
+    severity: 0,
+    comments: []
   };
   isValidIssue = false;
   commentForm: FormGroup;
@@ -52,7 +53,8 @@ export class IssueViewComponent implements OnInit {
       };
 
       this.issueService.addIssueComment(this.issue.guid, issueComment).pipe(take(1)).subscribe(results => {
-        this.issue = results;
+        this.issue.comments.push(results);
+        this.commentForm.reset();
       })
 
     }
@@ -65,7 +67,9 @@ export class IssueViewComponent implements OnInit {
   }
 
   onVoteDown(comment: IIssueComment) {
-    comment.rating--;
+    this.issueService.issueCommentDown(comment.guid).pipe(take(1)).subscribe(results => {
+      comment.rating = results.rating;
+    });
   }
 
 }

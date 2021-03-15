@@ -12,6 +12,7 @@ namespace Core.Specifications.Structure
 		public IssueSpec() : base()
 		{
 			AddInclude(i => i.IssueType);
+			AddInclude(i => i.Comments);
 		}
 
 		public IssueSpec(Guid guid) : base(i => i.guid == guid)

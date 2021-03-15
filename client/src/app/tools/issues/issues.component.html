@@ -10,7 +10,7 @@
         <button class="btn btn-primary btn-sm" type="button" (click)="onIssueAdd()"><i class="fa fa-plus"></i></button>
       </div>
     </div>
-    <div class="row" *ngFor="let item of issues">
+    <div class="row mb-1" *ngFor="let item of issues">
       <div class="col mt-2"><a [routerLink]="['/', 'tools', 'issue', 'view', item.guid]">{{item.issueTitle}}</a></div>
       <div class="col mt-2">{{item.issueType.typeTag}}</div>
       <div class="col mt-2">{{item.severity}}</div>

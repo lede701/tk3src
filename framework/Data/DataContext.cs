@@ -40,6 +40,13 @@ namespace Framework.Data
 				.WithMany(p => p.Timesheets)
 				.HasForeignKey(tp => tp.ProjectCodeId);
 
+			builder.Entity<IssueCommentVotes>()
+				.HasKey(v => new
+				{
+					v.UserGuid,
+					v.CommentGuid
+				});
+
 			/*
 			builder.Entity<Locations>()
 				.HasOne(loc => loc.Parent)
@@ -66,6 +73,7 @@ namespace Framework.Data
 		public DbSet<TimesheetExceptions> TimesheetExceptions { get; set; }
 		public DbSet<Issue> Issues { get; set; }
 		public DbSet<IssueComments> IssueComments { get; set; }
+		public DbSet<IssueCommentVotes> IssueCommentVotes { get; set; }
 		public DbSet<IssueType> IssueTypes { get; set; }
 		public DbSet<WorkSchedule> WorkSchedule { get; set; }
 		public DbSet<Tk3User> Users { get; set; }

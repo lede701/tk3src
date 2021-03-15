@@ -2,7 +2,7 @@
   <div class="container">
     <div class="row">
       <div class="col-8">
-        {{issue.issueTitle}}
+        <h1>{{issue.issueTitle}}</h1>
       </div>
     </div>
     <div class="row mb-2">
@@ -11,14 +11,16 @@
       </div>
     </div>
     <ng-container *ngIf="issue.comments.length > 0">
+      <hr />
       <div class="row mb-4" *ngFor="let comment of issue.comments">
         <div class="col-1"><i class="fa fa-thumbs-up mr-1 vote" (click)="onVoteUp(comment)"></i><i class="fa fa-thumbs-down mr-1 vote" (click)="onVoteDown(comment)"></i>
-          <span *ngIf="comment.rating > 0">{{comment.rating}}</span></div>
+          <span *ngIf="comment.rating != 0">{{comment.rating}}</span></div>
         <div class="col">{{comment.comment}}</div>
       </div>
     </ng-container>
+    <hr />
     <form [formGroup]="commentForm" (ngSubmit)="onAddComment()">
-      <div class="row">
+      <div class="row mb-1">
         <div class="col-6">
           <textarea class="form-control" [formControl]="commentForm.controls.comment"></textarea>
         </div>

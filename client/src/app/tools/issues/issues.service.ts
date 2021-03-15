@@ -3,8 +3,10 @@ import { Injectable } from '@angular/core';
 import { Observable, ReplaySubject } from 'rxjs';
 import { map, take } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
+import { IResults } from '../../entities/iresults';
 import { IIssue } from '../../entities/structure/issue';
 import { IIssueComment } from '../../entities/structure/issuecomment';
+import { IIssueType } from '../../entities/structure/issuetype';
 
 @Injectable({
   providedIn: 'root'
@@ -32,8 +34,12 @@ export class IssuesService {
     return this.http.get<IIssue>(this._baseUrl + '/get/' + guid);
   }
 
+  public getTypeList() {
+    return this.http.get<IIssueType[]>(this._baseUrl + "/typelist");
+  }
+
   public addIssueComment(guid: string, comment: IIssueComment) {
-    return this.http.post<IIssue>(this._baseUrl + '/comment/add/' + guid, comment);
+    return this.http.post<IIssueComment>(this._baseUrl + '/comment/add/' + guid, comment);
   }
 
   public issueCommentUp(guid: string) {
@@ -42,5 +48,9 @@ export class IssuesService {
 
   public issueCommentDown(guid: string) {
     return this.http.get<IIssueComment>(this._baseUrl + '/comment/down?guid=' + guid);
+  }
+
+  public issueStore(issue: IIssue) {
+    return this.http.post<IResults>(this._baseUrl + '/store', issue);
   }
 }

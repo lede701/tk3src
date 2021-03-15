@@ -1,1 +1,42 @@
-<p>issue-edit works!</p>
+<div class="container" *ngIf="isEditable">
+  <div class="row">
+    <div class="col-8">
+      <h1>{{issueHeading()}}</h1>
+    </div>
+  </div>
+
+  <form [formGroup]="issueForm" (ngSubmit)="onStore()">
+    <div class="row">
+      <div class="col-6">
+        <tk3-input-field [formControl]="issueForm.controls.title" [label]="'Title'"></tk3-input-field>
+      </div>
+      <div class="col-3">
+        <select class="form-control" [formControl]="issueForm.controls.severity">
+          <option value="default">-- Issue Severity --</option>
+          <option value="1">Urgent</option>
+          <option value="2">High</option>
+          <option value="3">Normal</option>
+          <option value="4">Low</option>
+        </select>
+      </div>
+      <div class="col-2">
+        <select [formControl]="issueForm.controls.issueType" class="form-control">
+          <option value="default">-- Type --</option>
+          <option *ngFor="let type of issueTypeList" value="{{type.guid}}">{{type.typeTag}}</option>
+        </select>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-9">
+        <label for="description" class="label">Enter Issue Description</label>
+        <textarea class="form-control" id="description" [formControl]="issueForm.controls.description"></textarea>
+      </div>
+    </div>
+    <div class="row mt-2">
+      <div class="col">
+        <button class="btn btn-primary mr-2" type="submit"><i class="fa fa-save mr-2"></i>Save</button>
+        <button class="btn btn-danger" type="button" (click)="onCancel()"><i class="fa fa-remove mr-2"></i>Cancel</button>
+      </div>
+    </div>
+  </form>
+</div>
